@@ -1,0 +1,470 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 55;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		4F53CF85279DE90A00C466C8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F53CF84279DE90A00C466C8 /* AppDelegate.swift */; };
+		4F53CF89279DE90B00C466C8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4F53CF88279DE90B00C466C8 /* Assets.xcassets */; };
+		4F53CF8C279DE90B00C466C8 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4F53CF8A279DE90B00C466C8 /* Main.storyboard */; };
+		4F53CF95279DF0A700C466C8 /* GameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F53CF94279DF0A700C466C8 /* GameView.swift */; };
+		4F53CF97279DF68300C466C8 /* Shaders.metal in Sources */ = {isa = PBXBuildFile; fileRef = 4F53CF96279DF68300C466C8 /* Shaders.metal */; };
+		4F7A3FB427A05414004DAA2C /* Renderable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F7A3FB327A05414004DAA2C /* Renderable.swift */; };
+		4F7A3FB627A05563004DAA2C /* Node.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F7A3FB527A05563004DAA2C /* Node.swift */; };
+		4F7A3FB827A0562B004DAA2C /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F7A3FB727A0562B004DAA2C /* Player.swift */; };
+		4F7A3FBB27A0A350004DAA2C /* Math.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F7A3FBA27A0A350004DAA2C /* Math.swift */; };
+		4F8D0E5F279F1DA700E7A2A0 /* Types.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F8D0E5E279F1DA700E7A2A0 /* Types.swift */; };
+		4F8D0E65279F24FB00E7A2A0 /* Engine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F8D0E64279F24FB00E7A2A0 /* Engine.swift */; };
+		4F8D0E67279F264A00E7A2A0 /* Preferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F8D0E66279F264A00E7A2A0 /* Preferences.swift */; };
+		4F8D0E69279F311F00E7A2A0 /* ShaderLibrary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F8D0E68279F311F00E7A2A0 /* ShaderLibrary.swift */; };
+		4F8D0E6B279F3B2C00E7A2A0 /* VertexDescriptorLibrary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F8D0E6A279F3B2C00E7A2A0 /* VertexDescriptorLibrary.swift */; };
+		4F8D0E6D279F3E2C00E7A2A0 /* RenderPipelineDescriptorLibrary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F8D0E6C279F3E2C00E7A2A0 /* RenderPipelineDescriptorLibrary.swift */; };
+		4F8D0E6F279F423800E7A2A0 /* RenderPipelineStateLibrary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F8D0E6E279F423800E7A2A0 /* RenderPipelineStateLibrary.swift */; };
+		4F8D0E72279F477000E7A2A0 /* GameObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F8D0E71279F477000E7A2A0 /* GameObject.swift */; };
+		4F8D0E74279F49FC00E7A2A0 /* Renderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F8D0E73279F49FC00E7A2A0 /* Renderer.swift */; };
+		4F8D0E76279F514700E7A2A0 /* MeshLibrary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F8D0E75279F514700E7A2A0 /* MeshLibrary.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		4F53CF81279DE90A00C466C8 /* MetalCraft.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MetalCraft.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		4F53CF84279DE90A00C466C8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		4F53CF88279DE90B00C466C8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		4F53CF8B279DE90B00C466C8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		4F53CF8D279DE90B00C466C8 /* MetalCraft.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MetalCraft.entitlements; sourceTree = "<group>"; };
+		4F53CF94279DF0A700C466C8 /* GameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameView.swift; sourceTree = "<group>"; };
+		4F53CF96279DF68300C466C8 /* Shaders.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Shaders.metal; sourceTree = "<group>"; };
+		4F7A3FB327A05414004DAA2C /* Renderable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Renderable.swift; sourceTree = "<group>"; };
+		4F7A3FB527A05563004DAA2C /* Node.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Node.swift; sourceTree = "<group>"; };
+		4F7A3FB727A0562B004DAA2C /* Player.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
+		4F7A3FBA27A0A350004DAA2C /* Math.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Math.swift; sourceTree = "<group>"; };
+		4F8D0E5E279F1DA700E7A2A0 /* Types.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Types.swift; sourceTree = "<group>"; };
+		4F8D0E64279F24FB00E7A2A0 /* Engine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Engine.swift; sourceTree = "<group>"; };
+		4F8D0E66279F264A00E7A2A0 /* Preferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Preferences.swift; sourceTree = "<group>"; };
+		4F8D0E68279F311F00E7A2A0 /* ShaderLibrary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShaderLibrary.swift; sourceTree = "<group>"; };
+		4F8D0E6A279F3B2C00E7A2A0 /* VertexDescriptorLibrary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VertexDescriptorLibrary.swift; sourceTree = "<group>"; };
+		4F8D0E6C279F3E2C00E7A2A0 /* RenderPipelineDescriptorLibrary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RenderPipelineDescriptorLibrary.swift; sourceTree = "<group>"; };
+		4F8D0E6E279F423800E7A2A0 /* RenderPipelineStateLibrary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RenderPipelineStateLibrary.swift; sourceTree = "<group>"; };
+		4F8D0E71279F477000E7A2A0 /* GameObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameObject.swift; sourceTree = "<group>"; };
+		4F8D0E73279F49FC00E7A2A0 /* Renderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Renderer.swift; sourceTree = "<group>"; };
+		4F8D0E75279F514700E7A2A0 /* MeshLibrary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeshLibrary.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		4F53CF7E279DE90A00C466C8 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		4F53CF78279DE90A00C466C8 = {
+			isa = PBXGroup;
+			children = (
+				4F53CF83279DE90A00C466C8 /* MetalCraft */,
+				4F53CF82279DE90A00C466C8 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		4F53CF82279DE90A00C466C8 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				4F53CF81279DE90A00C466C8 /* MetalCraft.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		4F53CF83279DE90A00C466C8 /* MetalCraft */ = {
+			isa = PBXGroup;
+			children = (
+				4F7A3FBA27A0A350004DAA2C /* Math.swift */,
+				4F8D0E70279F475A00E7A2A0 /* Game */,
+				4F8D0E63279F240F00E7A2A0 /* Libraries */,
+				4F8D0E62279F233200E7A2A0 /* Display */,
+				4F8D0E61279F231E00E7A2A0 /* Shaders */,
+				4F8D0E60279F230E00E7A2A0 /* Core */,
+				4F53CF93279DEFAB00C466C8 /* OtherFiles */,
+			);
+			path = MetalCraft;
+			sourceTree = "<group>";
+		};
+		4F53CF93279DEFAB00C466C8 /* OtherFiles */ = {
+			isa = PBXGroup;
+			children = (
+				4F53CF84279DE90A00C466C8 /* AppDelegate.swift */,
+				4F53CF88279DE90B00C466C8 /* Assets.xcassets */,
+				4F53CF8D279DE90B00C466C8 /* MetalCraft.entitlements */,
+			);
+			path = OtherFiles;
+			sourceTree = "<group>";
+		};
+		4F7A3FB227A05404004DAA2C /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				4F7A3FB327A05414004DAA2C /* Renderable.swift */,
+			);
+			path = Protocols;
+			sourceTree = "<group>";
+		};
+		4F7A3FB927A05654004DAA2C /* GameObjects */ = {
+			isa = PBXGroup;
+			children = (
+				4F7A3FB727A0562B004DAA2C /* Player.swift */,
+				4F8D0E71279F477000E7A2A0 /* GameObject.swift */,
+			);
+			path = GameObjects;
+			sourceTree = "<group>";
+		};
+		4F8D0E60279F230E00E7A2A0 /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				4F8D0E5E279F1DA700E7A2A0 /* Types.swift */,
+				4F8D0E64279F24FB00E7A2A0 /* Engine.swift */,
+				4F8D0E66279F264A00E7A2A0 /* Preferences.swift */,
+			);
+			path = Core;
+			sourceTree = "<group>";
+		};
+		4F8D0E61279F231E00E7A2A0 /* Shaders */ = {
+			isa = PBXGroup;
+			children = (
+				4F53CF96279DF68300C466C8 /* Shaders.metal */,
+			);
+			path = Shaders;
+			sourceTree = "<group>";
+		};
+		4F8D0E62279F233200E7A2A0 /* Display */ = {
+			isa = PBXGroup;
+			children = (
+				4F53CF8A279DE90B00C466C8 /* Main.storyboard */,
+				4F53CF94279DF0A700C466C8 /* GameView.swift */,
+				4F8D0E73279F49FC00E7A2A0 /* Renderer.swift */,
+			);
+			path = Display;
+			sourceTree = "<group>";
+		};
+		4F8D0E63279F240F00E7A2A0 /* Libraries */ = {
+			isa = PBXGroup;
+			children = (
+				4F8D0E68279F311F00E7A2A0 /* ShaderLibrary.swift */,
+				4F8D0E6A279F3B2C00E7A2A0 /* VertexDescriptorLibrary.swift */,
+				4F8D0E6C279F3E2C00E7A2A0 /* RenderPipelineDescriptorLibrary.swift */,
+				4F8D0E6E279F423800E7A2A0 /* RenderPipelineStateLibrary.swift */,
+				4F8D0E75279F514700E7A2A0 /* MeshLibrary.swift */,
+			);
+			path = Libraries;
+			sourceTree = "<group>";
+		};
+		4F8D0E70279F475A00E7A2A0 /* Game */ = {
+			isa = PBXGroup;
+			children = (
+				4F7A3FB927A05654004DAA2C /* GameObjects */,
+				4F7A3FB227A05404004DAA2C /* Protocols */,
+				4F7A3FB527A05563004DAA2C /* Node.swift */,
+			);
+			path = Game;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		4F53CF80279DE90A00C466C8 /* MetalCraft */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4F53CF90279DE90B00C466C8 /* Build configuration list for PBXNativeTarget "MetalCraft" */;
+			buildPhases = (
+				4F53CF7D279DE90A00C466C8 /* Sources */,
+				4F53CF7E279DE90A00C466C8 /* Frameworks */,
+				4F53CF7F279DE90A00C466C8 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = MetalCraft;
+			productName = MetalCraft;
+			productReference = 4F53CF81279DE90A00C466C8 /* MetalCraft.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		4F53CF79279DE90A00C466C8 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1320;
+				LastUpgradeCheck = 1320;
+				TargetAttributes = {
+					4F53CF80279DE90A00C466C8 = {
+						CreatedOnToolsVersion = 13.2.1;
+					};
+				};
+			};
+			buildConfigurationList = 4F53CF7C279DE90A00C466C8 /* Build configuration list for PBXProject "MetalCraft" */;
+			compatibilityVersion = "Xcode 13.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 4F53CF78279DE90A00C466C8;
+			productRefGroup = 4F53CF82279DE90A00C466C8 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				4F53CF80279DE90A00C466C8 /* MetalCraft */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		4F53CF7F279DE90A00C466C8 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4F53CF89279DE90B00C466C8 /* Assets.xcassets in Resources */,
+				4F53CF8C279DE90B00C466C8 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		4F53CF7D279DE90A00C466C8 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4F8D0E72279F477000E7A2A0 /* GameObject.swift in Sources */,
+				4F53CF97279DF68300C466C8 /* Shaders.metal in Sources */,
+				4F53CF95279DF0A700C466C8 /* GameView.swift in Sources */,
+				4F8D0E6B279F3B2C00E7A2A0 /* VertexDescriptorLibrary.swift in Sources */,
+				4F7A3FB827A0562B004DAA2C /* Player.swift in Sources */,
+				4F8D0E74279F49FC00E7A2A0 /* Renderer.swift in Sources */,
+				4F8D0E67279F264A00E7A2A0 /* Preferences.swift in Sources */,
+				4F7A3FB627A05563004DAA2C /* Node.swift in Sources */,
+				4F8D0E6F279F423800E7A2A0 /* RenderPipelineStateLibrary.swift in Sources */,
+				4F53CF85279DE90A00C466C8 /* AppDelegate.swift in Sources */,
+				4F7A3FBB27A0A350004DAA2C /* Math.swift in Sources */,
+				4F8D0E69279F311F00E7A2A0 /* ShaderLibrary.swift in Sources */,
+				4F7A3FB427A05414004DAA2C /* Renderable.swift in Sources */,
+				4F8D0E5F279F1DA700E7A2A0 /* Types.swift in Sources */,
+				4F8D0E76279F514700E7A2A0 /* MeshLibrary.swift in Sources */,
+				4F8D0E6D279F3E2C00E7A2A0 /* RenderPipelineDescriptorLibrary.swift in Sources */,
+				4F8D0E65279F24FB00E7A2A0 /* Engine.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		4F53CF8A279DE90B00C466C8 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				4F53CF8B279DE90B00C466C8 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		4F53CF8E279DE90B00C466C8 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 12.1;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		4F53CF8F279DE90B00C466C8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 12.1;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+			};
+			name = Release;
+		};
+		4F53CF91279DE90B00C466C8 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = MetalCraft/OtherFiles/MetalCraft.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 98589R7VQ2;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_NSMainStoryboardFile = Main;
+				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "Kermo-Saarse.MetalCraft";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		4F53CF92279DE90B00C466C8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = MetalCraft/OtherFiles/MetalCraft.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 98589R7VQ2;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_NSMainStoryboardFile = Main;
+				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "Kermo-Saarse.MetalCraft";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		4F53CF7C279DE90A00C466C8 /* Build configuration list for PBXProject "MetalCraft" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4F53CF8E279DE90B00C466C8 /* Debug */,
+				4F53CF8F279DE90B00C466C8 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		4F53CF90279DE90B00C466C8 /* Build configuration list for PBXNativeTarget "MetalCraft" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4F53CF91279DE90B00C466C8 /* Debug */,
+				4F53CF92279DE90B00C466C8 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 4F53CF79279DE90A00C466C8 /* Project object */;
+}
