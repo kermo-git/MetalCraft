@@ -18,25 +18,24 @@ class VertexDescriptorLibrary {
 
 protocol VertexDescriptor {
     var name: String {get}
-    var descriptor: MTLVertexDescriptor {get}
+    var descriptor: MTLVertexDescriptor! {get}
 }
 
 class BasicVertexDescriptor: VertexDescriptor {
     var name: String = "Basic Vertex Descriptor"
+    var descriptor: MTLVertexDescriptor!
     
-    var descriptor: MTLVertexDescriptor {
-        let result = MTLVertexDescriptor()
+    init() {
+        descriptor = MTLVertexDescriptor()
         
-        result.attributes[0].format = .float3
-        result.attributes[0].bufferIndex = 0
-        result.attributes[0].offset = 0
+        descriptor.attributes[0].format = .float3
+        descriptor.attributes[0].bufferIndex = 0
+        descriptor.attributes[0].offset = 0
         
-        result.attributes[1].format = .float4
-        result.attributes[1].bufferIndex = 0
-        result.attributes[1].offset = Float3.size()
+        descriptor.attributes[1].format = .float4
+        descriptor.attributes[1].bufferIndex = 0
+        descriptor.attributes[1].offset = Float3.size()
         
-        result.layouts[0].stride = Vertex.size()
-        
-        return result
+        descriptor.layouts[0].stride = Vertex.size()
     }
 }

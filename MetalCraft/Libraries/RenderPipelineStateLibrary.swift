@@ -18,19 +18,18 @@ class RenderPipelineStateLibrary {
 
 protocol RenderPipelineState {
     var name: String {get}
-    var state: MTLRenderPipelineState {get}
+    var state: MTLRenderPipelineState! {get}
 }
 
 class BasicRenderPipelineState: RenderPipelineState {
     var name: String = "Basic Render Pipeline State"
+    var state: MTLRenderPipelineState!
     
-    var state: MTLRenderPipelineState {
-        var result: MTLRenderPipelineState!
+    init() {
         do {
-            result = try Engine.Device.makeRenderPipelineState(descriptor: RenderPipelineDescriptorLibrary.get(.Basic))
+            state = try Engine.Device.makeRenderPipelineState(descriptor: RenderPipelineDescriptorLibrary.get(.Basic))
         } catch {
             print(error.localizedDescription)
         }
-        return result
     }
 }
