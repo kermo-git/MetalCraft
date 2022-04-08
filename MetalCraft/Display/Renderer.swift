@@ -30,8 +30,7 @@ extension Renderer: MTKViewDelegate {
         let encoder = commandBuffer?.makeRenderCommandEncoder(descriptor: renderPassDescriptor)
         encoder?.setRenderPipelineState(RenderPipelineStateLibrary.get(.Basic))
         
-        gameObject.update(deltaTime: 1 / Float(view.preferredFramesPerSecond))
-        gameObject.render(encoder!)
+        SceneManager.tick(encoder: encoder!, deltaTime: 1 / Float(view.preferredFramesPerSecond))
         
         encoder?.endEncoding()
         commandBuffer?.present(drawable)
