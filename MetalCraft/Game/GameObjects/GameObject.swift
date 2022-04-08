@@ -8,18 +8,7 @@ class GameObject: Node {
         mesh = MeshLibrary.Mesh(meshType)
     }
     
-    var time: Float = 0
-    func update(deltaTime: Float) {
-        time += deltaTime
-        
-        let cos = cos(time)
-        position.x = cos
-        rotation.z = cos
-        axisScale = Float3(repeating: cos)
-        updateConstants()
-    }
-    
-    private func updateConstants() {
+    override func update(deltaTime: Float) {
         constants.modelMatrix = self.modelMatrix
     }
 }

@@ -9,4 +9,5 @@ class ClearColors {
 class Preferences {
     static let ClearColor = ClearColors.BLACK
     static let PixelFormat = MTLPixelFormat.bgra8Unorm
+    static let InitialScene = SceneType.SandBox
 }

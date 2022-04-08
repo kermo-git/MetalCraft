@@ -60,9 +60,9 @@ class CustomMesh: Mesh {
 class Triangle: CustomMesh {
     override func createVerticesAndIndices() {
         vertices = [
-            Vertex(position: Float3( 0,  0.5, 0), color: Float4(0.5, 0, 0, 0.5)),
-            Vertex(position: Float3(-0.5, -0.5, 0), color: Float4(0, 0.5, 0, 0.5)),
-            Vertex(position: Float3( 0.5, -0.5, 0), color: Float4(0, 0, 0.5, 0.5))
+            Vertex(position: Float3(-0.5,  0.5, 0), color: Float4(0.5,   0,   0, 1)),
+            Vertex(position: Float3( 0.5,  0.5, 0), color: Float4(  0, 0.5,   0, 1)),
+            Vertex(position: Float3(   0, -0.5, 0), color: Float4(  0,   0, 0.5, 1))
         ]
         indices = [0, 1, 2]
     }
@@ -71,10 +71,10 @@ class Triangle: CustomMesh {
 class Quad: CustomMesh {
     override func createVerticesAndIndices() {
         vertices = [
-            Vertex(position: Float3(-0.5,  0.5, 0), color: Float4(0.5, 0, 0, 0.5)),
-            Vertex(position: Float3(-0.5, -0.5, 0), color: Float4(0, 0.5, 0, 0.5)),
-            Vertex(position: Float3( 0.5, -0.5, 0), color: Float4(0, 0, 0.5, 0.5)),
-            Vertex(position: Float3( 0.5,  0.5, 0), color: Float4(0.5, 0.5, 0, 0.5)),
+            Vertex(position: Float3(-0.5,  0.5, 0), color: Float4(0.5,   0,   0, 1)),
+            Vertex(position: Float3(-0.5, -0.5, 0), color: Float4(  0, 0.5,   0, 1)),
+            Vertex(position: Float3( 0.5, -0.5, 0), color: Float4(  0,   0, 0.5, 1)),
+            Vertex(position: Float3( 0.5,  0.5, 0), color: Float4(0.5, 0.5,   0, 1)),
         ]
         indices = [
             0, 1, 2,

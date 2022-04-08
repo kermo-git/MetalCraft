@@ -10,5 +10,6 @@ class Engine {
         RenderPipelineDescriptorLibrary.Initialize()
         RenderPipelineStateLibrary.Initialize()
         MeshLibrary.Initialize()
+        SceneManager.setScene(Preferences.InitialScene)
     }
 }
