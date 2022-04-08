@@ -1,12 +1,21 @@
 import MetalKit
 
+func getScreenSize(view: MTKView) -> Float2 {
+    return Float2(Float(view.bounds.width), Float(view.bounds.height))
+}
+
 class Renderer: NSObject {
-    var gameObject: GameObject = GameObject(meshType: .Quad)
+    static var screenSize: Float2 = Float2(0, 0)
+    
+    init(view: MTKView) {
+        Renderer.screenSize = getScreenSize(view: view)
+    }
 }
 
 extension Renderer: MTKViewDelegate {
+    
     func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {
-        // TODO
+        Renderer.screenSize = getScreenSize(view: view)
     }
     
     func draw(in view: MTKView) {
