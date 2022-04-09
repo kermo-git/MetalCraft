@@ -2,6 +2,8 @@
 class SandboxScene: Scene {
     
     override func buildScene() {
+        cameraManager.addCamera(DebugCamera())
+        
         let count = 10
         let scale: Float = 0.2
         

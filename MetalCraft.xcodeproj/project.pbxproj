@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4F00096C28015ECE001BDA70 /* Camera.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F00096B28015ECE001BDA70 /* Camera.swift */; };
+		4F00096E2801616A001BDA70 /* DebugCamera.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F00096D2801616A001BDA70 /* DebugCamera.swift */; };
+		4F00097028016E3E001BDA70 /* CameraManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F00096F28016E3E001BDA70 /* CameraManager.swift */; };
 		4F53CF85279DE90A00C466C8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F53CF84279DE90A00C466C8 /* AppDelegate.swift */; };
 		4F53CF89279DE90B00C466C8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4F53CF88279DE90B00C466C8 /* Assets.xcassets */; };
 		4F53CF8C279DE90B00C466C8 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4F53CF8A279DE90B00C466C8 /* Main.storyboard */; };
@@ -34,6 +37,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		4F00096B28015ECE001BDA70 /* Camera.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Camera.swift; sourceTree = "<group>"; };
+		4F00096D2801616A001BDA70 /* DebugCamera.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugCamera.swift; sourceTree = "<group>"; };
+		4F00096F28016E3E001BDA70 /* CameraManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraManager.swift; sourceTree = "<group>"; };
 		4F53CF81279DE90A00C466C8 /* MetalCraft.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MetalCraft.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4F53CF84279DE90A00C466C8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		4F53CF88279DE90B00C466C8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -73,6 +79,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4F00096A28015EB8001BDA70 /* Cameras */ = {
+			isa = PBXGroup;
+			children = (
+				4F00096B28015ECE001BDA70 /* Camera.swift */,
+				4F00096D2801616A001BDA70 /* DebugCamera.swift */,
+			);
+			path = Cameras;
+			sourceTree = "<group>";
+		};
 		4F53CF78279DE90A00C466C8 = {
 			isa = PBXGroup;
 			children = (
@@ -175,6 +190,7 @@
 		4F8D0E70279F475A00E7A2A0 /* Game */ = {
 			isa = PBXGroup;
 			children = (
+				4F00096A28015EB8001BDA70 /* Cameras */,
 				4F7A3FB527A05563004DAA2C /* Node.swift */,
 				4FC37FB227FE261E00A651EA /* Scenes */,
 				4F7A3FB927A05654004DAA2C /* GameObjects */,
@@ -196,6 +212,7 @@
 			isa = PBXGroup;
 			children = (
 				4FC37FB727FE2C5B00A651EA /* SceneManager.swift */,
+				4F00096F28016E3E001BDA70 /* CameraManager.swift */,
 			);
 			path = Managers;
 			sourceTree = "<group>";
@@ -283,6 +300,7 @@
 				4F8D0E72279F477000E7A2A0 /* GameObject.swift in Sources */,
 				4FC37FB827FE2C5B00A651EA /* SceneManager.swift in Sources */,
 				4F53CF97279DF68300C466C8 /* Shaders.metal in Sources */,
+				4F00097028016E3E001BDA70 /* CameraManager.swift in Sources */,
 				4F53CF95279DF0A700C466C8 /* GameView.swift in Sources */,
 				4F8D0E6B279F3B2C00E7A2A0 /* VertexDescriptorLibrary.swift in Sources */,
 				4F7A3FB827A0562B004DAA2C /* Player.swift in Sources */,
@@ -297,7 +315,9 @@
 				4F8D0E69279F311F00E7A2A0 /* ShaderLibrary.swift in Sources */,
 				4F7A3FB427A05414004DAA2C /* Renderable.swift in Sources */,
 				4FCA541427FF5F7400F3AF14 /* Keyboard.swift in Sources */,
+				4F00096C28015ECE001BDA70 /* Camera.swift in Sources */,
 				4F8D0E5F279F1DA700E7A2A0 /* Types.swift in Sources */,
+				4F00096E2801616A001BDA70 /* DebugCamera.swift in Sources */,
 				4F8D0E76279F514700E7A2A0 /* MeshLibrary.swift in Sources */,
 				4F8D0E6D279F3E2C00E7A2A0 /* RenderPipelineDescriptorLibrary.swift in Sources */,
 				4F8D0E65279F24FB00E7A2A0 /* Engine.swift in Sources */,
