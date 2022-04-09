@@ -5,7 +5,7 @@ class Pointer: GameObject {
     
     init(camera: Camera) {
         self.camera = camera
-        super.init(meshType: .Triangle)
+        super.init(mesh: Triangle)
     }
     
     override func update(deltaTime: Float) {

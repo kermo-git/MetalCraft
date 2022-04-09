@@ -1,4 +1,4 @@
 
 class CubeObject: GameObject {
-    init() { super.init(meshType: .Cube) }
+    init() { super.init(mesh: Cube) }
 }

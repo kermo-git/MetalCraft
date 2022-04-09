@@ -9,7 +9,6 @@ class Engine {
     static var RenderPipelineState: MTLRenderPipelineState!
     
     static func Ignite() {
-        MeshLibrary.Initialize()
         SceneManager.setScene(Preferences.InitialScene)
         
         DepthPencilState = getDepthStencilState()

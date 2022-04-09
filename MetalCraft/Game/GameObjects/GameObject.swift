@@ -2,10 +2,10 @@ import Metal
 
 class GameObject: Node {
     var constants = ModelConstants()
-    var mesh: Mesh!
+    var mesh: Mesh
     
-    init(meshType: MeshType) {
-        mesh = MeshLibrary.Mesh(meshType)
+    init(mesh: Mesh) {
+        self.mesh = mesh
     }
     
     override func update(deltaTime: Float) {
