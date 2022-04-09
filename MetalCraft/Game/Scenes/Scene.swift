@@ -12,8 +12,10 @@ class Scene: Node {
     func buildScene() {}
     
     override func update(deltaTime: Float) {
+        
         cameraManager.update(deltaTime: deltaTime)
         constants.viewMatrix = cameraManager.currentCamera.viewMatrix
+        constants.projectionMatrix = cameraManager.currentCamera.projectionMatrix
         super.update(deltaTime: deltaTime)
     }
     

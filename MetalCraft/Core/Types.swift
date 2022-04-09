@@ -32,6 +32,7 @@ struct Vertex: Sizeable {
 
 struct SceneConstants: Sizeable {
     var viewMatrix: Float4x4 = matrix_identity_float4x4
+    var projectionMatrix: Float4x4 = matrix_identity_float4x4
 }
 
 struct ModelConstants: Sizeable {

@@ -28,6 +28,7 @@ class BasicRenderPipelineDescriptor: RenderPipelineDescriptor {
     init() {
         descriptor = MTLRenderPipelineDescriptor()
         descriptor.colorAttachments[0].pixelFormat = Preferences.PixelFormat
+        descriptor.depthAttachmentPixelFormat = Preferences.DepthPixelFormat
         descriptor.vertexFunction = ShaderLibrary.Vertex(.Basic)
         descriptor.fragmentFunction = ShaderLibrary.Fragment(.Basic)
         descriptor.vertexDescriptor = VertexDescriptorLibrary.Descriptor(.Basic)

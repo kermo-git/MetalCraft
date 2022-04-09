@@ -11,6 +11,7 @@ class GameView: MTKView {
         self.device = Engine.Device
         self.clearColor = Preferences.ClearColor
         self.colorPixelFormat = Preferences.PixelFormat
+        self.depthStencilPixelFormat = Preferences.DepthPixelFormat
         self.delegate = renderer
     }
     
@@ -25,6 +26,12 @@ extension GameView {
     
     override func keyUp(with event: NSEvent) {
         Keyboard.setKeyPressed(event.keyCode, false)
+    }
+    
+    override func flagsChanged(with event: NSEvent) {
+        let flags = event.modifierFlags.intersection(.deviceIndependentFlagsMask)
+        Keyboard.setKeyPressed((KeyCode.SHIFT).rawValue, flags.contains(.shift))
+        Keyboard.setKeyPressed((KeyCode.COMMAND).rawValue, flags.contains(.command))
     }
 }
 

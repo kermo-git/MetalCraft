@@ -1,7 +1,11 @@
 import simd
 
 func toRadians(_ degrees: Float) -> Float {
-    degrees * Float.pi / 180
+    return degrees * Float.pi / 180
+}
+
+func toDegrees(_ radians: Float) -> Float {
+    return (radians * 180) / Float.pi
 }
 
 func translate(dir: Float3) -> Float4x4 {
@@ -63,5 +67,23 @@ func rotateAroundZ(_ radians: Float) -> Float4x4 {
         Float4(-sin, cos, 0, 0),
         Float4( 0,   0,   1, 0),
         Float4( 0,   0,   0, 1)
+    )
+}
+
+// https://gamedev.stackexchange.com/questions/120338/what-does-a-perspective-projection-matrix-look-like-in-opengl
+func perspective(degreesFov: Float, aspectRatio: Float, near: Float, far: Float) -> Float4x4 {
+    let fov = toRadians(degreesFov)
+    let t: Float = tan(fov/2)
+    
+    let x = 1 / (aspectRatio * t)
+    let y = 1 / t
+    let z = -((far + near) / (far - near))
+    let w = -((2 * far * near) / (far - near))
+    
+    return Float4x4(
+        Float4(x, 0, 0,  0),
+        Float4(0, y, 0,  0),
+        Float4(0, 0, z, -1),
+        Float4(0, 0, w,  0)
     )
 }
