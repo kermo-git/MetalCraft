@@ -2,11 +2,19 @@ import simd
 import Metal
 
 class Node {
+    var mesh: Mesh
+    private var children: [Node] = []
+    var constants = ShaderConstants()
+    
+    init(mesh: Mesh) {
+        self.mesh = mesh
+    }
+    
     var position = Float3(0, 0, 0)
     var scaleFactor = Float3(1, 1, 1)
     var rotation = Float3(0, 0, 0)
     
-    var modelMatrix: Float4x4 {
+    private var modelMatrix: Float4x4 {
         return translate(dir: position) *
             rotateAroundZ(rotation.z) *
             rotateAroundY(rotation.y) *
@@ -14,15 +22,18 @@ class Node {
             scale(axis: scaleFactor)
     }
     
-    var children: [Node] = []
-    
     func addChild(_ child: Node) {
         children.append(child)
     }
     
-    func update(deltaTime: Float) {
+    func updateModel(deltaTime: Float) {}
+    
+    func update(deltaTime: Float, parentMatrix: Float4x4 = matrix_identity_float4x4) {
+        updateModel(deltaTime: deltaTime)
+        constants.projectionViewModel = parentMatrix * self.modelMatrix
+        
         for child in children {
-            child.update(deltaTime: deltaTime)
+            child.update(deltaTime: deltaTime, parentMatrix: constants.projectionViewModel)
         }
     }
     
@@ -30,9 +41,20 @@ class Node {
         for child in children {
             child.render(encoder)
         }
+        renderMesh(encoder)
+    }
+    
+    private func renderMesh(_ encoder: MTLRenderCommandEncoder) {
+        encoder.setRenderPipelineState(Engine.RenderPipelineState)
+        encoder.setDepthStencilState(Engine.DepthPencilState)
         
-        if let renderable = self as? Renderable {
-            renderable.doRender(encoder)
-        }
+        encoder.setVertexBytes(&constants, length: ShaderConstants.size(), index: 2)
+        encoder.setVertexBuffer(mesh.vertexBuffer, offset: 0, index: 0)
+        
+        encoder.drawIndexedPrimitives(type: .triangle,
+                                      indexCount: mesh.indexCount,
+                                      indexType: .uint16,
+                                      indexBuffer: mesh.indexBuffer,
+                                      indexBufferOffset: 0)
     }
 }

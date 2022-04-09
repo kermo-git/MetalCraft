@@ -30,11 +30,6 @@ struct Vertex: Sizeable {
     var color: Float4
 }
 
-struct SceneConstants: Sizeable {
-    var viewMatrix: Float4x4 = matrix_identity_float4x4
-    var projectionMatrix: Float4x4 = matrix_identity_float4x4
-}
-
-struct ModelConstants: Sizeable {
-    var modelMatrix: Float4x4 = matrix_identity_float4x4
+struct ShaderConstants: Sizeable {
+    var projectionViewModel: Float4x4 = matrix_identity_float4x4
 }

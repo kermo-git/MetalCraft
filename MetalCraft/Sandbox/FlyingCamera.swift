@@ -1,14 +1,14 @@
 
-class DebugCamera: Camera {
-    var type: CameraType = .DebugCamera
+class FlyingCamera: Camera {
     var projectionMatrix: Float4x4 {
         perspective(degreesFov: 45,
                     aspectRatio: Renderer.aspectRatio,
                     near: 0.1,
                     far: 1000)
     }
+    var rotationX: Float = 0
+    var rotationY: Float = 0
     var position: Float3 = Float3(0, 0, 0)
-    var rotation: Float3 = Float3(0, 0, 0)
     var speed: Float
     
     init(speed: Float = 1) {
@@ -36,16 +36,16 @@ class DebugCamera: Camera {
             position.z += inc
         }
         if (Keyboard.isKeyPressed(.DOWN)) {
-            rotation.x -= inc
+            rotationX -= inc
         }
         if (Keyboard.isKeyPressed(.UP)) {
-            rotation.x += inc
+            rotationX += inc
         }
         if (Keyboard.isKeyPressed(.RIGHT)) {
-            rotation.y -= inc
+            rotationY -= inc
         }
         if (Keyboard.isKeyPressed(.LEFT)) {
-            rotation.y += inc
+            rotationY += inc
         }
     }
 }

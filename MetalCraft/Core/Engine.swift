@@ -4,21 +4,20 @@ class Engine {
     static let Device: MTLDevice = MTLCreateSystemDefaultDevice()!
     static let CommandQueue: MTLCommandQueue = Device.makeCommandQueue()!
     static let DefaultLibrary: MTLLibrary = Device.makeDefaultLibrary()!
-    
     static var DepthPencilState: MTLDepthStencilState!
     static var RenderPipelineState: MTLRenderPipelineState!
     
     static func Ignite() {
-        SceneManager.setScene(Preferences.InitialScene)
-        
         DepthPencilState = getDepthStencilState()
 
         let renderPipelineDescriptor = getRenderPipelineDescriptor(
-            vShader: getShaderFunction(name: "basic_vertex_shader"),
-            fShader: getShaderFunction(name: "basic_fragment_shader"),
+            vertexFunction: getShaderFunction(name: "basic_vertex_shader"),
+            fragmentFunction: getShaderFunction(name: "basic_fragment_shader"),
             vDescriptor: getVertexDescriptor()
         )
         RenderPipelineState = getRenderPipelineState(descriptor: renderPipelineDescriptor)
+        
+        GameLogic.setScene(Preferences.InitialScene)
     }
 
     static func getDepthStencilState() -> MTLDepthStencilState {
@@ -49,15 +48,15 @@ class Engine {
     }
     
     static func getRenderPipelineDescriptor(
-        vShader: MTLFunction,
-        fShader: MTLFunction,
+        vertexFunction: MTLFunction,
+        fragmentFunction: MTLFunction,
         vDescriptor: MTLVertexDescriptor) -> MTLRenderPipelineDescriptor {
             
         let descriptor = MTLRenderPipelineDescriptor()
         descriptor.colorAttachments[0].pixelFormat = Preferences.PixelFormat
         descriptor.depthAttachmentPixelFormat = Preferences.DepthPixelFormat
-        descriptor.vertexFunction = vShader
-        descriptor.fragmentFunction = fShader
+        descriptor.vertexFunction = vertexFunction
+        descriptor.fragmentFunction = fragmentFunction
         descriptor.vertexDescriptor = vDescriptor
             
         return descriptor

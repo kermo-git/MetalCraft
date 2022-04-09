@@ -10,5 +10,5 @@ class Preferences {
     static let ClearColor = ClearColors.BLACK
     static let PixelFormat = MTLPixelFormat.bgra8Unorm
     static let DepthPixelFormat = MTLPixelFormat.depth32Float
-    static let InitialScene = SceneType.SandBox
+    static let InitialScene = SandboxScene()
 }
