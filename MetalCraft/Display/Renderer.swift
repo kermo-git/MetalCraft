@@ -31,7 +31,7 @@ extension Renderer: MTKViewDelegate {
         
         let commandBuffer = Engine.CommandQueue.makeCommandBuffer()
         let encoder = commandBuffer?.makeRenderCommandEncoder(descriptor: renderPassDescriptor)
-        encoder?.setRenderPipelineState(RenderPipelineStateLibrary.get(.Basic))
+        encoder?.setRenderPipelineState(Engine.RenderPipelineState)
         
         SceneManager.tick(encoder: encoder!, deltaTime: 1 / Float(view.preferredFramesPerSecond))
         

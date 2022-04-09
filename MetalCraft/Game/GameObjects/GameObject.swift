@@ -15,8 +15,10 @@ class GameObject: Node {
 
 extension GameObject: Renderable {
     func doRender(_ encoder: MTLRenderCommandEncoder) {
+        encoder.setRenderPipelineState(Engine.RenderPipelineState)
+        encoder.setDepthStencilState(Engine.DepthPencilState)
+        
         encoder.setVertexBytes(&constants, length: ModelConstants.size(), index: 2)
-        encoder.setRenderPipelineState(RenderPipelineStateLibrary.get(.Basic))
         encoder.setVertexBuffer(mesh.vertexBuffer, offset: 0, index: 0)
         
         encoder.drawIndexedPrimitives(type: .triangle,
