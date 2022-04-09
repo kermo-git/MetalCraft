@@ -1,20 +1,13 @@
 
 class SandboxScene: Scene {
+    let cube = CubeObject()
     
     override func buildScene() {
-        cameraManager.addCamera(DebugCamera())
-        
-        let count = 10
-        let scale: Float = 0.2
-        
-        for y in -count..<count {
-            for x in -count..<count {
-                let player = Player()
-                player.position.x = (Float(x) + 0.5) / Float(count)
-                player.position.y = (Float(y) + 0.5) / Float(count)
-                player.scaleFactor = Float3(scale, scale, scale)
-                addChild(player)
-            }
-        }
+        let camera = DebugCamera(speed: 3)
+        cameraManager.addCamera(camera)
+        addChild(cube)
+        cube.rotation.y = 0.2
+        cube.rotation.x = 0.2
+        cube.position.z = -7
     }
 }
