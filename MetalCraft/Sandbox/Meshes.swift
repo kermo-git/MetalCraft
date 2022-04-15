@@ -1,19 +1,19 @@
 
 let Triangle = Mesh(
     vertices: [
-        Vertex(position: Float3(-0.5,  0.5, 0), color: Float4(0.5,   0,   0, 1)),
-        Vertex(position: Float3( 0.5,  0.5, 0), color: Float4(  0, 0.5,   0, 1)),
-        Vertex(position: Float3(   0, -0.5, 0), color: Float4(  0,   0, 0.5, 1))
+        Vertex(position: Float3(-1,  1, 0), textureCoords: Float2(0, 0)),
+        Vertex(position: Float3( 1,  1, 0), textureCoords: Float2(1, 0)),
+        Vertex(position: Float3( 0, -1, 0), textureCoords: Float2(0.5, 1))
     ],
     indices: [0, 1, 2]
 )
 
 let Quad = Mesh(
     vertices: [
-        Vertex(position: Float3(-0.5,  0.5, 0), color: Float4(0.5,   0,   0, 1)),
-        Vertex(position: Float3(-0.5, -0.5, 0), color: Float4(  0, 0.5,   0, 1)),
-        Vertex(position: Float3( 0.5, -0.5, 0), color: Float4(  0,   0, 0.5, 1)),
-        Vertex(position: Float3( 0.5,  0.5, 0), color: Float4(0.5, 0.5,   0, 1)),
+        Vertex(position: Float3(-1,  1, 0), textureCoords: Float2(0, 0)),
+        Vertex(position: Float3(-1, -1, 0), textureCoords: Float2(0, 1)),
+        Vertex(position: Float3( 1, -1, 0), textureCoords: Float2(1, 1)),
+        Vertex(position: Float3( 1,  1, 0), textureCoords: Float2(1, 0)),
     ],
     indices: [
         0, 1, 2,
@@ -24,16 +24,16 @@ let Quad = Mesh(
 let Cube = Mesh(
     vertices: [
         // Bottom vertices
-        Vertex(position: Float3(-1, -1, -1), color: Float4(0.2, 0.2, 0.2, 1)),
-        Vertex(position: Float3( 1, -1, -1), color: Float4(0.2, 0.2, 0.8, 1)),
-        Vertex(position: Float3(-1, -1,  1), color: Float4(0.8, 0.8, 0.2, 1)),
-        Vertex(position: Float3( 1, -1,  1), color: Float4(0.8, 0.8, 0.8, 1)),
+        Vertex(position: Float3(-1, -1, -1), textureCoords: Float2(0, 0)),
+        Vertex(position: Float3( 1, -1, -1), textureCoords: Float2(1, 0)),
+        Vertex(position: Float3(-1, -1,  1), textureCoords: Float2(0, 1)),
+        Vertex(position: Float3( 1, -1,  1), textureCoords: Float2(1, 1)),
         
         // Top vertices
-        Vertex(position: Float3(-1,  1, -1), color: Float4(0.2, 0.2, 0.4, 1)),
-        Vertex(position: Float3( 1,  1, -1), color: Float4(0.3, 0.8, 0.8, 1)),
-        Vertex(position: Float3(-1,  1,  1), color: Float4(0.7,   0, 0.7, 1)),
-        Vertex(position: Float3( 1,  1,  1), color: Float4(0.5, 0.5, 0.2, 1)),
+        Vertex(position: Float3(-1,  1, -1), textureCoords: Float2(0, 1)),
+        Vertex(position: Float3( 1,  1, -1), textureCoords: Float2(1, 1)),
+        Vertex(position: Float3(-1,  1,  1), textureCoords: Float2(0, 0)),
+        Vertex(position: Float3( 1,  1,  1), textureCoords: Float2(1, 0)),
     ],
     indices: [
         // Bottom face
@@ -59,5 +59,29 @@ let Cube = Mesh(
         // Right face
         1, 3, 7,
         1, 5, 7
+    ]
+)
+
+let Pyramid = Mesh(
+    vertices: [
+        // Apex
+        Vertex(position: Float3(0, 1, 0), textureCoords: Float2(0.5, 0)),
+        
+        // Bottom vertices
+        Vertex(position: Float3(-1, -1, -1), textureCoords: Float2(0, 1)),
+        Vertex(position: Float3( 1, -1, -1), textureCoords: Float2(1, 1)),
+        Vertex(position: Float3(-1, -1,  1), textureCoords: Float2(1, 1)),
+        Vertex(position: Float3( 1, -1,  1), textureCoords: Float2(0, 1)),
+    ],
+    indices: [
+        // Bottom
+        1, 2, 3,
+        2, 3, 4,
+        
+        // Sides
+        1, 0, 2,
+        2, 0, 4,
+        4, 0, 3,
+        3, 0, 1,
     ]
 )
