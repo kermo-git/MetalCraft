@@ -1,4 +1,5 @@
 import Metal
+import MetalKit
 
 class Engine {
     static let Device: MTLDevice = MTLCreateSystemDefaultDevice()!
@@ -6,18 +7,46 @@ class Engine {
     static let DefaultLibrary: MTLLibrary = Device.makeDefaultLibrary()!
     static var DepthPencilState: MTLDepthStencilState!
     static var RenderPipelineState: MTLRenderPipelineState!
+    static let SamplerState: MTLSamplerState = getSamplerState()
     
     static func Ignite() {
         DepthPencilState = getDepthStencilState()
-
-        let renderPipelineDescriptor = getRenderPipelineDescriptor(
-            vertexFunction: getShaderFunction(name: "basic_vertex_shader"),
-            fragmentFunction: getShaderFunction(name: "basic_fragment_shader"),
+        
+        let rPipelineDesc = getRenderPipelineDescriptor(
+            vertexFunction: getShaderFunction(name: "vertexShader"),
+            fragmentFunction: getShaderFunction(name: "fragmentShader"),
             vDescriptor: getVertexDescriptor()
         )
-        RenderPipelineState = getRenderPipelineState(descriptor: renderPipelineDescriptor)
+        RenderPipelineState = getRenderPipelineState(descriptor: rPipelineDesc)
+    }
+    
+    static func getTexture(fileName: String, fileExtension: String = "png",
+                           origin: MTKTextureLoader.Origin = MTKTextureLoader.Origin.topLeft) -> MTLTexture {
         
-        GameLogic.setScene(Preferences.InitialScene)
+        var result: MTLTexture!
+        
+        if let url = Bundle.main.url(forResource: fileName, withExtension: fileExtension) {
+            
+            let loader = MTKTextureLoader(device: Device)
+            let options: [MTKTextureLoader.Option : Any] = [MTKTextureLoader.Option.origin: origin]
+            
+            do {
+                result = try loader.newTexture(URL: url, options: options)
+                result.label = fileName
+            } catch let error as NSError {
+                print("Error creating texture \(fileName): \(error)")
+            }
+        } else {
+            print("Texture \(fileName) does not exist!")
+        }
+        return result
+    }
+    
+    static func getSamplerState() -> MTLSamplerState {
+        let descriptor = MTLSamplerDescriptor()
+        descriptor.minFilter = .nearest
+        descriptor.magFilter = .nearest
+        return Device.makeSamplerState(descriptor: descriptor)!
     }
 
     static func getDepthStencilState() -> MTLDepthStencilState {
@@ -38,7 +67,7 @@ class Engine {
         descriptor.attributes[0].bufferIndex = 0
         descriptor.attributes[0].offset = 0
         
-        descriptor.attributes[1].format = .float4
+        descriptor.attributes[1].format = .float2
         descriptor.attributes[1].bufferIndex = 0
         descriptor.attributes[1].offset = Float3.size()
         

@@ -3,30 +3,40 @@ using namespace metal;
 
 struct VertexIn {
     float3 position [[ attribute(0) ]];
-    float4 color [[ attribute(1) ]];
+    float2 textureCoords [[ attribute(1) ]];
 };
 
-struct ShaderConstants {
+struct ModelConstants {
     float4x4 projectionViewModel;
+    int textureIdx;
 };
 
 struct RasterizerData {
     float4 position [[ position ]];
-    half4 color;
+    float2 textureCoords;
+    int textureIdx [[ flat ]];
 };
 
-vertex RasterizerData basic_vertex_shader(const VertexIn vIn [[ stage_in ]],
-                                          // constant SceneConstants &sceneConstants [[ buffer(1) ]],
-                                          constant ShaderConstants &modelConstants [[ buffer(2) ]]) {
+vertex RasterizerData vertexShader(const VertexIn vIn [[ stage_in ]],
+                                   constant ModelConstants *constantsArray [[ buffer(1) ]],
+                                   uint instanceID [[ instance_id ]]) {
     
+    ModelConstants modelConstants = constantsArray[instanceID];
     RasterizerData rd;
     
     rd.position = modelConstants.projectionViewModel * float4(vIn.position, 1);
-    rd.color = half4(vIn.color);
+    rd.textureCoords = vIn.textureCoords;
+    rd.textureIdx = modelConstants.textureIdx;
     
     return rd;
 }
 
-fragment half4 basic_fragment_shader(RasterizerData rd [[ stage_in ]]) {
-    return rd.color;
+fragment half4 fragmentShader(const RasterizerData rd [[ stage_in ]],
+                              sampler sampler2D [[ sampler(0) ]],
+                              array<texture2d<half>, 5> textures [[ texture(0) ]]) {
+    
+    
+    texture2d<half> texture = textures[rd.textureIdx];
+    return texture.sample(sampler2D, rd.textureCoords);
 }
+

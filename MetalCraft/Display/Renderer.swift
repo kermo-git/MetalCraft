@@ -31,7 +31,6 @@ extension Renderer: MTKViewDelegate {
         
         let commandBuffer = Engine.CommandQueue.makeCommandBuffer()
         let encoder = commandBuffer?.makeRenderCommandEncoder(descriptor: renderPassDescriptor)
-        encoder?.setRenderPipelineState(Engine.RenderPipelineState)
         
         GameLogic.tick(encoder: encoder!, deltaTime: 1 / Float(view.preferredFramesPerSecond))
         

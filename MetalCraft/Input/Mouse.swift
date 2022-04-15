@@ -11,7 +11,7 @@ class Mouse {
     // SetMousePositionChange
     static func changePosition(newPosition: Float2, delta: Float2) {
         position = newPosition
-        positionDelta += delta
+        positionDelta = delta
     }
     
     // GetDX
