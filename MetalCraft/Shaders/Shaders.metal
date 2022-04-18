@@ -2,41 +2,54 @@
 using namespace metal;
 
 struct VertexIn {
-    float3 position [[ attribute(0) ]];
-    float2 textureCoords [[ attribute(1) ]];
+    float4 position [[ attribute(0) ]];
+    float4 normal [[ attribute(1) ]];
+    float2 textureCoords [[ attribute(2) ]];
 };
 
-struct ModelConstants {
+struct VertexConstants {
     float4x4 projectionViewModel;
-    int textureIdx;
+    float4x4 rotation;
+    int textureID;
 };
 
-struct RasterizerData {
+struct FragmentIn {
     float4 position [[ position ]];
+    float3 normal;
     float2 textureCoords;
-    int textureIdx [[ flat ]];
+    int textureID [[ flat ]];
 };
 
-vertex RasterizerData vertexShader(const VertexIn vIn [[ stage_in ]],
-                                   constant ModelConstants *constantsArray [[ buffer(1) ]],
-                                   uint instanceID [[ instance_id ]]) {
-    
-    ModelConstants modelConstants = constantsArray[instanceID];
-    RasterizerData rd;
-    
-    rd.position = modelConstants.projectionViewModel * float4(vIn.position, 1);
-    rd.textureCoords = vIn.textureCoords;
-    rd.textureIdx = modelConstants.textureIdx;
-    
-    return rd;
+struct FragmentConstants {
+    float3 sunDirection;
+};
+
+float3 toFloat3(float4 vec) {
+    return float3(vec.x, vec.y, vec.z);
 }
 
-fragment half4 fragmentShader(const RasterizerData rd [[ stage_in ]],
+vertex FragmentIn vertexShader(VertexIn vIn [[ stage_in ]],
+                               constant VertexConstants *constantsArray [[ buffer(1) ]],
+                               uint instanceID [[ instance_id ]]) {
+    
+    VertexConstants constants = constantsArray[instanceID];
+    FragmentIn fIn;
+    
+    fIn.position = constants.projectionViewModel * vIn.position;
+    fIn.normal = toFloat3(constants.rotation * vIn.normal);
+    fIn.textureCoords = vIn.textureCoords;
+    fIn.textureID = constants.textureID;
+    
+    return fIn;
+}
+
+fragment half4 fragmentShader(FragmentIn fIn [[ stage_in ]],
+                              constant FragmentConstants &constants [[ buffer(1) ]],
                               sampler sampler2D [[ sampler(0) ]],
                               array<texture2d<half>, 5> textures [[ texture(0) ]]) {
     
-    
-    texture2d<half> texture = textures[rd.textureIdx];
-    return texture.sample(sampler2D, rd.textureCoords);
+    texture2d<half> texture = textures[fIn.textureID];
+    half4 color = texture.sample(sampler2D, fIn.textureCoords);
+    float intensity = max(0.3, dot(constants.sunDirection, fIn.normal));
+    return intensity * color;
 }
-

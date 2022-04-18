@@ -19,6 +19,7 @@ extension Renderer: MTKViewDelegate {
     
     func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {
         Renderer.screenSize = getScreenSize(view: view)
+        GameLogic.scene.camera.updateProjectionMatrix(aspectRatio: Renderer.aspectRatio)
     }
     
     func draw(in view: MTKView) {

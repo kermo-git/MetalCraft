@@ -5,7 +5,6 @@ class GameView: MTKView {
     
     required init(coder: NSCoder) {
         super.init(coder: coder)
-        Engine.Ignite()
         
         self.renderer = Renderer(view: self)
         self.device = Engine.Device

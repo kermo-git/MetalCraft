@@ -5,13 +5,17 @@ class Mouse {
     static var rightPressed = false
     static var centerPressed = false
     
-    static var position = Float2(repeating: 0) // SetOverallMousePosition, GetMouseWindowPosition
+    private static var position = Float2(repeating: 0) // SetOverallMousePosition, GetMouseWindowPosition
     private static var positionDelta = Float2(repeating: 0)
     
     // SetMousePositionChange
     static func changePosition(newPosition: Float2, delta: Float2) {
         position = newPosition
         positionDelta = delta
+    }
+    
+    static func getPosition() -> Float2 {
+        return position;
     }
     
     // GetDX

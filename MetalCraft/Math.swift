@@ -8,6 +8,20 @@ func toDegrees(_ radians: Float) -> Float {
     return (radians * 180) / Float.pi
 }
 
+func turnClockwise(_ vector: Float2) -> Float2 {
+    return Float2(vector.y, -vector.x)
+}
+
+func turnCounterClockwise(_ vector: Float2) -> Float2 {
+    return Float2(-vector.y, vector.x)
+}
+
+func transform(vec3: Float3, matrix: Float4x4) -> Float3 {
+    let vec4 = Float4(vec3.x, vec3.y, vec3.z, 1)
+    let result4 = vec4 * matrix
+    return Float3(result4.x, result4.y, result4.z)
+}
+
 func translate(dir: Float3) -> Float4x4 {
     let x = dir.x
     let y = dir.y

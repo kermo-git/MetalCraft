@@ -1,36 +1,36 @@
 import simd
 import Metal
 
-class Scene {
+class Scene { 
     var camera: Camera
-    private var textures: [MTLTexture]
-    private var children: [Node] = []
+    private var rootNode: Node
     private var instanceCollections: [InstanceCollection] = []
     
-    init(camera: Camera, textures: [MTLTexture], children: [Node], instanceCollections: [InstanceCollection]) {
+    init(camera: Camera, rootNode: Node, instanceCollections: [InstanceCollection]) {
         self.camera = camera
-        self.textures = textures
-        self.children = children
+        self.rootNode = rootNode
         self.instanceCollections = instanceCollections
     }
     
+    var mat: Float4x4!
     func update(deltaTime: Float) {
         camera.update(deltaTime: deltaTime)
-
-        for node in children {
-            node.update(deltaTime: deltaTime, parentMatrix: camera.projectionViewMatrix)
-        }
+        rootNode.update(deltaTime: deltaTime,
+                        parentPVM: camera.projectionViewMatrix)
+        
         for collection in instanceCollections {
             collection.update(deltaTime: deltaTime)
         }
     }
     
+    var fragmentConstants = FragmentConstants()
+    
     func render(_ encoder: MTLRenderCommandEncoder) {
         encoder.setRenderPipelineState(Engine.RenderPipelineState)
         encoder.setDepthStencilState(Engine.DepthPencilState)
         
-        encoder.setFragmentSamplerState(Engine.SamplerState, index: 0)
-        encoder.setFragmentTextures(textures, range: 0..<textures.count)
+        TextureLibrary.render(encoder)
+        encoder.setFragmentBytes(&fragmentConstants, length: FragmentConstants.size(), index: 1)
         
         for collection in instanceCollections {
             collection.render(encoder)

@@ -1,51 +1,55 @@
+import simd
 
 class FlyingCamera: Camera {
-    var projectionMatrix: Float4x4 {
-        perspective(degreesFov: 45,
-                    aspectRatio: Renderer.aspectRatio,
-                    near: 0.1,
-                    far: 1000)
-    }
-    var rotationX: Float = 0
-    var rotationY: Float = 0
-    var position: Float3 = Float3(0, 0, 0)
-    var speed: Float
+    let flySpeed: Float = 5
+    let mouseSpeed: Float = 0.005
     
-    init(speed: Float = 1) {
-        self.speed = speed
+    var xzViewDir: Float2 {
+        let viewDir = self.viewDirection
+        return normalize(Float2(viewDir.x, viewDir.z))
     }
     
-    func update(deltaTime: Float) {
-        let inc = deltaTime * speed
+    override func updateProjectionMatrix(aspectRatio: Float) {
+        projectionMatrix = perspective(degreesFov: 45,
+                                       aspectRatio: aspectRatio,
+                                       near: 0.1,
+                                       far: 1000)
+        self.updateProjectionViewMatrix()
+    }
+    
+    override func update(deltaTime: Float) {
+        let inc = deltaTime * flySpeed
+        
+        func moveOnXZ(direction: Float2) {
+            position.z += inc * direction.y
+            position.x -= inc * direction.x
+        }
+        
+        let _xzViewDir = xzViewDir
+        
         if (Keyboard.isKeyPressed(.A)) {
-            position.x -= inc
+            moveOnXZ(direction: turnCounterClockwise(_xzViewDir))
         }
         if (Keyboard.isKeyPressed(.D)) {
-            position.x += inc
+            moveOnXZ(direction: turnClockwise(_xzViewDir))
         }
+        if (Keyboard.isKeyPressed(.W)) {
+            moveOnXZ(direction: _xzViewDir)
+        }
+        if (Keyboard.isKeyPressed(.S)) {
+            moveOnXZ(direction: _xzViewDir * -1)
+        }
+        
         if (Keyboard.isKeyPressed(.SHIFT)) {
             position.y -= inc
         }
         if (Keyboard.isKeyPressed(.SPACE)) {
             position.y += inc
         }
-        if (Keyboard.isKeyPressed(.W)) {
-            position.z -= inc
-        }
-        if (Keyboard.isKeyPressed(.S)) {
-            position.z += inc
-        }
-        if (Keyboard.isKeyPressed(.DOWN)) {
-            rotationX -= inc
-        }
-        if (Keyboard.isKeyPressed(.UP)) {
-            rotationX += inc
-        }
-        if (Keyboard.isKeyPressed(.RIGHT)) {
-            rotationY -= inc
-        }
-        if (Keyboard.isKeyPressed(.LEFT)) {
-            rotationY += inc
-        }
+        rotationY -= Mouse.getPositionDeltaX() * mouseSpeed
+        rotationX -= Mouse.getPositionDeltaY() * mouseSpeed
+        
+        updateProjectionViewMatrix()
     }
 }
+

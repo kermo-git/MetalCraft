@@ -25,12 +25,4 @@ extension Float3: Sizeable {}
 extension Float4: Sizeable {}
 extension Float4x4: Sizeable {}
 
-struct Vertex: Sizeable {
-    var position: Float3
-    var textureCoords: Float2 = Float2(0, 0)
-}
 
-struct VertexConstants: Sizeable {
-    var projectionViewModel: Float4x4 = matrix_identity_float4x4
-    var textureIdx: Int = 0
-}
