@@ -22,11 +22,7 @@ func transform(vec3: Float3, matrix: Float4x4) -> Float3 {
     return Float3(result4.x, result4.y, result4.z)
 }
 
-func translate(dir: Float3) -> Float4x4 {
-    let x = dir.x
-    let y = dir.y
-    let z = dir.z
-    
+func translate(_ x: Float, _ y: Float, _ z: Float) -> Float4x4 {
     return Float4x4(
         Float4(1, 0, 0, 0),
         Float4(0, 1, 0, 0),
@@ -35,11 +31,7 @@ func translate(dir: Float3) -> Float4x4 {
     )
 }
 
-func scale(axis: Float3) -> Float4x4 {
-    let x = axis.x
-    let y = axis.y
-    let z = axis.z
-    
+func scale(_ x: Float, _ y: Float, _ z: Float) -> Float4x4 {
     return Float4x4(
         Float4(x, 0, 0, 0),
         Float4(0, y, 0, 0),

@@ -1,10 +1,5 @@
 import Metal
 
-enum TextureType: CaseIterable {
-    case ORANGE_BRICKS
-    case LIME_BRICKS
-}
-
 class TextureLibrary {
     static let count: Int = TextureType.allCases.count
     private static let textures: [MTLTexture] = TextureType.allCases.map(loadTexture)

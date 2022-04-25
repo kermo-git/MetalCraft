@@ -3,20 +3,23 @@ using namespace metal;
 
 struct VertexIn {
     float4 position [[ attribute(0) ]];
-    float4 normal [[ attribute(1) ]];
-    float2 textureCoords [[ attribute(2) ]];
+    float2 textureCoords [[ attribute(1) ]];
 };
 
-struct VertexConstants {
-    float4x4 projectionViewModel;
-    float4x4 rotation;
+struct SceneConstants {
+    float4x4 projectionViewMatrix;
+};
+
+struct FaceConstants {
+    float4x4 modelMatrix;
+    float3 normal;
     int textureID;
 };
 
 struct FragmentIn {
     float4 position [[ position ]];
-    float3 normal;
     float2 textureCoords;
+    float3 normal [[ flat ]];
     int textureID [[ flat ]];
 };
 
@@ -29,16 +32,17 @@ float3 toFloat3(float4 vec) {
 }
 
 vertex FragmentIn vertexShader(VertexIn vIn [[ stage_in ]],
-                               constant VertexConstants *constantsArray [[ buffer(1) ]],
+                               constant SceneConstants &sceneConstants [[ buffer(1) ]],
+                               constant FaceConstants *constantsArray [[ buffer(2) ]],
                                uint instanceID [[ instance_id ]]) {
     
-    VertexConstants constants = constantsArray[instanceID];
+    FaceConstants faceConstants = constantsArray[instanceID];
     FragmentIn fIn;
     
-    fIn.position = constants.projectionViewModel * vIn.position;
-    fIn.normal = toFloat3(constants.rotation * vIn.normal);
+    fIn.position = sceneConstants.projectionViewMatrix * faceConstants.modelMatrix * vIn.position;
+    fIn.normal = faceConstants.normal;
     fIn.textureCoords = vIn.textureCoords;
-    fIn.textureID = constants.textureID;
+    fIn.textureID = faceConstants.textureID;
     
     return fIn;
 }

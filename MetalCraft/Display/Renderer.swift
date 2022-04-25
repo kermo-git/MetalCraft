@@ -5,6 +5,7 @@ func getScreenSize(view: MTKView) -> Float2 {
 }
 
 class Renderer: NSObject {
+    var sceneRenderer = SceneRenderer()
     static var screenSize: Float2 = Float2(0, 0)
     static var aspectRatio: Float {
         screenSize.x / screenSize.y
@@ -19,7 +20,7 @@ extension Renderer: MTKViewDelegate {
     
     func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {
         Renderer.screenSize = getScreenSize(view: view)
-        GameLogic.scene.camera.updateProjectionMatrix(aspectRatio: Renderer.aspectRatio)
+        sceneRenderer.updateAspectRatio(aspectRatio: Renderer.aspectRatio)
     }
     
     func draw(in view: MTKView) {
@@ -33,7 +34,8 @@ extension Renderer: MTKViewDelegate {
         let commandBuffer = Engine.CommandQueue.makeCommandBuffer()
         let encoder = commandBuffer?.makeRenderCommandEncoder(descriptor: renderPassDescriptor)
         
-        GameLogic.tick(encoder: encoder!, deltaTime: 1 / Float(view.preferredFramesPerSecond))
+        sceneRenderer.update(deltaTime: 1 / Float(view.preferredFramesPerSecond))
+        sceneRenderer.render(encoder!)
         
         encoder?.endEncoding()
         commandBuffer?.present(drawable)
