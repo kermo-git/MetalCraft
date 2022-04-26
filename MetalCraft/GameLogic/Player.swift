@@ -4,17 +4,31 @@ class Player {
     static var flySpeed: Float = 5
     static var mouseSpeed: Float = 0.005
     
-    static var camera = Camera()
+    static var rotationX: Float = 0
+    static var rotationY: Float = 0
+    static var position: Float3 = Float3(0, 0, 0)
+    
+    static func getViewDirection() -> Float3 {
+        let rotation = rotateAroundY(rotationY) * rotateAroundX(rotationX)
+        let result4 = Float4(0, 0, -1, 1) * rotation
+        return Float3(result4.x, result4.y, result4.z)
+    }
+    
+    static func getViewMatrix() -> Float4x4 {
+        return rotateAroundX(-rotationX) *
+               rotateAroundY(-rotationY) *
+               translate(-position.x, -position.y, -position.z)
+    }
     
     static func update(deltaTime: Float) {
-        let viewDir = camera.getViewDirection()
+        let viewDir = getViewDirection()
         let xzViewDir = normalize(Float2(viewDir.x, viewDir.z))
         
         let inc = deltaTime * flySpeed
         
         func moveOnXZ(direction: Float2) {
-            camera.position.z += inc * direction.y
-            camera.position.x -= inc * direction.x
+            position.z += inc * direction.y
+            position.x -= inc * direction.x
         }
         
         if (Keyboard.isKeyPressed(.A)) {
@@ -31,12 +45,12 @@ class Player {
         }
         
         if (Keyboard.isKeyPressed(.SHIFT)) {
-            camera.position.y -= inc
+            position.y -= inc
         }
         if (Keyboard.isKeyPressed(.SPACE)) {
-            camera.position.y += inc
+            position.y += inc
         }
-        camera.rotationY -= Mouse.getPositionDeltaX() * mouseSpeed
-        camera.rotationX -= Mouse.getPositionDeltaY() * mouseSpeed
+        rotationY -= Mouse.getPositionDeltaX() * mouseSpeed
+        rotationX -= Mouse.getPositionDeltaY() * mouseSpeed
     }
 }

@@ -5,7 +5,7 @@ func getScreenSize(view: MTKView) -> Float2 {
 }
 
 class Renderer: NSObject {
-    var sceneRenderer = SceneRenderer()
+    var sceneRenderer = WorldRenderer()
     static var screenSize: Float2 = Float2(0, 0)
     static var aspectRatio: Float {
         screenSize.x / screenSize.y

@@ -10,7 +10,7 @@ struct SceneConstants {
     float4x4 projectionViewMatrix;
 };
 
-struct FaceConstants {
+struct ShaderBlockFace {
     float4x4 modelMatrix;
     float3 normal;
     int textureID;
@@ -33,16 +33,16 @@ float3 toFloat3(float4 vec) {
 
 vertex FragmentIn vertexShader(VertexIn vIn [[ stage_in ]],
                                constant SceneConstants &sceneConstants [[ buffer(1) ]],
-                               constant FaceConstants *constantsArray [[ buffer(2) ]],
+                               constant ShaderBlockFace *blockFaces [[ buffer(2) ]],
                                uint instanceID [[ instance_id ]]) {
     
-    FaceConstants faceConstants = constantsArray[instanceID];
+    ShaderBlockFace blockface = blockFaces[instanceID];
     FragmentIn fIn;
     
-    fIn.position = sceneConstants.projectionViewMatrix * faceConstants.modelMatrix * vIn.position;
-    fIn.normal = faceConstants.normal;
+    fIn.position = sceneConstants.projectionViewMatrix * blockface.modelMatrix * vIn.position;
+    fIn.normal = blockface.normal;
     fIn.textureCoords = vIn.textureCoords;
-    fIn.textureID = faceConstants.textureID;
+    fIn.textureID = blockface.textureID;
     
     return fIn;
 }

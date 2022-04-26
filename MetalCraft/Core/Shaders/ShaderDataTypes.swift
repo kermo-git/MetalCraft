@@ -26,7 +26,7 @@ struct SceneConstants: Sizeable {
     var projectionViewMatrix: Float4x4 = matrix_identity_float4x4
 }
 
-struct FaceConstants: Sizeable {
+struct ShaderBlockFace: Sizeable {
     var modelMatrix: Float4x4 = matrix_identity_float4x4
     var normal: Float3 = Float3(0, 0, 0)
     private var textureID: Int = 0

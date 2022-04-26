@@ -18,8 +18,6 @@ func getNormal(_ direction: Direction) -> Float3 {
 }
 
 let RAD_90_DEG = toRadians(90)
-let RAD_MINUS_90_DEG = toRadians(-90)
-let RAD_180_DEG = toRadians(180)
 
 func getModelMatrix(rotX: Float = 0, rotY: Float = 0, rotZ: Float = 0,
                     posX: Float = 0, posY: Float = 0, posZ: Float = 0) -> Float4x4 {
@@ -36,7 +34,7 @@ func getModelMatrix(face: BlockFace) -> Float4x4 {
     
     switch face.direction {
         case .UP:
-            return getModelMatrix(rotX: RAD_MINUS_90_DEG,
+            return getModelMatrix(rotX: RAD_90_DEG,
                                   posX: Float(X) + 0.5,
                                   posY: Float(Y) + 1,
                                   posZ: Float(Z) + 0.5)
@@ -46,7 +44,7 @@ func getModelMatrix(face: BlockFace) -> Float4x4 {
                                   posY: Float(Y),
                                   posZ: Float(Z) + 0.5)
         case .LEFT:
-            return getModelMatrix(rotY: RAD_MINUS_90_DEG,
+            return getModelMatrix(rotY: RAD_90_DEG,
                                   posX: Float(X),
                                   posY: Float(Y) + 0.5,
                                   posZ: Float(Z) + 0.5)
