@@ -24,7 +24,7 @@ class WorldRenderer {
                                                length: UInt16.size(mesh.indices.count),
                                                options: [])!
         
-        chunks = [ChunkBuffer(faces: World.getFaces())]
+        chunks = [ChunkBuffer(faces: World().getFaces())]
         
         updateAspectRatio(aspectRatio: Renderer.aspectRatio)
     }

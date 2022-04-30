@@ -6,13 +6,13 @@ func getNormal(_ direction: Direction) -> Float3 {
             return Float3( 0, 1, 0)
         case .DOWN:
             return Float3( 0, -1, 0)
-        case .LEFT:
+        case .WEST:
             return Float3(-1, 0, 0)
-        case .RIGHT:
+        case .EAST:
             return Float3( 1, 0, 0)
-        case .NEAR:
+        case .SOUTH:
             return Float3( 0, 0, 1)
-        case .FAR:
+        case .NORTH:
             return Float3( 0, 0, -1)
     }
 }
@@ -28,9 +28,9 @@ func getModelMatrix(rotX: Float = 0, rotY: Float = 0, rotZ: Float = 0,
 }
 
 func getModelMatrix(face: BlockFace) -> Float4x4 {
-    let X = face.X
-    let Y = face.Y
-    let Z = face.Z
+    let X = face.pos.X
+    let Y = face.pos.Y
+    let Z = face.pos.Z
     
     switch face.direction {
         case .UP:
@@ -43,21 +43,21 @@ func getModelMatrix(face: BlockFace) -> Float4x4 {
                                   posX: Float(X) + 0.5,
                                   posY: Float(Y),
                                   posZ: Float(Z) + 0.5)
-        case .LEFT:
+        case .WEST:
             return getModelMatrix(rotY: RAD_90_DEG,
                                   posX: Float(X),
                                   posY: Float(Y) + 0.5,
                                   posZ: Float(Z) + 0.5)
-        case .RIGHT:
+        case .EAST:
             return getModelMatrix(rotY: RAD_90_DEG,
                                   posX: Float(X) + 1,
                                   posY: Float(Y) + 0.5,
                                   posZ: Float(Z) + 0.5)
-        case .NEAR:
+        case .SOUTH:
             return getModelMatrix(posX: Float(X) + 0.5,
                                   posY: Float(Y) + 0.5,
                                   posZ: Float(Z) + 1)
-        case .FAR:
+        case .NORTH:
             return getModelMatrix(posX: Float(X) + 0.5,
                                   posY: Float(Y) + 0.5,
                                   posZ: Float(Z))

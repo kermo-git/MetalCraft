@@ -19,10 +19,16 @@ class TextureLibrary {
     
     private static func loadTexture(type: TextureType) -> MTLTexture {
         switch type {
-            case .ORANGE_BRICKS:
-                return Engine.loadTexture(fileName: "orange_bricks")
-            case .LIME_BRICKS:
-                return Engine.loadTexture(fileName: "lime_bricks")
+            case .GRASS:
+                return Engine.loadTexture(fileName: "grass")
+            case .STONE_GRASS:
+                return Engine.loadTexture(fileName: "stone_grass")
+            case .STONE:
+                return Engine.loadTexture(fileName: "stone")
+            case .TREE_BARK:
+                return Engine.loadTexture(fileName: "tree_bark")
+            case .TREE_CUT:
+                return Engine.loadTexture(fileName: "tree_cut")
         }
     }
 }

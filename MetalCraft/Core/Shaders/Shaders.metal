@@ -54,6 +54,6 @@ fragment half4 fragmentShader(FragmentIn fIn [[ stage_in ]],
     
     texture2d<half> texture = textures[fIn.textureID];
     half4 color = texture.sample(sampler2D, fIn.textureCoords);
-    float intensity = max(0.3, dot(constants.sunDirection, fIn.normal));
+    float intensity = max(0.6, dot(constants.sunDirection, fIn.normal));
     return intensity * color;
 }
