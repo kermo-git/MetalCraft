@@ -1,7 +1,7 @@
 
-let sandGrass: Block = .SOLID_BLOCK(topTexture: .GRASS,
-                                    sideTexture: .STONE_GRASS,
-                                    bottomTexture: .STONE)
+let grass: Block = .SOLID_BLOCK(topTexture: .GRASS,
+                                sideTexture: .SAND_GRASS,
+                                bottomTexture: .SAND)
 
 let treeTrunk: Block = .SOLID_BLOCK(topTexture: .TREE_CUT,
                                     sideTexture: .TREE_BARK,
@@ -32,12 +32,7 @@ class WorldGenerator {
                 let terrainHeight = terrainHeight(pos: globalPos)
                 
                 for k in 0..<terrainHeight {
-                    chunk[BlockPos(X: i, Y: k, Z: j)] = sandGrass
-                }
-                if (i * j == 12) {
-                    for k in terrainHeight..<(terrainHeight + 5) {
-                        chunk[BlockPos(X: i, Y: k, Z: j)] = treeTrunk
-                    }
+                    chunk[BlockPos(X: i, Y: k, Z: j)] = grass
                 }
             }
         }

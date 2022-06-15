@@ -1,12 +1,12 @@
 import simd
 
 class Player {
-    static var flySpeed: Float = 5
-    static var mouseSpeed: Float = 0.005
+    static let flySpeed: Float = 5
+    static let mouseSpeed: Float = 0.005
     
     static var rotationX: Float = 0
     static var rotationY: Float = 0
-    static var position: Float3 = Float3(0, 0, 0)
+    static var position: Float3 = Float3(0, 15, 0)
     
     static func getViewDirection() -> Float3 {
         let rotation = rotateAroundY(rotationY) * rotateAroundX(rotationX)

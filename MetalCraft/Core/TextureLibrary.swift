@@ -21,10 +21,10 @@ class TextureLibrary {
         switch type {
             case .GRASS:
                 return Engine.loadTexture(fileName: "grass")
-            case .STONE_GRASS:
-                return Engine.loadTexture(fileName: "stone_grass")
-            case .STONE:
-                return Engine.loadTexture(fileName: "stone")
+            case .SAND_GRASS:
+                return Engine.loadTexture(fileName: "sand_grass")
+            case .SAND:
+                return Engine.loadTexture(fileName: "sand")
             case .TREE_BARK:
                 return Engine.loadTexture(fileName: "tree_bark")
             case .TREE_CUT:

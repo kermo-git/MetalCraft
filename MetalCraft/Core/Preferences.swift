@@ -1,7 +1,7 @@
 import Metal
 
 class Preferences {
-    static let ClearColor = ClearColors.BLACK
+    static let ClearColor = ClearColors.GRAY
     static let PixelFormat = MTLPixelFormat.bgra8Unorm
     static let DepthPixelFormat = MTLPixelFormat.depth32Float
 }
