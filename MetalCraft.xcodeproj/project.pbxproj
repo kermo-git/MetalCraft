@@ -26,6 +26,7 @@
 		4F38E3D3281895D3002EDB94 /* sand_grass.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F38E3C7281895D3002EDB94 /* sand_grass.png */; };
 		4F3AD8BB281D05BE00C5BEEC /* NoiseGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F3AD8BA281D05BE00C5BEEC /* NoiseGenerator.swift */; };
 		4F3AD8BD281D2FAF00C5BEEC /* Position.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F3AD8BC281D2FAF00C5BEEC /* Position.swift */; };
+		4F535A4B285A7F330080BC31 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 4F535A4A285A7F330080BC31 /* .gitignore */; };
 		4F53CF85279DE90A00C466C8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F53CF84279DE90A00C466C8 /* AppDelegate.swift */; };
 		4F53CF89279DE90B00C466C8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4F53CF88279DE90B00C466C8 /* Assets.xcassets */; };
 		4F53CF8C279DE90B00C466C8 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4F53CF8A279DE90B00C466C8 /* Main.storyboard */; };
@@ -73,6 +74,7 @@
 		4F38E3C7281895D3002EDB94 /* sand_grass.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sand_grass.png; sourceTree = "<group>"; };
 		4F3AD8BA281D05BE00C5BEEC /* NoiseGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoiseGenerator.swift; sourceTree = "<group>"; };
 		4F3AD8BC281D2FAF00C5BEEC /* Position.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Position.swift; sourceTree = "<group>"; };
+		4F535A4A285A7F330080BC31 /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		4F53CF81279DE90A00C466C8 /* MetalCraft.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MetalCraft.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4F53CF84279DE90A00C466C8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		4F53CF88279DE90B00C466C8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -125,6 +127,7 @@
 		4F53CF78279DE90A00C466C8 = {
 			isa = PBXGroup;
 			children = (
+				4F535A4A285A7F330080BC31 /* .gitignore */,
 				4F53CF83279DE90A00C466C8 /* MetalCraft */,
 				4F53CF82279DE90A00C466C8 /* Products */,
 			);
@@ -327,6 +330,7 @@
 				4F53CF8C279DE90B00C466C8 /* Main.storyboard in Resources */,
 				4F38E3CC281895D3002EDB94 /* grass_flowers_1.png in Resources */,
 				4F38E3C8281895D3002EDB94 /* grass_flowers_3.png in Resources */,
+				4F535A4B285A7F330080BC31 /* .gitignore in Resources */,
 				4F38E3C9281895D3002EDB94 /* sand.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
