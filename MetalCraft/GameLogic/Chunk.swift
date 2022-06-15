@@ -22,21 +22,74 @@ struct Chunk {
     }
 }
 
-class ChunkMap {
-    var chunks: [String : Chunk] = [:]
+func getBlockFaces(chunkPos: ChunkPos, chunk: Chunk) -> [BlockFace] {
+    var result: [BlockFace] = []
     
-    private func getKey(_ chunkX: Int, _ chunkZ: Int) -> String {
-        return String(chunkX) + "_" + String(chunkZ)
-    }
-    
-    subscript(_ pos: ChunkPos) -> Chunk? {
-        get {
-            return chunks[getKey(pos.X, pos.Z)]
+    for localX in 0..<CHUNK_SIDE {
+        for globalY in 0..<CHUNK_HEIGHT {
+            for localZ in 0..<CHUNK_SIDE {
+                
+                let localPos = BlockPos(X: localX, Y: globalY, Z: localZ)
+                let globalPos = toGlobalPos(chunk: chunkPos, local: localPos)
+                
+                switch chunk[localPos] {
+                    case .AIR: break
+                    case .SOLID_BLOCK(let topTexture, let sideTexture, let bottomTexture):
+                    
+                    if (globalY > 0) {
+                        if (chunk[localPos.move(.DOWN)] == .AIR) {
+                            result.append(BlockFace(direction: .DOWN,
+                                                    textureType: bottomTexture,
+                                                    pos: globalPos))
+                        }
+                    }
+                    
+                    if (globalY < CHUNK_HEIGHT - 1) {
+                        if (chunk[localPos.move(.UP)] == .AIR) {
+                            result.append(BlockFace(direction: .UP,
+                                                    textureType: topTexture,
+                                                    pos: globalPos))
+                        }
+                    } else {
+                        result.append(BlockFace(direction: .UP,
+                                                textureType: topTexture,
+                                                pos: globalPos))
+                    }
+                    
+                    if (localX > 0) {
+                        if (chunk[localPos.move(.WEST)] == .AIR) {
+                            result.append(BlockFace(direction: .WEST,
+                                                    textureType: sideTexture,
+                                                    pos: globalPos))
+                        }
+                    }
+                    if (localX < CHUNK_SIDE - 1) {
+                        if (chunk[localPos.move(.EAST)] == .AIR) {
+                            result.append(BlockFace(direction: .EAST,
+                                                    textureType: sideTexture,
+                                                    pos: globalPos))
+                        }
+                    }
+                    
+                    if (localZ > 0) {
+                        if (chunk[localPos.move(.NORTH)] == .AIR) {
+                            result.append(BlockFace(direction: .NORTH,
+                                                    textureType: sideTexture,
+                                                    pos: globalPos))
+                        }
+                    }
+                    if (localZ < CHUNK_SIDE - 1) {
+                        if (chunk[localPos.move(.SOUTH)] == .AIR) {
+                            result.append(BlockFace(direction: .SOUTH,
+                                                    textureType: sideTexture,
+                                                    pos: globalPos))
+                        }
+                    }
+                }
+            }
         }
-        set {
-            chunks[getKey(pos.X, pos.Z)] = newValue
-        }
     }
+    return result
 }
 
 func getNorthBorderBlockFaces(southChunkPos: ChunkPos,
@@ -97,7 +150,7 @@ func getWestBorderBlockFaces(eastChunkPos: ChunkPos,
     let eastLocalX = 0
     let westLocalX = CHUNK_SIDE - 1
     
-    let westChunkPos = eastChunkPos.move(.EAST)
+    let westChunkPos = eastChunkPos.move(.WEST)
     
     for localZ in 0..<CHUNK_SIDE {
         for globalY in 0..<CHUNK_HEIGHT {
@@ -111,7 +164,7 @@ func getWestBorderBlockFaces(eastChunkPos: ChunkPos,
                         case .AIR:
                             break
                         case .SOLID_BLOCK(_, let sideTexture, _):
-                            faces.append(BlockFace(direction: .SOUTH,
+                            faces.append(BlockFace(direction: .EAST,
                                                    textureType: sideTexture,
                                                    pos: toGlobalPos(chunk: westChunkPos,
                                                                     local: westBlockPos)))
@@ -119,7 +172,7 @@ func getWestBorderBlockFaces(eastChunkPos: ChunkPos,
                 case .SOLID_BLOCK(_, let sideTexture, _):
                     switch westChunk[westBlockPos] {
                         case .AIR:
-                            faces.append(BlockFace(direction: .NORTH,
+                            faces.append(BlockFace(direction: .WEST,
                                                    textureType: sideTexture,
                                                    pos: toGlobalPos(chunk: eastChunkPos,
                                                                     local: eastBlockPos)))
@@ -130,79 +183,4 @@ func getWestBorderBlockFaces(eastChunkPos: ChunkPos,
         }
     }
     return faces
-}
-
-
-func getBlockFaces(chunkPos: ChunkPos, chunk: Chunk) -> [BlockFace] {
-    var result: [BlockFace] = []
-    
-    for localX in 0..<CHUNK_SIDE {
-        for globalY in 0..<CHUNK_HEIGHT {
-            for localZ in 0..<CHUNK_SIDE {
-                
-                let localPos = BlockPos(X: localX, Y: globalY, Z: localZ)
-                let globalPos = toGlobalPos(chunk: chunkPos, local: localPos)
-                
-                switch chunk[localPos] {
-                    case .AIR: break
-                    case .SOLID_BLOCK(let topTexture, let sideTexture, let bottomTexture):
-                    
-                    if (globalY > 0) {
-                        if (chunk[localPos.move(.DOWN)] == .AIR) {
-                            result.append(BlockFace(direction: .DOWN,
-                                                    textureType: bottomTexture,
-                                                    pos: globalPos))
-                        }
-                    } else {
-                        result.append(BlockFace(direction: .DOWN,
-                                                textureType: bottomTexture,
-                                                pos: globalPos))
-                    }
-                    
-                    if (globalY < CHUNK_HEIGHT - 1) {
-                        if (chunk[localPos.move(.UP)] == .AIR) {
-                            result.append(BlockFace(direction: .UP,
-                                                    textureType: topTexture,
-                                                    pos: globalPos))
-                        }
-                    } else {
-                        result.append(BlockFace(direction: .UP,
-                                                textureType: topTexture,
-                                                pos: globalPos))
-                    }
-                    
-                    if (localX > 0) {
-                        if (chunk[localPos.move(.WEST)] == .AIR) {
-                            result.append(BlockFace(direction: .WEST,
-                                                    textureType: sideTexture,
-                                                    pos: globalPos))
-                        }
-                    }
-                    if (localX < CHUNK_SIDE - 1) {
-                        if (chunk[localPos.move(.EAST)] == .AIR) {
-                            result.append(BlockFace(direction: .EAST,
-                                                    textureType: sideTexture,
-                                                    pos: globalPos))
-                        }
-                    }
-                    
-                    if (localZ > 0) {
-                        if (chunk[localPos.move(.NORTH)] == .AIR) {
-                            result.append(BlockFace(direction: .NORTH,
-                                                    textureType: sideTexture,
-                                                    pos: globalPos))
-                        }
-                    }
-                    if (localZ < CHUNK_SIDE - 1) {
-                        if (chunk[localPos.move(.SOUTH)] == .AIR) {
-                            result.append(BlockFace(direction: .SOUTH,
-                                                    textureType: sideTexture,
-                                                    pos: globalPos))
-                        }
-                    }
-                }
-            }
-        }
-    }
-    return result
 }

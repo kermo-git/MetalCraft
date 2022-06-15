@@ -1,7 +1,7 @@
 import simd
 import Metal
 
-class WorldRenderer {
+class TestWorldRenderer {
     var sceneConstants = SceneConstants()
     var fragmentConstants = FragmentConstants()
     var projectionMatrix: Float4x4 = matrix_identity_float4x4
@@ -10,7 +10,11 @@ class WorldRenderer {
     var meshVertexBuffer: MTLBuffer
     var meshIndexBuffer: MTLBuffer
     
-    init() {
+    var chunks: ChunkBuffer
+    
+    init(faces: [BlockFace]) {
+        chunks = ChunkBuffer(faces: faces)
+        
         let mesh = buildQuad()
         meshIndexCount = mesh.indices.count
         
@@ -46,15 +50,12 @@ class WorldRenderer {
         encoder.setVertexBytes(&sceneConstants, length: SceneConstants.size(), index: 1)
         encoder.setFragmentBytes(&fragmentConstants, length: FragmentConstants.size(), index: 1)
         
-        for (_, chunk) in GameState.renderedChunks {
-            encoder.setVertexBuffer(chunk.buffer, offset: 0, index: 2)
-            encoder.drawIndexedPrimitives(type: .triangle,
-                                          indexCount: meshIndexCount,
-                                          indexType: .uint16,
-                                          indexBuffer: meshIndexBuffer,
-                                          indexBufferOffset: 0,
-                                          instanceCount: chunk.faces.count)
-        }
+        encoder.setVertexBuffer(chunks.buffer, offset: 0, index: 2)
+        encoder.drawIndexedPrimitives(type: .triangle,
+                                      indexCount: meshIndexCount,
+                                      indexType: .uint16,
+                                      indexBuffer: meshIndexBuffer,
+                                      indexBufferOffset: 0,
+                                      instanceCount: chunks.faceCount)
     }
 }
-

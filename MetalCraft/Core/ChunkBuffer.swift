@@ -1,8 +1,20 @@
 import Metal
 
+class LoadedChunk {
+    var data: Chunk
+    var faces: [BlockFace]
+    var buffer: MTLBuffer
+    
+    init(data: Chunk, faces: [BlockFace]) {
+        self.data = data
+        self.faces = faces
+        buffer = toBuffer(faces)
+    }
+}
+
 class ChunkBuffer {
     var faceCount = 0
-    var buffer: MTLBuffer!
+    var buffer: MTLBuffer
     
     init(faces: [BlockFace]) {
         faceCount = faces.count
