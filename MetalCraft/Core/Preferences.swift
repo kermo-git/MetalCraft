@@ -1,13 +1,10 @@
 import Metal
 
 class Preferences {
-    static let ClearColor = ClearColors.GRAY
+    static let ClearColor = MTLClearColor(red: Double(BACKGROUND_COLOR.x),
+                                          green: Double(BACKGROUND_COLOR.y),
+                                          blue: Double(BACKGROUND_COLOR.z),
+                                          alpha: Double(BACKGROUND_COLOR.w))
     static let PixelFormat = MTLPixelFormat.bgra8Unorm
     static let DepthPixelFormat = MTLPixelFormat.depth32Float
-}
-
-class ClearColors {
-    static let BLACK = MTLClearColor(red: 0, green: 0, blue: 0, alpha: 1)
-    static let GRAY = MTLClearColor(red: 0.5, green: 0.5, blue: 0.5, alpha: 1)
-    static let GREEN = MTLClearColor(red: 0.22, green: 0.55, blue: 0.34, alpha: 1)
 }

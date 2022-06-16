@@ -28,7 +28,6 @@ struct SceneConstants: Sizeable {
 
 struct ShaderBlockFace: Sizeable {
     var modelMatrix: Float4x4 = matrix_identity_float4x4
-    var normal: Float3 = Float3(0, 0, 0)
     private var textureID: Int = 0
     
     mutating func setTexture(_ type: TextureType) {
@@ -37,5 +36,7 @@ struct ShaderBlockFace: Sizeable {
 }
 
 struct FragmentConstants: Sizeable {
-    var sunDirection: Float3 = normalize(Float3(0.1, 0.2, 0.3))
+    var playerPos: Float3 = Float3(0, 0, 0)
+    var renderDistance: Float = RENDER_DISTANCE
+    var fogColor: Float4 = BACKGROUND_COLOR
 }

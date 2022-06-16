@@ -34,6 +34,8 @@ class WorldRenderer {
     
     func update(deltaTime: Float) {
         sceneConstants.projectionViewMatrix = projectionMatrix * Player.getViewMatrix()
+        fragmentConstants.playerPos = Player.position
+        fragmentConstants.renderDistance = RENDER_DISTANCE
     }
     
     func render(_ encoder: MTLRenderCommandEncoder) {

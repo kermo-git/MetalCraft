@@ -1,6 +1,11 @@
 import Darwin
 
 let RENDER_DISTANCE_CHUNKS = 8
+let RENDER_DISTANCE = Float(RENDER_DISTANCE_CHUNKS * CHUNK_SIDE)
+let BACKGROUND_COLOR = Float4(x: 0.075,
+                              y: 0.78,
+                              z: 0.95,
+                              w: 1)
 let MEMORY_DISTANCE_CHUNKS = 64
 
 let localRenderCircle: [ChunkPos] = generateCircle(radiusChunks: RENDER_DISTANCE_CHUNKS)

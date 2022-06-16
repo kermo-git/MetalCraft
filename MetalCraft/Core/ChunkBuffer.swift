@@ -39,7 +39,6 @@ func toBuffer(_ faces: [BlockFace]) -> MTLBuffer {
 func toShaderData(_ face: BlockFace) -> ShaderBlockFace {
     var constants = ShaderBlockFace()
     constants.modelMatrix = getModelMatrix(face: face)
-    constants.normal = getNormal(face.direction)
     constants.setTexture(face.textureType)
     return constants
 }

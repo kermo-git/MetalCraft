@@ -12,24 +12,21 @@ struct SceneConstants {
 
 struct ShaderBlockFace {
     float4x4 modelMatrix;
-    float3 normal;
     int textureID;
 };
 
 struct FragmentIn {
     float4 position [[ position ]];
+    float3 worldPosition;
     float2 textureCoords;
-    float3 normal [[ flat ]];
     int textureID [[ flat ]];
 };
 
 struct FragmentConstants {
-    float3 sunDirection;
+    float3 playerPos;
+    float renderDistance;
+    float4 fogColor;
 };
-
-float3 toFloat3(float4 vec) {
-    return float3(vec.x, vec.y, vec.z);
-}
 
 vertex FragmentIn vertexShader(VertexIn vIn [[ stage_in ]],
                                constant SceneConstants &sceneConstants [[ buffer(1) ]],
@@ -39,8 +36,9 @@ vertex FragmentIn vertexShader(VertexIn vIn [[ stage_in ]],
     ShaderBlockFace blockface = blockFaces[instanceID];
     FragmentIn fIn;
     
-    fIn.position = sceneConstants.projectionViewMatrix * blockface.modelMatrix * vIn.position;
-    fIn.normal = blockface.normal;
+    float4 worldPosition = blockface.modelMatrix * vIn.position;
+    fIn.position = sceneConstants.projectionViewMatrix * worldPosition;
+    fIn.worldPosition = float3(worldPosition);
     fIn.textureCoords = vIn.textureCoords;
     fIn.textureID = blockface.textureID;
     
@@ -53,6 +51,18 @@ fragment half4 fragmentShader(FragmentIn fIn [[ stage_in ]],
                               array<texture2d<half>, 5> textures [[ texture(0) ]]) {
     
     texture2d<half> texture = textures[fIn.textureID];
-    half4 color = texture.sample(sampler2D, fIn.textureCoords);
-    return color;
+    half4 textureColor = texture.sample(sampler2D, fIn.textureCoords);
+    
+    float distanceFromPlayer = distance(fIn.worldPosition, constants.playerPos);
+    float fogStartDistance = 0.6 * constants.renderDistance;
+    float fullFogDistance = 0.9 * constants.renderDistance;
+    half4 fogColor = half4(constants.fogColor);
+    
+    if (distanceFromPlayer < fogStartDistance)
+        return textureColor;
+    if (distanceFromPlayer < fullFogDistance) {
+        half fogLevel = (distanceFromPlayer - fogStartDistance) / (fullFogDistance - fogStartDistance);
+        return textureColor + fogLevel * (fogColor - textureColor);
+    }
+    return fogColor;
 }
