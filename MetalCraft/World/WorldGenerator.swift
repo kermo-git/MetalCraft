@@ -1,14 +1,15 @@
 
 let grass: Block = .SOLID_BLOCK(topTexture: .GRASS,
-                                sideTexture: .SAND_GRASS,
-                                bottomTexture: .SAND)
+                                sideTexture: .DIRT_GRASS,
+                                bottomTexture: .DIRT)
 
-let treeTrunk: Block = .SOLID_BLOCK(topTexture: .TREE_CUT,
-                                    sideTexture: .TREE_BARK,
-                                    bottomTexture: .TREE_CUT)
+let flowers: Block = .SOLID_BLOCK(topTexture: .WHITE_FLOWERS,
+                                  sideTexture: .DIRT_GRASS,
+                                  bottomTexture: .DIRT)
 
 class WorldGenerator {
     let generator = SimplexNoise()
+    let grassGenerator = SimplexNoise()
     
     let NOISE_UNIT_BLOCKS: Float = 20
     let BASE_HEIGHT: Int = 10
@@ -22,6 +23,14 @@ class WorldGenerator {
         return BASE_HEIGHT + Int(noiseValue * NOISE_RANGE)
     }
     
+    func isFlowers(pos: BlockPos) -> Bool {
+        let noiseX = Float(pos.X)
+        let noiseY = Float(pos.Z)
+        
+        let noiseValue = grassGenerator.noise(noiseX, noiseY, 0)
+        return noiseValue > 0.7
+    }
+    
     func generateChunk(pos: ChunkPos) -> Chunk {
         var chunk = Chunk()
         
@@ -32,7 +41,7 @@ class WorldGenerator {
                 let terrainHeight = terrainHeight(pos: globalPos)
                 
                 for k in 0..<terrainHeight {
-                    chunk[BlockPos(X: i, Y: k, Z: j)] = grass
+                    chunk[BlockPos(X: i, Y: k, Z: j)] = isFlowers(pos: globalPos) ? flowers : grass
                 }
             }
         }

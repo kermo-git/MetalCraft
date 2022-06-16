@@ -48,7 +48,7 @@ class WorldRenderer {
         encoder.setVertexBytes(&sceneConstants, length: SceneConstants.size(), index: 1)
         encoder.setFragmentBytes(&fragmentConstants, length: FragmentConstants.size(), index: 1)
         
-        for (_, chunk) in GameState.renderedChunks {
+        for (_, chunk) in WorldState.renderedChunks {
             encoder.setVertexBuffer(chunk.buffer, offset: 0, index: 2)
             encoder.drawIndexedPrimitives(type: .triangle,
                                           indexCount: meshIndexCount,

@@ -35,8 +35,10 @@ extension Renderer: MTKViewDelegate {
         let encoder = commandBuffer?.makeRenderCommandEncoder(descriptor: renderPassDescriptor)
         
         let deltaTime = 1 / Float(view.preferredFramesPerSecond)
-        GameState.update(deltaTime: deltaTime)
+        Player.update(deltaTime: deltaTime)
+        WorldState.update(deltaTime: deltaTime)
         worldRenderer.update(deltaTime: deltaTime)
+        
         worldRenderer.render(encoder!)
         
         encoder?.endEncoding()

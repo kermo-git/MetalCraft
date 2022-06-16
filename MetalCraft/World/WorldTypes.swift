@@ -23,8 +23,7 @@ enum Block: Equatable {
 
 enum TextureType: CaseIterable {
     case GRASS
-    case SAND_GRASS
-    case SAND
-    case TREE_BARK
-    case TREE_CUT
+    case WHITE_FLOWERS
+    case DIRT_GRASS
+    case DIRT
 }

@@ -10,7 +10,7 @@ let MEMORY_DISTANCE_CHUNKS = 64
 
 let localRenderCircle: [ChunkPos] = generateCircle(radiusChunks: RENDER_DISTANCE_CHUNKS)
 
-enum GameState {
+enum WorldState {
     static var worldGenerator = WorldGenerator()
     
     static var playerChunkPos: ChunkPos = ChunkPos(X: 0, Z: 0)
@@ -20,8 +20,6 @@ enum GameState {
     static var toBeGenerated: [ChunkPos] = localRenderCircle
     
     static func update(deltaTime: Float) {
-        Player.update(deltaTime: deltaTime)
-        
         let newPlayerChunkPos = getChunkPos(Player.position)
         
         if (playerChunkPos != newPlayerChunkPos) {
