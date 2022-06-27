@@ -6,7 +6,7 @@ class Player {
     
     static var rotationX: Float = 0
     static var rotationY: Float = 0
-    static var position: Float3 = Float3(0, 15, 0)
+    static var position: Float3 = Float3(0, 20, 0)
     
     static func getViewDirection() -> Float3 {
         let rotation = rotateAroundY(rotationY) * rotateAroundX(rotationX)

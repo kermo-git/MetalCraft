@@ -43,8 +43,8 @@ class Mouse {
     }
     
     static func GetMouseViewportPosition() -> Float2 {
-        let x = (position.x - Renderer.screenSize.x * 0.5) / (Renderer.screenSize.x * 0.5)
-        let y = (position.y - Renderer.screenSize.y * 0.5) / (Renderer.screenSize.y * 0.5)
+        let x = (position.x - _screenSize.x * 0.5) / (_screenSize.x * 0.5)
+        let y = (position.y - _screenSize.y * 0.5) / (_screenSize.y * 0.5)
         return Float2(x, y)
     }
 }

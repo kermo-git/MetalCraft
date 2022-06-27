@@ -13,7 +13,7 @@ let localRenderCircle: [ChunkPos] = generateCircle(radiusChunks: RENDER_DISTANCE
 enum WorldState {
     static var worldGenerator = WorldGenerator()
     
-    static var playerChunkPos: ChunkPos = ChunkPos(X: 0, Z: 0)
+    static var playerChunkPos: ChunkPos = getChunkPos(Player.position)
     
     static var memoryChunks: [ChunkPos : LoadedChunk] = [:]
     static var renderedChunks: [ChunkPos : LoadedChunk] = [:]
@@ -101,5 +101,29 @@ enum WorldState {
                 memoryChunks[pos] = newLoadedChunk
             }
         }
+    }
+}
+
+func generateCircle(radiusChunks: Int) -> [ChunkPos] {
+    var result: [ChunkPos] = []
+    
+    func distanceFromCenter(_ pos: ChunkPos) -> Float {
+        let fX = Float(pos.X)
+        let fZ = Float(pos.Z)
+        return sqrt(fX * fX + fZ * fZ)
+    }
+    
+    for X in -radiusChunks...radiusChunks {
+        for Z in -radiusChunks...radiusChunks {
+            let pos = ChunkPos(X: X, Z: Z)
+            
+            if (distanceFromCenter(pos) <= Float(radiusChunks)) {
+                result.append(pos)
+            }
+        }
+    }
+    
+    return result.sorted() {
+        distanceFromCenter($0) < distanceFromCenter($1)
     }
 }

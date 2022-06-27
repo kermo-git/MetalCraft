@@ -1,7 +1,7 @@
 import simd
 import Metal
 
-class TestWorldRenderer {
+class WorldRenderer {
     var sceneConstants = SceneConstants()
     var fragmentConstants = FragmentConstants()
     var projectionMatrix: Float4x4 = matrix_identity_float4x4
@@ -10,11 +10,7 @@ class TestWorldRenderer {
     var meshVertexBuffer: MTLBuffer
     var meshIndexBuffer: MTLBuffer
     
-    var chunks: ChunkBuffer
-    
-    init(faces: [BlockFace]) {
-        chunks = ChunkBuffer(faces: faces)
-        
+    init() {
         let mesh = buildQuad()
         meshIndexCount = mesh.indices.count
         
@@ -26,7 +22,7 @@ class TestWorldRenderer {
                                                length: UInt16.size(mesh.indices.count),
                                                options: [])!
         
-        updateAspectRatio(aspectRatio: Renderer.aspectRatio)
+        updateAspectRatio(aspectRatio: _aspectRatio)
     }
     
     func updateAspectRatio(aspectRatio: Float) {
@@ -38,6 +34,8 @@ class TestWorldRenderer {
     
     func update(deltaTime: Float) {
         sceneConstants.projectionViewMatrix = projectionMatrix * Player.getViewMatrix()
+        fragmentConstants.playerPos = Player.position
+        fragmentConstants.renderDistance = RENDER_DISTANCE
     }
     
     func render(_ encoder: MTLRenderCommandEncoder) {
@@ -50,12 +48,15 @@ class TestWorldRenderer {
         encoder.setVertexBytes(&sceneConstants, length: SceneConstants.size(), index: 1)
         encoder.setFragmentBytes(&fragmentConstants, length: FragmentConstants.size(), index: 1)
         
-        encoder.setVertexBuffer(chunks.buffer, offset: 0, index: 2)
-        encoder.drawIndexedPrimitives(type: .triangle,
-                                      indexCount: meshIndexCount,
-                                      indexType: .uint16,
-                                      indexBuffer: meshIndexBuffer,
-                                      indexBufferOffset: 0,
-                                      instanceCount: chunks.faceCount)
+        for (_, chunk) in WorldState.renderedChunks {
+            encoder.setVertexBuffer(chunk.buffer, offset: 0, index: 2)
+            encoder.drawIndexedPrimitives(type: .triangle,
+                                          indexCount: meshIndexCount,
+                                          indexType: .uint16,
+                                          indexBuffer: meshIndexBuffer,
+                                          indexBufferOffset: 0,
+                                          instanceCount: chunk.faces.count)
+        }
     }
 }
+
