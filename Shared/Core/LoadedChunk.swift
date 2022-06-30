@@ -12,16 +12,6 @@ class LoadedChunk {
     }
 }
 
-class ChunkBuffer {
-    var faceCount = 0
-    var buffer: MTLBuffer
-    
-    init(faces: [BlockFace]) {
-        faceCount = faces.count
-        buffer = toBuffer(faces)
-    }
-}
-
 func toBuffer(_ faces: [BlockFace]) -> MTLBuffer {
     let bufferOptions = MTLResourceOptions.storageModeShared
     let result = Engine.Device.makeBuffer(length: ShaderBlockFace.size(faces.count),

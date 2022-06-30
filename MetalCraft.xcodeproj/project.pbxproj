@@ -50,8 +50,8 @@
 		4FD31117286A3F0100BB55ED /* Engine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FD310EC286A3F0100BB55ED /* Engine.swift */; };
 		4FD31118286A3F0100BB55ED /* Preferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FD310ED286A3F0100BB55ED /* Preferences.swift */; };
 		4FD31119286A3F0100BB55ED /* Preferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FD310ED286A3F0100BB55ED /* Preferences.swift */; };
-		4FD3111A286A3F0100BB55ED /* ChunkBuffer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FD310EE286A3F0100BB55ED /* ChunkBuffer.swift */; };
-		4FD3111B286A3F0100BB55ED /* ChunkBuffer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FD310EE286A3F0100BB55ED /* ChunkBuffer.swift */; };
+		4FD3111A286A3F0100BB55ED /* LoadedChunk.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FD310EE286A3F0100BB55ED /* LoadedChunk.swift */; };
+		4FD3111B286A3F0100BB55ED /* LoadedChunk.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FD310EE286A3F0100BB55ED /* LoadedChunk.swift */; };
 		4FD3111C286A3F0100BB55ED /* TextureLibrary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FD310EF286A3F0100BB55ED /* TextureLibrary.swift */; };
 		4FD3111D286A3F0100BB55ED /* TextureLibrary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FD310EF286A3F0100BB55ED /* TextureLibrary.swift */; };
 		4FD31120286A3F0100BB55ED /* ShaderTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FD310F2286A3F0100BB55ED /* ShaderTypes.swift */; };
@@ -119,7 +119,7 @@
 		4FD310EB286A3F0100BB55ED /* yellow_flowers.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = yellow_flowers.png; sourceTree = "<group>"; };
 		4FD310EC286A3F0100BB55ED /* Engine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Engine.swift; sourceTree = "<group>"; };
 		4FD310ED286A3F0100BB55ED /* Preferences.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Preferences.swift; sourceTree = "<group>"; };
-		4FD310EE286A3F0100BB55ED /* ChunkBuffer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChunkBuffer.swift; sourceTree = "<group>"; };
+		4FD310EE286A3F0100BB55ED /* LoadedChunk.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoadedChunk.swift; sourceTree = "<group>"; };
 		4FD310EF286A3F0100BB55ED /* TextureLibrary.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextureLibrary.swift; sourceTree = "<group>"; };
 		4FD310F2286A3F0100BB55ED /* ShaderTypes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShaderTypes.swift; sourceTree = "<group>"; };
 		4FD310F3286A3F0100BB55ED /* Shaders.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = Shaders.metal; sourceTree = "<group>"; };
@@ -208,7 +208,7 @@
 			children = (
 				4FD310EC286A3F0100BB55ED /* Engine.swift */,
 				4FD310ED286A3F0100BB55ED /* Preferences.swift */,
-				4FD310EE286A3F0100BB55ED /* ChunkBuffer.swift */,
+				4FD310EE286A3F0100BB55ED /* LoadedChunk.swift */,
 				4FD310EF286A3F0100BB55ED /* TextureLibrary.swift */,
 				4FD310F4286A3F0100BB55ED /* WorldRenderer.swift */,
 				4FD310F5286A3F0100BB55ED /* Types.swift */,
@@ -444,7 +444,7 @@
 				4FD31144286A3F1400BB55ED /* BlockFaceMatrix.swift in Sources */,
 				4FD31142286A3F1400BB55ED /* Mesh.swift in Sources */,
 				4FD31140286A3F1400BB55ED /* Math.swift in Sources */,
-				4FD3111A286A3F0100BB55ED /* ChunkBuffer.swift in Sources */,
+				4FD3111A286A3F0100BB55ED /* LoadedChunk.swift in Sources */,
 				4FD31122286A3F0100BB55ED /* Shaders.metal in Sources */,
 				4FD31118286A3F0100BB55ED /* Preferences.swift in Sources */,
 				4FD31154286A3F1F00BB55ED /* SimplexNoise.swift in Sources */,
@@ -463,7 +463,7 @@
 				4FD3107A286A3BCD00BB55ED /* ContentView.swift in Sources */,
 				4FD31155286A3F1F00BB55ED /* SimplexNoise.swift in Sources */,
 				4FD31145286A3F1400BB55ED /* BlockFaceMatrix.swift in Sources */,
-				4FD3111B286A3F0100BB55ED /* ChunkBuffer.swift in Sources */,
+				4FD3111B286A3F0100BB55ED /* LoadedChunk.swift in Sources */,
 				4FD31127286A3F0100BB55ED /* Types.swift in Sources */,
 				4FD3114F286A3F1F00BB55ED /* WorldTypes.swift in Sources */,
 				4FD3115C286A3F6C00BB55ED /* MetalView.swift in Sources */,
