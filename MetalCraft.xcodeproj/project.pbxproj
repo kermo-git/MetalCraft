@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4F19D4C72870890E00FA6EED /* leaves_yellow_flowers.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F19D4C52870890E00FA6EED /* leaves_yellow_flowers.png */; };
+		4F19D4C82870890E00FA6EED /* leaves_yellow_flowers.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F19D4C52870890E00FA6EED /* leaves_yellow_flowers.png */; };
+		4F19D4C92870890E00FA6EED /* leaves_pink_flowers.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F19D4C62870890E00FA6EED /* leaves_pink_flowers.png */; };
+		4F19D4CA2870890E00FA6EED /* leaves_pink_flowers.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F19D4C62870890E00FA6EED /* leaves_pink_flowers.png */; };
 		4FD31077286A3BCD00BB55ED /* MetalCraftApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FD31067286A3BCD00BB55ED /* MetalCraftApp.swift */; };
 		4FD31078286A3BCD00BB55ED /* MetalCraftApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FD31067286A3BCD00BB55ED /* MetalCraftApp.swift */; };
 		4FD31079286A3BCD00BB55ED /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FD31068286A3BCD00BB55ED /* ContentView.swift */; };
@@ -40,8 +44,6 @@
 		4FD3110D286A3F0100BB55ED /* sand.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FD310E7286A3F0100BB55ED /* sand.png */; };
 		4FD3110E286A3F0100BB55ED /* leaves.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FD310E8286A3F0100BB55ED /* leaves.png */; };
 		4FD3110F286A3F0100BB55ED /* leaves.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FD310E8286A3F0100BB55ED /* leaves.png */; };
-		4FD31110286A3F0100BB55ED /* lime_bricks.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FD310E9286A3F0100BB55ED /* lime_bricks.png */; };
-		4FD31111286A3F0100BB55ED /* lime_bricks.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FD310E9286A3F0100BB55ED /* lime_bricks.png */; };
 		4FD31112286A3F0100BB55ED /* red_flowers.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FD310EA286A3F0100BB55ED /* red_flowers.png */; };
 		4FD31113286A3F0100BB55ED /* red_flowers.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FD310EA286A3F0100BB55ED /* red_flowers.png */; };
 		4FD31114286A3F0100BB55ED /* yellow_flowers.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FD310EB286A3F0100BB55ED /* yellow_flowers.png */; };
@@ -93,6 +95,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		4F19D4C52870890E00FA6EED /* leaves_yellow_flowers.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = leaves_yellow_flowers.png; sourceTree = "<group>"; };
+		4F19D4C62870890E00FA6EED /* leaves_pink_flowers.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = leaves_pink_flowers.png; sourceTree = "<group>"; };
 		4FD31067286A3BCD00BB55ED /* MetalCraftApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetalCraftApp.swift; sourceTree = "<group>"; };
 		4FD31068286A3BCD00BB55ED /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		4FD31069286A3BCD00BB55ED /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -114,7 +118,6 @@
 		4FD310E6286A3F0100BB55ED /* stone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = stone.png; sourceTree = "<group>"; };
 		4FD310E7286A3F0100BB55ED /* sand.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sand.png; sourceTree = "<group>"; };
 		4FD310E8286A3F0100BB55ED /* leaves.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = leaves.png; sourceTree = "<group>"; };
-		4FD310E9286A3F0100BB55ED /* lime_bricks.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = lime_bricks.png; sourceTree = "<group>"; };
 		4FD310EA286A3F0100BB55ED /* red_flowers.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = red_flowers.png; sourceTree = "<group>"; };
 		4FD310EB286A3F0100BB55ED /* yellow_flowers.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = yellow_flowers.png; sourceTree = "<group>"; };
 		4FD310EC286A3F0100BB55ED /* Engine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Engine.swift; sourceTree = "<group>"; };
@@ -220,6 +223,8 @@
 		4FD310DB286A3F0100BB55ED /* Textures */ = {
 			isa = PBXGroup;
 			children = (
+				4F19D4C62870890E00FA6EED /* leaves_pink_flowers.png */,
+				4F19D4C52870890E00FA6EED /* leaves_yellow_flowers.png */,
 				4FD310DC286A3F0100BB55ED /* dirt_grass.png */,
 				4FD310DD286A3F0100BB55ED /* dirt.png */,
 				4FD310DE286A3F0100BB55ED /* orange_bricks.png */,
@@ -233,7 +238,6 @@
 				4FD310E6286A3F0100BB55ED /* stone.png */,
 				4FD310E7286A3F0100BB55ED /* sand.png */,
 				4FD310E8286A3F0100BB55ED /* leaves.png */,
-				4FD310E9286A3F0100BB55ED /* lime_bricks.png */,
 				4FD310EA286A3F0100BB55ED /* red_flowers.png */,
 				4FD310EB286A3F0100BB55ED /* yellow_flowers.png */,
 			);
@@ -378,12 +382,13 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4F19D4C72870890E00FA6EED /* leaves_yellow_flowers.png in Resources */,
 				4FD31106286A3F0100BB55ED /* sand_grass.png in Resources */,
 				4FD3110A286A3F0100BB55ED /* stone.png in Resources */,
 				4FD3107B286A3BCD00BB55ED /* Assets.xcassets in Resources */,
+				4F19D4C92870890E00FA6EED /* leaves_pink_flowers.png in Resources */,
 				4FD310FA286A3F0100BB55ED /* orange_bricks.png in Resources */,
 				4FD31102286A3F0100BB55ED /* stone_grass.png in Resources */,
-				4FD31110286A3F0100BB55ED /* lime_bricks.png in Resources */,
 				4FD310FC286A3F0100BB55ED /* tree_cut.png in Resources */,
 				4FD31100286A3F0100BB55ED /* white_flowers.png in Resources */,
 				4FD3110E286A3F0100BB55ED /* leaves.png in Resources */,
@@ -402,12 +407,13 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4F19D4C82870890E00FA6EED /* leaves_yellow_flowers.png in Resources */,
 				4FD31107286A3F0100BB55ED /* sand_grass.png in Resources */,
 				4FD3110B286A3F0100BB55ED /* stone.png in Resources */,
 				4FD3107C286A3BCD00BB55ED /* Assets.xcassets in Resources */,
+				4F19D4CA2870890E00FA6EED /* leaves_pink_flowers.png in Resources */,
 				4FD310FB286A3F0100BB55ED /* orange_bricks.png in Resources */,
 				4FD31103286A3F0100BB55ED /* stone_grass.png in Resources */,
-				4FD31111286A3F0100BB55ED /* lime_bricks.png in Resources */,
 				4FD310FD286A3F0100BB55ED /* tree_cut.png in Resources */,
 				4FD31101286A3F0100BB55ED /* white_flowers.png in Resources */,
 				4FD3110F286A3F0100BB55ED /* leaves.png in Resources */,
