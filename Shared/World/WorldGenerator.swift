@@ -37,7 +37,7 @@ class WorldGenerator {
         for i in 0..<CHUNK_SIDE {
             for j in 0..<CHUNK_SIDE {
                 let localPos = BlockPos(X: i, Y: 0, Z: j)
-                let globalPos = toGlobalPos(chunk: pos, local: localPos)
+                let globalPos = getGlobalPos(chunk: pos, local: localPos)
                 let terrainHeight = terrainHeight(pos: globalPos)
                 
                 for k in 0..<terrainHeight {

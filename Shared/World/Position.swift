@@ -151,14 +151,14 @@ func getChunkPos(_ pos: BlockPos) -> ChunkPos {
                     Z: toChunkCoordinate(pos.Z))
 }
 
-func toGlobalPos(chunk: ChunkPos, local: BlockPos) -> BlockPos {
+func getChunkPos(_ pointPos: Float3) -> ChunkPos {
+    return getChunkPos(getBlockPos(pointPos))
+}
+
+func getGlobalPos(chunk: ChunkPos, local: BlockPos) -> BlockPos {
     return BlockPos(X: chunk.X * CHUNK_SIDE + local.X,
                     Y: local.Y,
                     Z: chunk.Z * CHUNK_SIDE + local.Z)
-}
-
-func getChunkPos(_ pointPos: Float3) -> ChunkPos {
-    return getChunkPos(getBlockPos(pointPos))
 }
 
 func distance(_ chunk1: ChunkPos, _ chunk2: ChunkPos) -> Float {

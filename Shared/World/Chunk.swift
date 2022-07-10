@@ -30,7 +30,7 @@ func getBlockFaces(chunkPos: ChunkPos, chunk: Chunk) -> [BlockFace] {
             for localZ in 0..<CHUNK_SIDE {
                 
                 let localPos = BlockPos(X: localX, Y: globalY, Z: localZ)
-                let globalPos = toGlobalPos(chunk: chunkPos, local: localPos)
+                let globalPos = getGlobalPos(chunk: chunkPos, local: localPos)
                 
                 switch chunk[localPos] {
                     case .AIR: break
@@ -115,7 +115,7 @@ func getNorthBorderBlockFaces(southChunkPos: ChunkPos,
                         case .AIR:
                             break
                         case .SOLID_BLOCK(_, let sideTexture, _):
-                            let globalPos = toGlobalPos(chunk: northChunkPos,
+                            let globalPos = getGlobalPos(chunk: northChunkPos,
                                                         local: northBlockPos)
                         
                             faces.append(BlockFace(direction: .SOUTH,
@@ -125,7 +125,7 @@ func getNorthBorderBlockFaces(southChunkPos: ChunkPos,
                 case .SOLID_BLOCK(_, let sideTexture, _):
                     switch northChunk[northBlockPos] {
                         case .AIR:
-                            let globalPos = toGlobalPos(chunk: southChunkPos,
+                            let globalPos = getGlobalPos(chunk: southChunkPos,
                                                         local: southBlockPos)
                         
                             faces.append(BlockFace(direction: .NORTH,
@@ -166,7 +166,7 @@ func getWestBorderBlockFaces(eastChunkPos: ChunkPos,
                         case .SOLID_BLOCK(_, let sideTexture, _):
                             faces.append(BlockFace(direction: .EAST,
                                                    textureType: sideTexture,
-                                                   pos: toGlobalPos(chunk: westChunkPos,
+                                                   pos: getGlobalPos(chunk: westChunkPos,
                                                                     local: westBlockPos)))
                     }
                 case .SOLID_BLOCK(_, let sideTexture, _):
@@ -174,7 +174,7 @@ func getWestBorderBlockFaces(eastChunkPos: ChunkPos,
                         case .AIR:
                             faces.append(BlockFace(direction: .WEST,
                                                    textureType: sideTexture,
-                                                   pos: toGlobalPos(chunk: eastChunkPos,
+                                                   pos: getGlobalPos(chunk: eastChunkPos,
                                                                     local: eastBlockPos)))
                         case .SOLID_BLOCK(_, _, _):
                             break
