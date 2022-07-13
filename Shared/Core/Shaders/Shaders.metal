@@ -2,17 +2,13 @@
 using namespace metal;
 
 struct VertexIn {
-    float4 position [[ attribute(0) ]];
+    float3 position [[ attribute(0) ]];
     float2 textureCoords [[ attribute(1) ]];
+    int textureID [[ attribute(2) ]];
 };
 
 struct SceneConstants {
     float4x4 projectionViewMatrix;
-};
-
-struct ShaderBlockFace {
-    float4x4 modelMatrix;
-    int textureID;
 };
 
 struct FragmentIn {
@@ -28,19 +24,16 @@ struct FragmentConstants {
     float4 fogColor;
 };
 
-vertex FragmentIn vertexShader(VertexIn vIn [[ stage_in ]],
-                               constant SceneConstants &sceneConstants [[ buffer(1) ]],
-                               constant ShaderBlockFace *blockFaces [[ buffer(2) ]],
-                               uint instanceID [[ instance_id ]]) {
+vertex FragmentIn vertexShader(const VertexIn vIn [[ stage_in ]],
+                               constant SceneConstants &sceneConstants [[ buffer(1) ]]) {
     
-    ShaderBlockFace blockface = blockFaces[instanceID];
     FragmentIn fIn;
     
-    float4 worldPosition = blockface.modelMatrix * vIn.position;
+    float4 worldPosition = float4(vIn.position, 1);
     fIn.position = sceneConstants.projectionViewMatrix * worldPosition;
-    fIn.worldPosition = float3(worldPosition);
+    fIn.worldPosition = vIn.position;
     fIn.textureCoords = vIn.textureCoords;
-    fIn.textureID = blockface.textureID;
+    fIn.textureID = vIn.textureID;
     
     return fIn;
 }

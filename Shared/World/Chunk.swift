@@ -22,15 +22,36 @@ struct Chunk {
     }
 }
 
-func getBlockFaces(chunkPos: ChunkPos, chunk: Chunk) -> [BlockFace] {
-    var result: [BlockFace] = []
+struct FacePos: Hashable {
+    var blockPos: BlockPos
+    var direction: Direction
+}
+
+typealias Faces = [FacePos : TextureType]
+
+extension Faces {
+    subscript(_ pos: BlockPos, _ dir: Direction) -> TextureType? {
+        get {
+            return self[FacePos(blockPos: pos, direction: dir)]
+        }
+        set {
+            self[FacePos(blockPos: pos, direction: dir)] = newValue
+        }
+    }
+    
+    mutating func append(_ other: Faces) {
+        self.merge(other) { t1, t2 in t1 }
+    }
+}
+
+func getBlockFaces(chunk: Chunk) -> Faces {
+    var result = Faces()
     
     for localX in 0..<CHUNK_SIDE {
         for globalY in 0..<CHUNK_HEIGHT {
             for localZ in 0..<CHUNK_SIDE {
                 
                 let localPos = BlockPos(X: localX, Y: globalY, Z: localZ)
-                let globalPos = getGlobalPos(chunk: chunkPos, local: localPos)
                 
                 switch chunk[localPos] {
                     case .AIR: break
@@ -38,51 +59,37 @@ func getBlockFaces(chunkPos: ChunkPos, chunk: Chunk) -> [BlockFace] {
                     
                     if (globalY > 0) {
                         if (chunk[localPos.move(.DOWN)] == .AIR) {
-                            result.append(BlockFace(direction: .DOWN,
-                                                    textureType: bottomTexture,
-                                                    pos: globalPos))
+                            result[localPos, .DOWN] = bottomTexture
                         }
                     }
                     
                     if (globalY < CHUNK_HEIGHT - 1) {
                         if (chunk[localPos.move(.UP)] == .AIR) {
-                            result.append(BlockFace(direction: .UP,
-                                                    textureType: topTexture,
-                                                    pos: globalPos))
+                            result[localPos, .UP] = topTexture
                         }
                     } else {
-                        result.append(BlockFace(direction: .UP,
-                                                textureType: topTexture,
-                                                pos: globalPos))
+                        result[localPos, .UP] = topTexture
                     }
                     
                     if (localX > 0) {
                         if (chunk[localPos.move(.WEST)] == .AIR) {
-                            result.append(BlockFace(direction: .WEST,
-                                                    textureType: sideTexture,
-                                                    pos: globalPos))
+                            result[localPos, .WEST] = sideTexture
                         }
                     }
                     if (localX < CHUNK_SIDE - 1) {
                         if (chunk[localPos.move(.EAST)] == .AIR) {
-                            result.append(BlockFace(direction: .EAST,
-                                                    textureType: sideTexture,
-                                                    pos: globalPos))
+                            result[localPos, .EAST] = sideTexture
                         }
                     }
                     
                     if (localZ > 0) {
                         if (chunk[localPos.move(.NORTH)] == .AIR) {
-                            result.append(BlockFace(direction: .NORTH,
-                                                    textureType: sideTexture,
-                                                    pos: globalPos))
+                            result[localPos, .NORTH] = sideTexture
                         }
                     }
                     if (localZ < CHUNK_SIDE - 1) {
                         if (chunk[localPos.move(.SOUTH)] == .AIR) {
-                            result.append(BlockFace(direction: .SOUTH,
-                                                    textureType: sideTexture,
-                                                    pos: globalPos))
+                            result[localPos, .SOUTH] = sideTexture
                         }
                     }
                 }
@@ -92,95 +99,69 @@ func getBlockFaces(chunkPos: ChunkPos, chunk: Chunk) -> [BlockFace] {
     return result
 }
 
-func getNorthBorderBlockFaces(southChunkPos: ChunkPos,
-                              southChunk: Chunk,
-                              northChunk: Chunk) -> [BlockFace] {
-    
-    var faces: [BlockFace] = []
-    
-    let southLocalZ = 0
-    let northLocalZ = CHUNK_SIDE - 1
-    
-    let northChunkPos = southChunkPos.move(.NORTH)
-    
-    for localX in 0..<CHUNK_SIDE {
-        for globalY in 0..<CHUNK_HEIGHT {
-            
-            let southBlockPos = BlockPos(X: localX, Y: globalY, Z: southLocalZ)
-            let northBlockPos = BlockPos(X: localX, Y: globalY, Z: northLocalZ)
-            
-            switch southChunk[southBlockPos] {
-                case .AIR:
-                    switch northChunk[northBlockPos] {
-                        case .AIR:
-                            break
-                        case .SOLID_BLOCK(_, let sideTexture, _):
-                            let globalPos = getGlobalPos(chunk: northChunkPos,
-                                                        local: northBlockPos)
-                        
-                            faces.append(BlockFace(direction: .SOUTH,
-                                                   textureType: sideTexture,
-                                                   pos: globalPos))
-                    }
-                case .SOLID_BLOCK(_, let sideTexture, _):
-                    switch northChunk[northBlockPos] {
-                        case .AIR:
-                            let globalPos = getGlobalPos(chunk: southChunkPos,
-                                                        local: southBlockPos)
-                        
-                            faces.append(BlockFace(direction: .NORTH,
-                                                   textureType: sideTexture,
-                                                   pos: globalPos))
-                        case .SOLID_BLOCK(_, _, _):
-                            break
-                    }
-            }
-        }
-    }
-    return faces
+func getNorthBorderBlockFaces(southChunk: Chunk,
+                              northChunk: Chunk) -> (Faces, Faces) {
+   
+   var southChunkFaces = Faces()
+   var northChunkFaces = Faces()
+   
+   for localX in 0..<CHUNK_SIDE {
+       for globalY in 0..<CHUNK_HEIGHT {
+           
+           let northWallPos = BlockPos(X: localX, Y: globalY, Z: 0)
+           let southWallPos = BlockPos(X: localX, Y: globalY, Z: CHUNK_SIDE - 1)
+           
+           switch southChunk[northWallPos] {
+               case .AIR:
+                   switch northChunk[southWallPos] {
+                       case .AIR:
+                           break
+                       case .SOLID_BLOCK(_, let sideTexture, _):
+                           northChunkFaces[southWallPos, .SOUTH] = sideTexture
+                   }
+               case .SOLID_BLOCK(_, let sideTexture, _):
+                   switch northChunk[southWallPos] {
+                       case .AIR:
+                           southChunkFaces[northWallPos, .NORTH] = sideTexture
+                       case .SOLID_BLOCK(_, _, _):
+                           break
+                   }
+           }
+       }
+   }
+   return (southChunkFaces, northChunkFaces)
 }
 
 
-func getWestBorderBlockFaces(eastChunkPos: ChunkPos,
-                             eastChunk: Chunk,
-                             westChunk: Chunk) -> [BlockFace] {
-    
-    var faces: [BlockFace] = []
-    
-    let eastLocalX = 0
-    let westLocalX = CHUNK_SIDE - 1
-    
-    let westChunkPos = eastChunkPos.move(.WEST)
-    
-    for localZ in 0..<CHUNK_SIDE {
-        for globalY in 0..<CHUNK_HEIGHT {
-            
-            let eastBlockPos = BlockPos(X: eastLocalX, Y: globalY, Z: localZ)
-            let westBlockPos = BlockPos(X: westLocalX, Y: globalY, Z: localZ)
-            
-            switch eastChunk[eastBlockPos] {
-                case .AIR:
-                    switch westChunk[westBlockPos] {
-                        case .AIR:
-                            break
-                        case .SOLID_BLOCK(_, let sideTexture, _):
-                            faces.append(BlockFace(direction: .EAST,
-                                                   textureType: sideTexture,
-                                                   pos: getGlobalPos(chunk: westChunkPos,
-                                                                    local: westBlockPos)))
-                    }
-                case .SOLID_BLOCK(_, let sideTexture, _):
-                    switch westChunk[westBlockPos] {
-                        case .AIR:
-                            faces.append(BlockFace(direction: .WEST,
-                                                   textureType: sideTexture,
-                                                   pos: getGlobalPos(chunk: eastChunkPos,
-                                                                    local: eastBlockPos)))
-                        case .SOLID_BLOCK(_, _, _):
-                            break
-                    }
-            }
-        }
-    }
-    return faces
+func getWestBorderBlockFaces(eastChunk: Chunk,
+                             westChunk: Chunk) -> (Faces, Faces) {
+   
+   var eastChunkFaces = Faces()
+   var westChunkFaces = Faces()
+   
+   for localZ in 0..<CHUNK_SIDE {
+       for globalY in 0..<CHUNK_HEIGHT {
+           
+           let westWallPos = BlockPos(X: 0, Y: globalY, Z: localZ)
+           let eastWallPos = BlockPos(X: CHUNK_SIDE - 1, Y: globalY, Z: localZ)
+           
+           switch eastChunk[westWallPos] {
+               case .AIR:
+                   switch westChunk[eastWallPos] {
+                       case .AIR:
+                           break
+                       case .SOLID_BLOCK(_, let sideTexture, _):
+                           westChunkFaces[eastWallPos, .EAST] = sideTexture
+                   }
+               case .SOLID_BLOCK(_, let sideTexture, _):
+                   switch westChunk[eastWallPos] {
+                       case .AIR:
+                           eastChunkFaces[westWallPos, .WEST] = sideTexture
+                       case .SOLID_BLOCK(_, _, _):
+                           break
+                   }
+           }
+       }
+   }
+   return (eastChunkFaces, westChunkFaces)
 }

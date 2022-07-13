@@ -2,33 +2,31 @@ import Metal
 
 class LoadedChunk {
     var data: Chunk
-    var faces: [BlockFace]
-    var buffer: MTLBuffer
+    var faces: Faces
+    var vertexBuffer: MTLBuffer!
     
-    init(data: Chunk, faces: [BlockFace]) {
+    init(pos: ChunkPos, data: Chunk, faces: Faces) {
         self.data = data
         self.faces = faces
-        buffer = toBuffer(faces)
+        reCompile(pos: pos)
+    }
+    
+    func reCompile(pos: ChunkPos) {
+        vertexBuffer = compile(chunkPos: pos, faces: faces)
     }
 }
 
-func toBuffer(_ faces: [BlockFace]) -> MTLBuffer {
-    let bufferOptions = MTLResourceOptions.storageModeShared
-    let result = Engine.Device.makeBuffer(length: ShaderBlockFace.size(faces.count),
-                                          options: bufferOptions)
+func compile(chunkPos: ChunkPos, faces: Faces) -> MTLBuffer {
+    var vertices: [Vertex] = []
     
-    var pointer = result!.contents().bindMemory(to: ShaderBlockFace.self, capacity: faces.count)
-    
-    for face in faces {
-        pointer.pointee = toShaderData(face)
-        pointer = pointer.advanced(by: 1)
+    for (facePos, textureType) in faces {
+        let globalPos = getGlobalPos(chunk: chunkPos, local: facePos.blockPos)
+        vertices.append(contentsOf: createVertices(pos: globalPos,
+                                                   dir: facePos.direction,
+                                                   texture: textureType))
     }
-    return result!
-}
-
-func toShaderData(_ face: BlockFace) -> ShaderBlockFace {
-    var constants = ShaderBlockFace()
-    constants.modelMatrix = getModelMatrix(face: face)
-    constants.setTexture(face.textureType)
-    return constants
+    
+    return Engine.Device.makeBuffer(bytes: vertices,
+                                    length: Vertex.size(vertices.count),
+                                    options: [])!
 }

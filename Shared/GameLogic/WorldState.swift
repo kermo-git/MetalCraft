@@ -53,54 +53,50 @@ enum WorldState {
             let distanceFromPlayer = distance(pos, newPlayerChunkPos)
             
             if (distanceFromPlayer <= Float(RENDER_DISTANCE_CHUNKS)) {
-                let newChunk = worldGenerator.generateChunk(pos: pos)
-                var faces = getBlockFaces(chunkPos: pos, chunk: newChunk)
-                
-                let southPos = pos.move(.SOUTH)
-                if let southChunk = memoryChunks[southPos] {
-                    faces.append(
-                        contentsOf: getNorthBorderBlockFaces(
-                            southChunkPos: southPos,
-                            southChunk: southChunk.data,
-                            northChunk: newChunk
-                        )
-                    )
-                }
-                let northPos = pos.move(.NORTH)
-                if let northChunk = memoryChunks[northPos] {
-                    faces.append(
-                        contentsOf: getNorthBorderBlockFaces(
-                            southChunkPos: pos,
-                            southChunk: newChunk,
-                            northChunk: northChunk.data
-                        )
-                    )
-                }
-                let westPos = pos.move(.WEST)
-                if let westChunk = memoryChunks[westPos] {
-                    faces.append(
-                        contentsOf: getWestBorderBlockFaces(
-                            eastChunkPos: pos,
-                            eastChunk: newChunk,
-                            westChunk: westChunk.data
-                        )
-                    )
-                }
-                let eastPos = pos.move(.EAST)
-                if let eastChunk = memoryChunks[eastPos] {
-                    faces.append(
-                        contentsOf: getWestBorderBlockFaces(
-                            eastChunkPos: eastPos,
-                            eastChunk: eastChunk.data,
-                            westChunk: newChunk
-                        )
-                    )
-                }
-                let newLoadedChunk = LoadedChunk(data: newChunk, faces: faces)
-                renderedChunks[pos] = newLoadedChunk
-                memoryChunks[pos] = newLoadedChunk
+                generateChunk(pos: pos)
             }
         }
+    }
+    
+    static func generateChunk(pos: ChunkPos) {
+        let newChunk = worldGenerator.generateChunk(pos: pos)
+        var faces = getBlockFaces(chunk: newChunk)
+        
+        let southPos = pos.move(.SOUTH)
+        if let southChunk = memoryChunks[southPos] {
+            let (southChunkFaces, newChunkFaces) = getNorthBorderBlockFaces(southChunk: southChunk.data,
+                                                                            northChunk: newChunk)
+            southChunk.faces.append(southChunkFaces)
+            southChunk.reCompile(pos: southPos)
+            faces.append(newChunkFaces)
+        }
+        let northPos = pos.move(.NORTH)
+        if let northChunk = memoryChunks[northPos] {
+            let (newChunkFaces, northChunkFaces) = getNorthBorderBlockFaces(southChunk: newChunk,
+                                                                            northChunk: northChunk.data)
+            northChunk.faces.append(northChunkFaces)
+            northChunk.reCompile(pos: northPos)
+            faces.append(newChunkFaces)
+        }
+        let westPos = pos.move(.WEST)
+        if let westChunk = memoryChunks[westPos] {
+            let (newChunkFaces, westChunkFaces) = getWestBorderBlockFaces(eastChunk: newChunk,
+                                                                          westChunk: westChunk.data)
+            westChunk.faces.append(westChunkFaces)
+            westChunk.reCompile(pos: westPos)
+            faces.append(newChunkFaces)
+        }
+        let eastPos = pos.move(.EAST)
+        if let eastChunk = memoryChunks[eastPos] {
+            let (eastChunkFaces, newChunkFaces) = getWestBorderBlockFaces(eastChunk: eastChunk.data,
+                                                                          westChunk: newChunk)
+            eastChunk.faces.append(eastChunkFaces)
+            eastChunk.reCompile(pos: eastPos)
+            faces.append(newChunkFaces)
+        }
+        let newLoadedChunk = LoadedChunk(pos: pos, data: newChunk, faces: faces)
+        renderedChunks[pos] = newLoadedChunk
+        memoryChunks[pos] = newLoadedChunk
     }
 }
 

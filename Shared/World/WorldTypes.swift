@@ -1,17 +1,11 @@
 
-enum Direction {
+enum Direction: Hashable {
     case UP
     case DOWN
     case WEST
     case EAST
     case SOUTH
     case NORTH
-}
-
-struct BlockFace {
-    var direction: Direction
-    var textureType: TextureType
-    var pos: BlockPos
 }
 
 enum Block: Equatable {

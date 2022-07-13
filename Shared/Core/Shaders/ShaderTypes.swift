@@ -2,8 +2,15 @@ import simd
 import Metal
 
 struct Vertex: Sizeable {
-    var position: Float3 = Float3(0, 0, 0)
-    var textureCoords: Float2 = Float2(0, 0)
+    var position: Float3
+    var textureCoords: Float2
+    private var textureID: Int
+    
+    init(position: Float3, textureCoords: Float2, texture: TextureType) {
+        self.position = position
+        self.textureCoords = textureCoords
+        textureID = TextureLibrary.getTextureID(texture)
+    }
 }
 
 func getVertexDescriptor() -> MTLVertexDescriptor {
@@ -17,6 +24,10 @@ func getVertexDescriptor() -> MTLVertexDescriptor {
     descriptor.attributes[1].bufferIndex = 0
     descriptor.attributes[1].offset = Float3.size()
     
+    descriptor.attributes[2].format = .int
+    descriptor.attributes[2].bufferIndex = 0
+    descriptor.attributes[2].offset = Float3.size() + Float2.size()
+    
     descriptor.layouts[0].stride = Vertex.size()
     
     return descriptor
@@ -24,15 +35,6 @@ func getVertexDescriptor() -> MTLVertexDescriptor {
 
 struct SceneConstants: Sizeable {
     var projectionViewMatrix: Float4x4 = matrix_identity_float4x4
-}
-
-struct ShaderBlockFace: Sizeable {
-    var modelMatrix: Float4x4 = matrix_identity_float4x4
-    private var textureID: Int = 0
-    
-    mutating func setTexture(_ type: TextureType) {
-        textureID = TextureLibrary.getTextureID(type)
-    }
 }
 
 struct FragmentConstants: Sizeable {

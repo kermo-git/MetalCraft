@@ -74,10 +74,8 @@
 		4FD31139286A3F0C00BB55ED /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FD3112E286A3F0C00BB55ED /* Player.swift */; };
 		4FD31140286A3F1400BB55ED /* Math.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FD3113D286A3F1400BB55ED /* Math.swift */; };
 		4FD31141286A3F1400BB55ED /* Math.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FD3113D286A3F1400BB55ED /* Math.swift */; };
-		4FD31142286A3F1400BB55ED /* Mesh.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FD3113E286A3F1400BB55ED /* Mesh.swift */; };
-		4FD31143286A3F1400BB55ED /* Mesh.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FD3113E286A3F1400BB55ED /* Mesh.swift */; };
-		4FD31144286A3F1400BB55ED /* BlockFaceMatrix.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FD3113F286A3F1400BB55ED /* BlockFaceMatrix.swift */; };
-		4FD31145286A3F1400BB55ED /* BlockFaceMatrix.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FD3113F286A3F1400BB55ED /* BlockFaceMatrix.swift */; };
+		4FD31144286A3F1400BB55ED /* BlockfaceMatrix.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FD3113F286A3F1400BB55ED /* BlockfaceMatrix.swift */; };
+		4FD31145286A3F1400BB55ED /* BlockfaceMatrix.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FD3113F286A3F1400BB55ED /* BlockfaceMatrix.swift */; };
 		4FD3114E286A3F1F00BB55ED /* WorldTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FD31147286A3F1F00BB55ED /* WorldTypes.swift */; };
 		4FD3114F286A3F1F00BB55ED /* WorldTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FD31147286A3F1F00BB55ED /* WorldTypes.swift */; };
 		4FD31150286A3F1F00BB55ED /* WorldGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FD31148286A3F1F00BB55ED /* WorldGenerator.swift */; };
@@ -133,8 +131,7 @@
 		4FD3112D286A3F0C00BB55ED /* WorldState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WorldState.swift; sourceTree = "<group>"; };
 		4FD3112E286A3F0C00BB55ED /* Player.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
 		4FD3113D286A3F1400BB55ED /* Math.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Math.swift; sourceTree = "<group>"; };
-		4FD3113E286A3F1400BB55ED /* Mesh.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Mesh.swift; sourceTree = "<group>"; };
-		4FD3113F286A3F1400BB55ED /* BlockFaceMatrix.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BlockFaceMatrix.swift; sourceTree = "<group>"; };
+		4FD3113F286A3F1400BB55ED /* BlockfaceMatrix.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BlockfaceMatrix.swift; sourceTree = "<group>"; };
 		4FD31147286A3F1F00BB55ED /* WorldTypes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WorldTypes.swift; sourceTree = "<group>"; };
 		4FD31148286A3F1F00BB55ED /* WorldGenerator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WorldGenerator.swift; sourceTree = "<group>"; };
 		4FD3114A286A3F1F00BB55ED /* NoiseGenerator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoiseGenerator.swift; sourceTree = "<group>"; };
@@ -276,8 +273,7 @@
 			isa = PBXGroup;
 			children = (
 				4FD3113D286A3F1400BB55ED /* Math.swift */,
-				4FD3113E286A3F1400BB55ED /* Mesh.swift */,
-				4FD3113F286A3F1400BB55ED /* BlockFaceMatrix.swift */,
+				4FD3113F286A3F1400BB55ED /* BlockfaceMatrix.swift */,
 			);
 			path = Geometry;
 			sourceTree = "<group>";
@@ -447,8 +443,7 @@
 				4FD3111C286A3F0100BB55ED /* TextureLibrary.swift in Sources */,
 				4FD31116286A3F0100BB55ED /* Engine.swift in Sources */,
 				4FD31124286A3F0100BB55ED /* WorldRenderer.swift in Sources */,
-				4FD31144286A3F1400BB55ED /* BlockFaceMatrix.swift in Sources */,
-				4FD31142286A3F1400BB55ED /* Mesh.swift in Sources */,
+				4FD31144286A3F1400BB55ED /* BlockfaceMatrix.swift in Sources */,
 				4FD31140286A3F1400BB55ED /* Math.swift in Sources */,
 				4FD3111A286A3F0100BB55ED /* LoadedChunk.swift in Sources */,
 				4FD31122286A3F0100BB55ED /* Shaders.metal in Sources */,
@@ -468,7 +463,7 @@
 			files = (
 				4FD3107A286A3BCD00BB55ED /* ContentView.swift in Sources */,
 				4FD31155286A3F1F00BB55ED /* SimplexNoise.swift in Sources */,
-				4FD31145286A3F1400BB55ED /* BlockFaceMatrix.swift in Sources */,
+				4FD31145286A3F1400BB55ED /* BlockfaceMatrix.swift in Sources */,
 				4FD3111B286A3F0100BB55ED /* LoadedChunk.swift in Sources */,
 				4FD31127286A3F0100BB55ED /* Types.swift in Sources */,
 				4FD3114F286A3F1F00BB55ED /* WorldTypes.swift in Sources */,
@@ -483,7 +478,6 @@
 				4FD31125286A3F0100BB55ED /* WorldRenderer.swift in Sources */,
 				4FD31078286A3BCD00BB55ED /* MetalCraftApp.swift in Sources */,
 				4FD31133286A3F0C00BB55ED /* Mouse.swift in Sources */,
-				4FD31143286A3F1400BB55ED /* Mesh.swift in Sources */,
 				4FD31141286A3F1400BB55ED /* Math.swift in Sources */,
 				4FD31157286A3F1F00BB55ED /* Position.swift in Sources */,
 				4FD31121286A3F0100BB55ED /* ShaderTypes.swift in Sources */,
