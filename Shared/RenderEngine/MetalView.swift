@@ -3,25 +3,10 @@ import MetalKit
 
 // https://gist.github.com/HugoNijmek/d5b983784cf4519c5b352f41a790c237
 
-func getScreenSize(view: MTKView) -> Float2 {
-    return Float2(Float(view.bounds.width), Float(view.bounds.height))
-}
+struct MetalView {
+    let renderer: Renderer
 
-var _screenSize: Float2 = Float2(0, 0)
-var _aspectRatio: Float {
-    _screenSize.x / _screenSize.y
-}
-
-let camera = FlyingCamera(startPos: Float3(0, 60, 0))
-let worldState = ChunkLoader(cameraStartPos: camera.position, generator: generateChunk)
-let worldRenderer = WorldRenderer(worldState: worldState, camera: camera)
-
-struct MTKViewRepresentable {
-    func makeCoordinator() -> Coordinator {
-        Coordinator(self)
-    }
-
-    func makeMTKView(_ context: MTKViewRepresentable.Context) -> MTKView {
+    func makeMTKView(_ context: MetalView.Context) -> MTKView {
         let mtkView = MTKView()
         
         mtkView.delegate = context.coordinator
@@ -39,17 +24,25 @@ struct MTKViewRepresentable {
         return mtkView
     }
     
+    func makeCoordinator() -> Coordinator {
+        Coordinator(parent: self)
+    }
+    
     class Coordinator : NSObject, MTKViewDelegate {
-        var parent: MTKViewRepresentable
+        let parent: MetalView
 
-        init(_ parent: MTKViewRepresentable) {
+        init(parent: MetalView) {
             self.parent = parent
             super.init()
         }
         
+        func getScreenSize(view: MTKView) -> Float2 {
+            return Float2(Float(view.bounds.width), Float(view.bounds.height))
+        }
+        
         func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {
-            _screenSize = getScreenSize(view: view)
-            worldRenderer.updateAspectRatio(aspectRatio: _aspectRatio)
+            let screenSize = getScreenSize(view: view)
+            parent.renderer.setAspectRatio(screenSize.x / screenSize.y)
         }
         
         func draw(in view: MTKView) {
@@ -61,11 +54,13 @@ struct MTKViewRepresentable {
             }
             
             let commandBuffer = Engine.CommandQueue.makeCommandBuffer()
+            
             let encoder = commandBuffer?.makeRenderCommandEncoder(descriptor: renderPassDescriptor)
+            encoder?.setDepthStencilState(Engine.DepthPencilState)
             
             let deltaTime = 1 / Float(view.preferredFramesPerSecond)
-            worldRenderer.update(deltaTime: deltaTime)
-            worldRenderer.render(encoder!)
+            parent.renderer.update(deltaTime: deltaTime)
+            parent.renderer.render(encoder!)
             
             encoder?.endEncoding()
             commandBuffer?.present(drawable)
@@ -73,3 +68,23 @@ struct MTKViewRepresentable {
         }
     }
 }
+
+#if os(macOS)
+extension MetalView : NSViewRepresentable {
+    func makeNSView(context: Context) -> MTKView {
+        return makeMTKView(context)
+    }
+    
+    func updateNSView(_ nsView: MTKView, context: Context) {}
+}
+#endif
+
+#if os(iOS)
+extension MetalView : UIViewRepresentable {
+    func makeUIView(context: Context) -> MTKView {
+        return makeMTKView(context)
+    }
+    
+    func updateUIView(_ nsView: MTKView, context: Context) {}
+}
+#endif

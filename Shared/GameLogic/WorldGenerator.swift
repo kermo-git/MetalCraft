@@ -1,16 +1,3 @@
-
-let grass: Block = .SOLID_BLOCK(topTexture: .GRASS,
-                                sideTexture: .DIRT_GRASS,
-                                bottomTexture: .DIRT)
-
-let flowers: Block = .SOLID_BLOCK(topTexture: .WHITE_FLOWERS,
-                                  sideTexture: .DIRT_GRASS,
-                                  bottomTexture: .DIRT)
-
-let dirt: Block = .SOLID_BLOCK(topTexture: .DIRT,
-                               sideTexture: .DIRT,
-                               bottomTexture: .DIRT)
-
 let plains = WorldNoise(
     generator: SimplexNoise(),
     unitSquareBlocks: 50,
@@ -69,11 +56,11 @@ func generateChunk(pos: ChunkPos) -> Chunk {
             }
             
             for k in 0..<(terrainHeight - 1) {
-                chunk[BlockPos(X: i, Y: k, Z: j)] = dirt
+                chunk[BlockPos(X: i, Y: k, Z: j)] = .DIRT
             }
             
             chunk[BlockPos(X: i, Y: terrainHeight - 1, Z: j)] =
-                Float.random(in: 0...1) > 0.7 ? flowers : grass
+            Float.random(in: 0...1) > 0.7 ? .WHITE_FLOWERS : .GRASS
         }
     }
     

@@ -8,11 +8,6 @@ class Engine {
     static let CommandQueue: MTLCommandQueue = Device.makeCommandQueue()!
     static let DefaultLibrary: MTLLibrary = Device.makeDefaultLibrary()!
     static let DepthPencilState: MTLDepthStencilState = getDepthStencilState()
-    static let RenderPipelineState: MTLRenderPipelineState = getRenderPipelineState(
-            vertexFunction: getShaderFunction(name: "vertexShader"),
-            fragmentFunction: getShaderFunction(name: "fragmentShader"),
-            vDescriptor: getVertexDescriptor()
-    )!
     static let SamplerState: MTLSamplerState = getSamplerState()
     
     static func loadTexture(fileName: String, fileExtension: String = "png",
@@ -59,9 +54,12 @@ class Engine {
         return DefaultLibrary.makeFunction(name: name)!
     }
 
-    static func getRenderPipelineState(vertexFunction: MTLFunction,
-                                       fragmentFunction: MTLFunction,
+    static func getRenderPipelineState(vertexShaderName: String,
+                                       fragmentShaderName: String,
                                        vDescriptor: MTLVertexDescriptor) -> MTLRenderPipelineState? {
+        
+        let vertexFunction = getShaderFunction(name: vertexShaderName)
+        let fragmentFunction = getShaderFunction(name: fragmentShaderName)
         
         let descriptor = MTLRenderPipelineDescriptor()
         descriptor.colorAttachments[0].pixelFormat = Preferences.PixelFormat

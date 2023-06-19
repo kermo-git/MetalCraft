@@ -9,7 +9,7 @@ struct Vertex: Sizeable {
     init(position: Float3, textureCoords: Float2, texture: TextureType) {
         self.position = position
         self.textureCoords = textureCoords
-        textureID = TextureLibrary.getTextureID(texture)
+        textureID = getTextureID(texture)
     }
 }
 
@@ -38,7 +38,7 @@ struct SceneConstants: Sizeable {
 }
 
 struct FragmentConstants: Sizeable {
-    var playerPos: Float3 = Float3(0, 0, 0)
-    var renderDistance: Float = RENDER_DISTANCE
+    var cameraPos: Float3 = Float3(0, 0, 0)
+    var renderDistance: Float = RENDER_DISTANCE_BLOCKS
     var fogColor: Float4 = BACKGROUND_COLOR
 }

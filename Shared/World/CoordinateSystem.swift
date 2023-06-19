@@ -92,6 +92,15 @@ import Darwin
  * Block with global position of (0, 0) is NW corner of Chunk (0, 0)
  */
 
+enum Direction: Hashable {
+    case UP
+    case DOWN
+    case WEST
+    case EAST
+    case SOUTH
+    case NORTH
+}
+
 struct BlockPos: Hashable {
     let X: Int
     let Y: Int

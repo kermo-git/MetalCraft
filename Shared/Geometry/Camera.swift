@@ -4,6 +4,7 @@ class Camera {
     var rotationX: Float = 0
     var rotationY: Float = 0
     var position: Float3 = Float3(0, 0, 0)
+    var degreesFov: Float = 45
     
     func getViewDirection() -> Float3 {
         let rotation = rotateAroundY(rotationY) * rotateAroundX(rotationX)
@@ -17,5 +18,7 @@ class Camera {
                translate(-position.x, -position.y, -position.z)
     }
     
-    func update(deltaTime: Float) {}
+    func update(deltaTime: Float) {
+        // Override in subclass
+    }
 }

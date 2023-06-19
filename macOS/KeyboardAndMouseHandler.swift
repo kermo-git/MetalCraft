@@ -13,9 +13,7 @@ struct KeyboardAndMouseHandler: NSViewRepresentable {
         return view
     }
     
-    func updateNSView(_ nsView: NSView, context: Context) {
-
-    }
+    func updateNSView(_ nsView: NSView, context: Context) {}
     
     class HandlerView: NSView {
         override var acceptsFirstResponder: Bool { return true }

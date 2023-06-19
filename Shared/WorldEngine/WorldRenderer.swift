@@ -1,30 +1,45 @@
-import Darwin
+import simd
+import Metal
 
 let RENDER_DISTANCE_CHUNKS = Float(8)
-let RENDER_DISTANCE = RENDER_DISTANCE_CHUNKS * Float(CHUNK_SIDE)
-let BACKGROUND_COLOR = Float4(x: 0.075,
-                              y: 0.78,
-                              z: 0.95,
-                              w: 1)
+let RENDER_DISTANCE_BLOCKS = RENDER_DISTANCE_CHUNKS * Float(CHUNK_SIDE)
 let MEMORY_DISTANCE_CHUNKS = Float(64)
 
-let localRenderCircle: [ChunkPos] = generateCircle(radiusChunks: Int(RENDER_DISTANCE_CHUNKS))
-
-class ChunkLoader {
-    var cameraChunkPos: ChunkPos
-    var memoryChunks: [ChunkPos : LoadedChunk] = [:]
-    var renderedChunks: [ChunkPos : LoadedChunk] = [:]
-    var toBeGenerated: [ChunkPos] = localRenderCircle
+class WorldRenderer: Renderer {
+    private let localRenderCircle: [ChunkPos] = generateCircle(radiusChunks: Int(RENDER_DISTANCE_CHUNKS))
     
-    var generator: (_ pos: ChunkPos) -> Chunk
+    private var cameraChunkPos: ChunkPos
+    private var memoryChunks: [ChunkPos : LoadedChunk] = [:]
+    private var renderedChunks: [ChunkPos : LoadedChunk] = [:]
+    private var toBeGenerated: [ChunkPos]
     
-    init(cameraStartPos: Float3, generator: @escaping (_ pos: ChunkPos) -> Chunk) {
-        self.cameraChunkPos = getChunkPos(cameraStartPos)
+    private var generator: (_ pos: ChunkPos) -> Chunk
+    
+    init(generator: @escaping (_ pos: ChunkPos) -> Chunk, camera: Camera) {
+        self.cameraChunkPos = getChunkPos(camera.position)
         self.generator = generator
+        self.toBeGenerated = localRenderCircle
+        
+        super.init(
+            camera: camera,
+            renderPipelineState: Engine.getRenderPipelineState(
+                vertexShaderName: "vertexShader",
+                fragmentShaderName: "fragmentShader",
+                vDescriptor: getVertexDescriptor()
+            )!
+        )
     }
     
-    func update(cameraPos: Float3) {
-        let newPlayerChunkPos = getChunkPos(cameraPos)
+    private let textures: [MTLTexture] =
+        TextureType.allCases.map {
+            Engine.loadTexture(fileName: $0.rawValue)
+        }
+    
+    private var sceneConstants = SceneConstants()
+    private var fragmentConstants = FragmentConstants()
+    
+    override func updateScene(deltaTime: Float) {
+        let newPlayerChunkPos = getChunkPos(camera.position)
         
         if (cameraChunkPos != newPlayerChunkPos) {
             for (pos, chunk) in memoryChunks {
@@ -64,9 +79,26 @@ class ChunkLoader {
                 }
             }
         }
+        
+        sceneConstants.projectionViewMatrix = projectionMatrix * camera.getViewMatrix()
+        fragmentConstants.cameraPos = camera.position
+        fragmentConstants.renderDistance = RENDER_DISTANCE_BLOCKS
     }
     
-    func addChunk(pos: ChunkPos, newChunk: Chunk) {
+    override func renderScene(_ encoder: MTLRenderCommandEncoder) {
+        encoder.setFragmentSamplerState(Engine.SamplerState, index: 0)
+        encoder.setFragmentTextures(textures, range: 0..<textures.count)
+        
+        encoder.setVertexBytes(&sceneConstants, length: SceneConstants.size(), index: 1)
+        encoder.setFragmentBytes(&fragmentConstants, length: FragmentConstants.size(), index: 1)
+        
+        for (_, chunk) in renderedChunks {
+            encoder.setVertexBuffer(chunk.vertexBuffer, offset: 0, index: 0)
+            encoder.drawPrimitives(type: .triangle, vertexStart: 0, vertexCount: chunk.faces.count * 6)
+        }
+    }
+    
+    private func addChunk(pos: ChunkPos, newChunk: Chunk) {
         var faces = getBlockFaces(chunk: newChunk)
         
         let southPos = pos.move(.SOUTH)
@@ -107,7 +139,39 @@ class ChunkLoader {
     }
 }
 
-func generateCircle(radiusChunks: Int) -> [ChunkPos] {
+private class LoadedChunk {
+    var data: Chunk
+    var faces: Faces
+    var vertexBuffer: MTLBuffer!
+    
+    init(pos: ChunkPos, data: Chunk, faces: Faces) {
+        self.data = data
+        self.faces = faces
+        reCompile(pos: pos)
+    }
+    
+    func reCompile(pos: ChunkPos) {
+        vertexBuffer = compile(chunkPos: pos, faces: faces)
+    }
+}
+
+private func compile(chunkPos: ChunkPos, faces: Faces) -> MTLBuffer {
+    var vertices: [Vertex] = []
+    
+    for (facePos, block) in faces {
+        let globalPos = getGlobalPos(chunk: chunkPos, local: facePos.blockPos)
+        vertices.append(contentsOf: createVertices(pos: globalPos,
+                                                   dir: facePos.direction,
+                                                   block: block))
+    }
+    
+    return Engine.Device.makeBuffer(bytes: vertices,
+                                    length: Vertex.size(vertices.count),
+                                    options: [])!
+}
+
+
+private func generateCircle(radiusChunks: Int) -> [ChunkPos] {
     var result: [ChunkPos] = []
     
     func distanceFromCenter(_ pos: ChunkPos) -> Float {

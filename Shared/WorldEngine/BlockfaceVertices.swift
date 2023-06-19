@@ -1,6 +1,8 @@
 import Metal
 
-func createVertices(pos: BlockPos, dir: Direction, texture: TextureType) -> [Vertex] {
+func createVertices(pos: BlockPos, dir: Direction, block: Block) -> [Vertex] {
+    let texture = getTextureType(block: block, direction: dir)
+    
     let X = Float(pos.X)
     let Y = Float(pos.Y)
     let Z = Float(pos.Z)
