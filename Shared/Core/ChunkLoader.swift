@@ -1,37 +1,41 @@
 import Darwin
 
-let RENDER_DISTANCE_CHUNKS = 8
-let RENDER_DISTANCE = Float(RENDER_DISTANCE_CHUNKS * CHUNK_SIDE)
+let RENDER_DISTANCE_CHUNKS = Float(8)
+let RENDER_DISTANCE = RENDER_DISTANCE_CHUNKS * Float(CHUNK_SIDE)
 let BACKGROUND_COLOR = Float4(x: 0.075,
                               y: 0.78,
                               z: 0.95,
                               w: 1)
-let MEMORY_DISTANCE_CHUNKS = 64
+let MEMORY_DISTANCE_CHUNKS = Float(64)
 
-let localRenderCircle: [ChunkPos] = generateCircle(radiusChunks: RENDER_DISTANCE_CHUNKS)
+let localRenderCircle: [ChunkPos] = generateCircle(radiusChunks: Int(RENDER_DISTANCE_CHUNKS))
 
-enum WorldState {
-    static var worldGenerator = WorldGenerator()
+class ChunkLoader {
+    var cameraChunkPos: ChunkPos
+    var memoryChunks: [ChunkPos : LoadedChunk] = [:]
+    var renderedChunks: [ChunkPos : LoadedChunk] = [:]
+    var toBeGenerated: [ChunkPos] = localRenderCircle
     
-    static var playerChunkPos: ChunkPos = getChunkPos(Player.position)
+    var generator: (_ pos: ChunkPos) -> Chunk
     
-    static var memoryChunks: [ChunkPos : LoadedChunk] = [:]
-    static var renderedChunks: [ChunkPos : LoadedChunk] = [:]
-    static var toBeGenerated: [ChunkPos] = localRenderCircle
+    init(cameraStartPos: Float3, generator: @escaping (_ pos: ChunkPos) -> Chunk) {
+        self.cameraChunkPos = getChunkPos(cameraStartPos)
+        self.generator = generator
+    }
     
-    static func update(deltaTime: Float) {
-        let newPlayerChunkPos = getChunkPos(Player.position)
+    func update(cameraPos: Float3) {
+        let newPlayerChunkPos = getChunkPos(cameraPos)
         
-        if (playerChunkPos != newPlayerChunkPos) {
+        if (cameraChunkPos != newPlayerChunkPos) {
             for (pos, chunk) in memoryChunks {
                 let distanceFromPlayer = distance(pos, newPlayerChunkPos)
                 
-                if (distanceFromPlayer > Float(RENDER_DISTANCE_CHUNKS)) {
+                if (distanceFromPlayer > RENDER_DISTANCE_CHUNKS) {
                     renderedChunks.removeValue(forKey: pos)
                 } else {
                     renderedChunks[pos] = chunk
                 }
-                if (distanceFromPlayer > Float(MEMORY_DISTANCE_CHUNKS)) {
+                if (distanceFromPlayer > MEMORY_DISTANCE_CHUNKS) {
                     memoryChunks.removeValue(forKey: pos)
                 }
             }
@@ -46,20 +50,23 @@ enum WorldState {
                     toBeGenerated.append(pos)
                 }
             }
-            playerChunkPos = newPlayerChunkPos
+            cameraChunkPos = newPlayerChunkPos
         }
         if (!toBeGenerated.isEmpty) {
             let pos = toBeGenerated.remove(at: 0)
             let distanceFromPlayer = distance(pos, newPlayerChunkPos)
             
-            if (distanceFromPlayer <= Float(RENDER_DISTANCE_CHUNKS)) {
-                generateChunk(pos: pos)
+            if (distanceFromPlayer <= RENDER_DISTANCE_CHUNKS) {
+                // addChunk(pos: pos, newChunk: generateChunk(pos: pos))
+                // This makes the game faster, but may occasionally crash:
+                Task {
+                    addChunk(pos: pos, newChunk: generateChunk(pos: pos))
+                }
             }
         }
     }
     
-    static func generateChunk(pos: ChunkPos) {
-        let newChunk = worldGenerator.generateChunk(pos: pos)
+    func addChunk(pos: ChunkPos, newChunk: Chunk) {
         var faces = getBlockFaces(chunk: newChunk)
         
         let southPos = pos.move(.SOUTH)

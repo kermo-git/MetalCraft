@@ -6,7 +6,12 @@ class WorldRenderer {
     var fragmentConstants = FragmentConstants()
     var projectionMatrix: Float4x4 = matrix_identity_float4x4
     
-    init() {
+    var chunkLoader: ChunkLoader
+    var camera: Camera
+    
+    init(chunkLoader: ChunkLoader, camera: Camera) {
+        self.chunkLoader = chunkLoader
+        self.camera = camera
         updateAspectRatio(aspectRatio: _aspectRatio)
     }
     
@@ -18,8 +23,11 @@ class WorldRenderer {
     }
     
     func update(deltaTime: Float) {
-        sceneConstants.projectionViewMatrix = projectionMatrix * Player.getViewMatrix()
-        fragmentConstants.playerPos = Player.position
+        camera.update(deltaTime: deltaTime)
+        chunkLoader.update(cameraPos: camera.position)
+        
+        sceneConstants.projectionViewMatrix = projectionMatrix * camera.getViewMatrix()
+        fragmentConstants.playerPos = camera.position
         fragmentConstants.renderDistance = RENDER_DISTANCE
     }
     
@@ -32,7 +40,7 @@ class WorldRenderer {
         encoder.setVertexBytes(&sceneConstants, length: SceneConstants.size(), index: 1)
         encoder.setFragmentBytes(&fragmentConstants, length: FragmentConstants.size(), index: 1)
         
-        for (_, chunk) in WorldState.renderedChunks {
+        for (_, chunk) in chunkLoader.renderedChunks {
             encoder.setVertexBuffer(chunk.vertexBuffer, offset: 0, index: 0)
             encoder.drawPrimitives(type: .triangle, vertexStart: 0, vertexCount: chunk.faces.count * 6)
         }

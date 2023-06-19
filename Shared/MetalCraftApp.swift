@@ -4,7 +4,7 @@ import SwiftUI
 struct MetalCraftApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            MetalView()
         }
     }
 }

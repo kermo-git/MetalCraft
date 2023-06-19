@@ -12,13 +12,16 @@ var _aspectRatio: Float {
     _screenSize.x / _screenSize.y
 }
 
-struct MetalView {
-    
+let camera = FlyingCamera(startPos: Float3(0, 60, 0))
+let worldState = ChunkLoader(cameraStartPos: camera.position, generator: generateChunk)
+let worldRenderer = WorldRenderer(worldState: worldState, camera: camera)
+
+struct MTKViewRepresentable {
     func makeCoordinator() -> Coordinator {
         Coordinator(self)
     }
 
-    func makeMTKView(_ context: MetalView.Context) -> MTKView {
+    func makeMTKView(_ context: MTKViewRepresentable.Context) -> MTKView {
         let mtkView = MTKView()
         
         mtkView.delegate = context.coordinator
@@ -37,10 +40,9 @@ struct MetalView {
     }
     
     class Coordinator : NSObject, MTKViewDelegate {
-        var worldRenderer = WorldRenderer()
-        var parent: MetalView
+        var parent: MTKViewRepresentable
 
-        init(_ parent: MetalView) {
+        init(_ parent: MTKViewRepresentable) {
             self.parent = parent
             super.init()
         }
@@ -62,10 +64,7 @@ struct MetalView {
             let encoder = commandBuffer?.makeRenderCommandEncoder(descriptor: renderPassDescriptor)
             
             let deltaTime = 1 / Float(view.preferredFramesPerSecond)
-            Player.update(deltaTime: deltaTime)
-            WorldState.update(deltaTime: deltaTime)
             worldRenderer.update(deltaTime: deltaTime)
-            
             worldRenderer.render(encoder!)
             
             encoder?.endEncoding()
@@ -74,30 +73,3 @@ struct MetalView {
         }
     }
 }
-
-#if os(macOS)
-extension MetalView : NSViewRepresentable {
-    func makeNSView(context: Context) -> MTKView {
-        return makeMTKView(context)
-    }
-    
-    func updateNSView(_ nsView: MTKView, context: Context) {
-
-    }
-}
-#endif
-
-#if os(iOS)
-extension MetalView : UIViewRepresentable {
-    func makeUIView(context: Context) -> MTKView {
-        return makeMTKView(context)
-    }
-    
-    func updateUIView(_ nsView: MTKView, context: Context) {
-
-    }
-}
-#endif
-
-
-

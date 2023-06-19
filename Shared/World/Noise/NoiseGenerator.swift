@@ -34,3 +34,35 @@ struct FractalNoise: NoiseGenerator {
         return total / max_value
     }
 }
+
+struct WorldNoise {
+    let generator: NoiseGenerator
+    let unitSquareBlocks: Float
+    
+    func signedNoise(_ pos: BlockPos) -> Float {
+        let noiseX = Float(pos.X) / unitSquareBlocks
+        let noiseY = Float(pos.Z) / unitSquareBlocks
+        
+        return generator.signedNoise(noiseX, noiseY, 0)
+    }
+    
+    func noise(_ pos: BlockPos) -> Float {
+        return 0.5 * signedNoise(pos) + 0.5
+    }
+    
+    func turbulence(_ pos: BlockPos) -> Float {
+        let value = signedNoise(pos)
+        return value > 0 ? value : -value
+    }
+    
+    let minTerrainHeight: Int
+    let heightRange: Float
+    
+    func terrainHeight(_ pos: BlockPos) -> Int {
+        return minTerrainHeight + Int(noise(pos) * heightRange)
+    }
+    
+    func turbulentTerrainHeight(_ pos: BlockPos) -> Int {
+        return minTerrainHeight + Int(turbulence(pos) * heightRange)
+    }
+}
