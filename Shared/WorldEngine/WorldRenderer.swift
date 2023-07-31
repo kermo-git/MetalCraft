@@ -8,81 +8,15 @@ let MEMORY_DISTANCE_CHUNKS = Float(64)
 // https://docs.swift.org/swift-book/documentation/the-swift-programming-language/concurrency
 // https://swiftbysundell.com/articles/swift-actors/
 
+private let localRenderCircle: [ChunkPos] = generateCircle(radiusChunks: Int(RENDER_DISTANCE_CHUNKS))
+
 class WorldRenderer: Renderer {
-    private actor LoadedChunks {
-        var memoryChunks: [ChunkPos : LoadedChunk] = [:]
-        var renderedChunks: [ChunkPos : LoadedChunk] = [:]
-        
-        func addChunk(pos: ChunkPos, newChunk: Chunk) {
-            var faces = getBlockFaces(chunk: newChunk)
-            
-            let southPos = pos.move(.SOUTH)
-            if let southChunk = memoryChunks[southPos] {
-                let (southChunkFaces, newChunkFaces) = getNorthBorderBlockFaces(southChunk: southChunk.data,
-                                                                                northChunk: newChunk)
-                
-                addFaces(chunk: southChunk, faces: southChunkFaces)
-                faces.append(newChunkFaces)
-            }
-            let northPos = pos.move(.NORTH)
-            if let northChunk = memoryChunks[northPos] {
-                let (newChunkFaces, northChunkFaces) = getNorthBorderBlockFaces(southChunk: newChunk,
-                                                                                northChunk: northChunk.data)
-                
-                addFaces(chunk: northChunk, faces: northChunkFaces)
-                faces.append(newChunkFaces)
-            }
-            let westPos = pos.move(.WEST)
-            if let westChunk = memoryChunks[westPos] {
-                let (newChunkFaces, westChunkFaces) = getWestBorderBlockFaces(eastChunk: newChunk,
-                                                                              westChunk: westChunk.data)
-                
-                addFaces(chunk: westChunk, faces: westChunkFaces)
-                faces.append(newChunkFaces)
-            }
-            let eastPos = pos.move(.EAST)
-            if let eastChunk = memoryChunks[eastPos] {
-                let (eastChunkFaces, newChunkFaces) = getWestBorderBlockFaces(eastChunk: eastChunk.data,
-                                                                              westChunk: newChunk)
-                
-                addFaces(chunk: eastChunk, faces: eastChunkFaces)
-                faces.append(newChunkFaces)
-            }
-            let newLoadedChunk = LoadedChunk(pos: pos, data: newChunk, faces: faces)
-            memoryChunks[pos] = newLoadedChunk
-            renderedChunks[pos] = newLoadedChunk
-        }
-        
-        private func addFaces(chunk: LoadedChunk, faces: Faces) {
-            chunk.faces.append(faces)
-            chunk.reCompile()
-        }
-        
-        func unRenderChunkAt(_ pos: ChunkPos) {
-            renderedChunks.removeValue(forKey: pos)
-        }
-        
-        func reloadChunkFromMemory(_ pos: ChunkPos) {
-            renderedChunks[pos] = memoryChunks[pos]
-        }
-        
-        func deleteChunkAt(_ pos: ChunkPos) {
-            memoryChunks.removeValue(forKey: pos)
-            renderedChunks.removeValue(forKey: pos)
-        }
-    }
-    private let localRenderCircle: [ChunkPos] = generateCircle(radiusChunks: Int(RENDER_DISTANCE_CHUNKS))
-    private var toBeGenerated: [ChunkPos]
-    private var cameraChunkPos: ChunkPos
-    
-    private var generator: (_ pos: ChunkPos) -> Chunk
-    
-    private let loadedChunks = LoadedChunks()
+    private var cameraPos: ChunkPos
+    private let loader: ChunkLoader
     
     init(generator: @escaping (_ pos: ChunkPos) -> Chunk, camera: Camera) {
-        self.cameraChunkPos = getChunkPos(camera.position)
-        self.generator = generator
-        self.toBeGenerated = localRenderCircle
+        cameraPos = getChunkPos(camera.position)
+        loader = ChunkLoader(generator: generator)
         
         super.init(
             camera: camera,
@@ -103,46 +37,14 @@ class WorldRenderer: Renderer {
     private var fragmentConstants = FragmentConstants()
     
     override func updateScene(deltaTime: Float) {
-        let newPlayerChunkPos = getChunkPos(camera.position)
+        let newCameraPos = getChunkPos(camera.position)
+        let posChanged = cameraPos != newCameraPos
         
-        if (cameraChunkPos != newPlayerChunkPos) {
-            Task {
-                let memoryChunks = await loadedChunks.memoryChunks
-                for (pos, _) in memoryChunks {
-                    let distanceFromPlayer = distance(pos, newPlayerChunkPos)
-                    
-                    if (distanceFromPlayer > MEMORY_DISTANCE_CHUNKS) {
-                        await loadedChunks.deleteChunkAt(pos)
-                    } else if (distanceFromPlayer > RENDER_DISTANCE_CHUNKS) {
-                        await loadedChunks.unRenderChunkAt(pos)
-                    } else {
-                        await loadedChunks.reloadChunkFromMemory(pos)
-                    }
-                }
-                
-                let globalRenderCircle = localRenderCircle.map {
-                    ChunkPos(X: newPlayerChunkPos.X + $0.X,
-                             Z: newPlayerChunkPos.Z + $0.Z)
-                }
-                
-                for pos in globalRenderCircle {
-                    if (memoryChunks[pos] == nil) {
-                        toBeGenerated.append(pos)
-                    }
-                }
-            }
-            cameraChunkPos = newPlayerChunkPos
+        Task {
+            await loader.generationCycle(cameraPos: newCameraPos, posChanged: posChanged)
         }
-        else if (!toBeGenerated.isEmpty) {
-            let pos = toBeGenerated.remove(at: 0)
-            let distanceFromPlayer = distance(pos, cameraChunkPos)
-            
-            if (distanceFromPlayer <= RENDER_DISTANCE_CHUNKS) {
-                Task {
-                    await loadedChunks.addChunk(pos: pos, newChunk: generator(pos))
-                }
-            }
-        }
+        cameraPos = newCameraPos
+        
         sceneConstants.projectionViewMatrix = projectionMatrix * camera.getViewMatrix()
         fragmentConstants.cameraPos = camera.position
         fragmentConstants.renderDistance = RENDER_DISTANCE_BLOCKS
@@ -155,14 +57,124 @@ class WorldRenderer: Renderer {
         encoder.setVertexBytes(&sceneConstants, length: SceneConstants.size(), index: 1)
         encoder.setFragmentBytes(&fragmentConstants, length: FragmentConstants.size(), index: 1)
         
-        for (_, chunk) in await loadedChunks.renderedChunks {
-            encoder.setVertexBuffer(chunk.vertexBuffer, offset: 0, index: 0)
-            encoder.drawPrimitives(type: .triangle, vertexStart: 0, vertexCount: chunk.faces.count * 6)
+        for (_, chunk) in await loader.renderedChunks {
+            let (buffer, faceCount) = await chunk.getRenderData()
+            encoder.setVertexBuffer(buffer, offset: 0, index: 0)
+            encoder.drawPrimitives(type: .triangle, vertexStart: 0, vertexCount: faceCount * 6)
         }
     }
 }
 
-private class LoadedChunk {
+private actor ChunkLoader {
+    var renderedChunks: [ChunkPos : LoadedChunk] = [:]
+    
+    private var memoryChunks: [ChunkPos : LoadedChunk] = [:]
+    private var generationQueue: [ChunkPos] = localRenderCircle
+    private var generator: (_ pos: ChunkPos) -> Chunk
+    
+    init(generator: @escaping (_ pos: ChunkPos) -> Chunk) {
+        self.generator = generator
+    }
+    
+    func generationCycle(cameraPos: ChunkPos, posChanged: Bool) {
+        if (posChanged) {
+            for (pos, chunk) in memoryChunks {
+                let distance = distance(pos, cameraPos)
+                
+                if (distance > MEMORY_DISTANCE_CHUNKS) {
+                    memoryChunks.removeValue(forKey: pos)
+                    renderedChunks.removeValue(forKey: pos)
+                } else if (distance > RENDER_DISTANCE_CHUNKS) {
+                    renderedChunks.removeValue(forKey: pos)
+                } else {
+                    renderedChunks[pos] = chunk
+                }
+            }
+            
+            let globalRenderCircle = localRenderCircle.map {
+                ChunkPos(X: cameraPos.X + $0.X,
+                         Z: cameraPos.Z + $0.Z)
+            }
+            
+            for pos in globalRenderCircle {
+                if (memoryChunks[pos] == nil) {
+                    generationQueue.append(pos)
+                }
+            }
+        } else if (!generationQueue.isEmpty) {
+            let pos = generationQueue.remove(at: 0)
+            let distance = distance(pos, cameraPos)
+            
+            if (distance <= RENDER_DISTANCE_CHUNKS) {
+                addChunk(pos: pos, newChunk: generator(pos))
+            }
+        }
+    }
+    
+    func addChunk(pos: ChunkPos, newChunk: Chunk) {
+        @Sendable func getTopFaces() async -> Faces {
+            return getBlockFaces(chunk: newChunk)
+        }
+        @Sendable func getSouthFaces() async -> Faces {
+            let southPos = pos.move(.SOUTH)
+            if let southChunk = await memoryChunks[southPos] {
+                let (southChunkFaces, newChunkFaces) = getNorthBorderBlockFaces(southChunk: await southChunk.data,
+                                                                                northChunk: newChunk)
+                await southChunk.addFaces(southChunkFaces)
+                return newChunkFaces
+            }
+            return Faces()
+        }
+        @Sendable func getNorthFaces() async -> Faces {
+            let northPos = pos.move(.NORTH)
+            if let northChunk = await memoryChunks[northPos] {
+                let (newChunkFaces, northChunkFaces) = getNorthBorderBlockFaces(southChunk: newChunk,
+                                                                                northChunk: await northChunk.data)
+                await northChunk.addFaces(northChunkFaces)
+                return newChunkFaces
+            }
+            return Faces()
+        }
+        @Sendable func getWestFaces() async -> Faces {
+            let westPos = pos.move(.WEST)
+            if let westChunk = await memoryChunks[westPos] {
+                let (newChunkFaces, westChunkFaces) = getWestBorderBlockFaces(eastChunk: newChunk,
+                                                                              westChunk: await westChunk.data)
+                await westChunk.addFaces(westChunkFaces)
+                return newChunkFaces
+            }
+            return Faces()
+        }
+        @Sendable func getEastFaces() async -> Faces {
+            let eastPos = pos.move(.EAST)
+            if let eastChunk = await memoryChunks[eastPos] {
+                let (eastChunkFaces, newChunkFaces) = getWestBorderBlockFaces(eastChunk: await eastChunk.data,
+                                                                              westChunk: newChunk)
+                await eastChunk.addFaces(eastChunkFaces)
+                return newChunkFaces
+            }
+            return Faces()
+        }
+        
+        Task {
+            async let topFaces = getTopFaces()
+            async let northFaces = getNorthFaces()
+            async let southFaces = getSouthFaces()
+            async let westFaces = getWestFaces()
+            async let eastFaces = getEastFaces()
+            
+            var faces = Faces()
+            for sideFaces in await [topFaces, northFaces, southFaces, westFaces, eastFaces] {
+                faces.append(sideFaces)
+            }
+            let newLoadedChunk = LoadedChunk(pos: pos, data: newChunk, faces: faces)
+            memoryChunks[pos] = newLoadedChunk
+            renderedChunks[pos] = newLoadedChunk
+        }
+    }
+}
+
+private actor LoadedChunk {
     var pos: ChunkPos
     var data: Chunk
     var faces: Faces
@@ -172,11 +184,16 @@ private class LoadedChunk {
         self.pos = pos
         self.data = data
         self.faces = faces
-        reCompile()
+        vertexBuffer = compile(chunkPos: pos, faces: faces)
     }
     
-    func reCompile() {
+    func addFaces(_ newFaces: Faces) {
+        faces.append(newFaces)
         vertexBuffer = compile(chunkPos: pos, faces: faces)
+    }
+    
+    func getRenderData() -> (MTLBuffer, Int) {
+        return (vertexBuffer, faces.count)
     }
 }
 

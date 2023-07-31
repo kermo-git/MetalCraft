@@ -2,9 +2,9 @@ import simd
 import Metal
 
 struct Vertex: Sizeable {
-    var position: Float3
-    var textureCoords: Float2
-    private var textureID: Int
+    let position: Float3
+    let textureCoords: Float2
+    private let textureID: Int
     
     init(position: Float3, textureCoords: Float2, texture: TextureType) {
         self.position = position

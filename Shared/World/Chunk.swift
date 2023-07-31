@@ -4,7 +4,7 @@ let CHUNK_HEIGHT = 256
 let BLOCKS_IN_SLICE_YZ = CHUNK_SIDE * CHUNK_HEIGHT
 let BLOCKS_IN_CHUNK = BLOCKS_IN_SLICE_YZ * CHUNK_SIDE
 
-struct Chunk {
+class Chunk {
     var data: [Block] = Array(repeating: .AIR, count: BLOCKS_IN_CHUNK)
     
     private func getIndex(_ pos: BlockPos) -> Int {
