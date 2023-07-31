@@ -55,19 +55,15 @@ struct KeyboardAndMouseHandler: NSViewRepresentable {
         // Mouse movement
         
         override func mouseMoved(with event: NSEvent) {
-            handleMousePositionChange(event: event)
+            handleMouseMove(event: event)
         }
         
         override func mouseDragged(with event: NSEvent) {
-            handleMousePositionChange(event: event)
+            handleMouseMove(event: event)
         }
         
         override func rightMouseDragged(with event: NSEvent) {
-            handleMousePositionChange(event: event)
-        }
-        
-        override func scrollWheel(with event: NSEvent) {
-            Mouse.scroll(deltaY: Float(event.deltaY))
+            handleMouseMove(event: event)
         }
         
         override func updateTrackingAreas() {
@@ -80,16 +76,8 @@ struct KeyboardAndMouseHandler: NSViewRepresentable {
             self.addTrackingArea(area)
         }
         
-        private func handleMousePositionChange(event: NSEvent) {
-            let position = Float2(
-                Float(event.locationInWindow.x),
-                Float(event.locationInWindow.y)
-            )
-            let positionDelta = Float2(
-                Float(event.deltaX),
-                Float(event.deltaY)
-            )
-            Mouse.changePosition(newPosition: position, delta: positionDelta)
+        private func handleMouseMove(event: NSEvent) {
+            Mouse.move(Float(event.deltaX), Float(event.deltaY))
         }
     }
 }

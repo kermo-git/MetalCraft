@@ -3,42 +3,23 @@ class Mouse {
     static var leftPressed = false
     static var rightPressed = false
     
-    private static var position = Float2(repeating: 0)
-    private static var positionDelta = Float2(repeating: 0)
+    private static var deltaX: Float = 0
+    private static var deltaY: Float = 0
     
-    static func changePosition(newPosition: Float2, delta: Float2) {
-        position = newPosition
-        positionDelta = delta
-    }
-    
-    static func getPosition() -> Float2 {
-        return position;
+    static func move(_ deltaX: Float, _ deltaY: Float) {
+        self.deltaX = deltaX
+        self.deltaY = deltaY
     }
     
     static func getPositionDeltaX() -> Float {
-        let result = positionDelta.x
-        positionDelta.x = 0
+        let result = deltaX
+        deltaX = 0
         return result
     }
     
     static func getPositionDeltaY() -> Float {
-        let result = positionDelta.y
-        positionDelta.y = 0
-        return result
-    }
-    
-    private static var scrollPos: Float = 0
-    private static var lastScrollPos: Float = 0
-    private static var scrollPosDelta: Float = 0
-    
-    static func scroll(deltaY: Float) {
-        scrollPos += deltaY
-        scrollPosDelta += deltaY
-    }
-    
-    static func getScrollPosDelta() -> Float {
-        let result = scrollPosDelta
-        scrollPosDelta = 0
+        let result = deltaY
+        deltaY = 0
         return result
     }
 }

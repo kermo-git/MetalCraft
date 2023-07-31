@@ -2,7 +2,7 @@ import simd
 
 class FlyingCamera: Camera {
     let flySpeed: Float = 5
-    let mouseSpeed: Float = 0.005
+    let rotateSpeed: Float = 0.005
     
     init(startPos: Float3) {
         super.init()
@@ -39,7 +39,7 @@ class FlyingCamera: Camera {
         if (Keyboard.isKeyPressed(.SPACE)) {
             position.y += inc
         }
-        rotationY -= Mouse.getPositionDeltaX() * mouseSpeed
-        rotationX -= Mouse.getPositionDeltaY() * mouseSpeed
+        rotationY -= Mouse.getPositionDeltaX() * rotateSpeed
+        rotationX -= Mouse.getPositionDeltaY() * rotateSpeed
     }
 }
