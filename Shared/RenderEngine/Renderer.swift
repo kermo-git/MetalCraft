@@ -31,12 +31,12 @@ class Renderer {
         // Override in subclass
     }
     
-    func render(_ encoder: MTLRenderCommandEncoder) {
+    func render(_ encoder: MTLRenderCommandEncoder) async {
         encoder.setRenderPipelineState(renderPipelineState)
-        renderScene(encoder)
+        await renderScene(encoder)
     }
     
-    func renderScene(_ encoder: MTLRenderCommandEncoder) {
+    func renderScene(_ encoder: MTLRenderCommandEncoder) async {
         // Override in subclass
     }
 }

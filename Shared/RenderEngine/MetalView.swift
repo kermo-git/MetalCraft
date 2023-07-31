@@ -52,19 +52,20 @@ struct MetalView {
             else {
                 return
             }
-            
-            let commandBuffer = Engine.CommandQueue.makeCommandBuffer()
-            
-            let encoder = commandBuffer?.makeRenderCommandEncoder(descriptor: renderPassDescriptor)
-            encoder?.setDepthStencilState(Engine.DepthPencilState)
-            
             let deltaTime = 1 / Float(view.preferredFramesPerSecond)
             parent.renderer.update(deltaTime: deltaTime)
-            parent.renderer.render(encoder!)
             
-            encoder?.endEncoding()
-            commandBuffer?.present(drawable)
-            commandBuffer?.commit()
+            if let commandBuffer = Engine.CommandQueue.makeCommandBuffer(),
+               let encoder = commandBuffer.makeRenderCommandEncoder(descriptor: renderPassDescriptor) {
+                encoder.setDepthStencilState(Engine.DepthPencilState)
+                Task {
+                    await parent.renderer.render(encoder)
+                    
+                    encoder.endEncoding()
+                    commandBuffer.present(drawable)
+                    commandBuffer.commit()
+                }
+            }
         }
     }
 }
