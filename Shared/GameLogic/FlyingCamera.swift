@@ -20,26 +20,26 @@ class FlyingCamera: Camera {
             position.x -= inc * direction.x
         }
         
-        if (Keyboard.isKeyPressed(.A)) {
+        if (Input.moveLeft) {
             moveOnXZ(direction: turnCounterClockwise(xzViewDir))
         }
-        if (Keyboard.isKeyPressed(.D)) {
+        if (Input.moveRight) {
             moveOnXZ(direction: turnClockwise(xzViewDir))
         }
-        if (Keyboard.isKeyPressed(.W)) {
+        if (Input.moveForward) {
             moveOnXZ(direction: xzViewDir)
         }
-        if (Keyboard.isKeyPressed(.S)) {
+        if (Input.moveBackward) {
             moveOnXZ(direction: xzViewDir * -1)
         }
         
-        if (Keyboard.isKeyPressed(.SHIFT)) {
+        if (Input.flyDown) {
             position.y -= inc
         }
-        if (Keyboard.isKeyPressed(.SPACE)) {
+        if (Input.flyUp) {
             position.y += inc
         }
-        rotationY -= Mouse.getPositionDeltaX() * rotateSpeed
-        rotationX -= Mouse.getPositionDeltaY() * rotateSpeed
+        rotationY -= Input.getCamRotationX() * rotateSpeed
+        rotationX -= Input.getCamRotationY() * rotateSpeed
     }
 }

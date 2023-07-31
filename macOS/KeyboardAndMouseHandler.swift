@@ -4,13 +4,7 @@ import SwiftUI
 
 struct KeyboardAndMouseHandler: NSViewRepresentable {
     func makeNSView(context: Context) -> NSView {
-        let view = HandlerView()
-        
-        DispatchQueue.main.async { // wait till next event cycle
-            view.window?.makeFirstResponder(view)
-        }
-        
-        return view
+        HandlerView()
     }
     
     func updateNSView(_ nsView: NSView, context: Context) {}
@@ -22,34 +16,17 @@ struct KeyboardAndMouseHandler: NSViewRepresentable {
         
         override func keyDown(with event: NSEvent) {
             Keyboard.setKeyPressed(event.keyCode, true)
+            refreshInput()
         }
         
         override func keyUp(with event: NSEvent) {
             Keyboard.setKeyPressed(event.keyCode, false)
+            refreshInput()
         }
         
         override func flagsChanged(with event: NSEvent) {
-            let flags = event.modifierFlags.intersection(.deviceIndependentFlagsMask)
-            Keyboard.setKeyPressed((KeyCode.SHIFT).rawValue, flags.contains(.shift))
-            Keyboard.setKeyPressed((KeyCode.COMMAND).rawValue, flags.contains(.command))
-        }
-        
-        // Mouse clicks
-        
-        override func mouseDown(with event: NSEvent) {
-            Mouse.leftPressed = true
-        }
-        
-        override func mouseUp(with event: NSEvent) {
-            Mouse.leftPressed = false
-        }
-        
-        override func rightMouseDown(with event: NSEvent) {
-            Mouse.rightPressed = true
-        }
-        
-        override func rightMouseUp(with event: NSEvent) {
-            Mouse.rightPressed = false
+            Keyboard.toggleKey(event.keyCode)
+            refreshInput()
         }
         
         // Mouse movement
@@ -76,8 +53,45 @@ struct KeyboardAndMouseHandler: NSViewRepresentable {
             self.addTrackingArea(area)
         }
         
-        private func handleMouseMove(event: NSEvent) {
-            Mouse.move(Float(event.deltaX), Float(event.deltaY))
+        // Private functions
+        
+        private func refreshInput() {
+            Input.moveForward = Keyboard.isKeyPressed(MOVE_FORWARD_KEY)
+            Input.moveBackward = Keyboard.isKeyPressed(MOVE_BACKWARD_KEY)
+            Input.moveLeft = Keyboard.isKeyPressed(MOVE_LEFT_KEY)
+            Input.moveRight = Keyboard.isKeyPressed(MOVE_RIGHT_KEY)
+            Input.flyUp = Keyboard.isKeyPressed(FLY_UP_KEY)
+            Input.flyDown = Keyboard.isKeyPressed(FLY_DOWN_KEY)
         }
+        
+        private func handleMouseMove(event: NSEvent) {
+            Input.rotateCamera(Float(event.deltaX), Float(event.deltaY))
+        }
+    }
+}
+
+class Keyboard {
+    private static let KEY_COUNT = 256
+    private static var keys: [Bool] = [Bool].init(repeating: false, count: KEY_COUNT)
+    
+    static func setKeyPressed(_ keyCode: UInt16, _ isPressed: Bool) {
+        keys[Int(keyCode)] = isPressed
+    }
+    
+    static func toggleKey(_ keyCode: UInt16) {
+        keys[Int(keyCode)] = !keys[Int(keyCode)]
+    }
+    
+    static func isKeyPressed(_ keyCode: KeyCode) -> Bool {
+        return keys[Int(keyCode.rawValue)]
+    }
+    
+    static func isKeyPressed(_ keyCodes: [KeyCode]) -> Bool {
+        for code in keyCodes {
+            if (keys[Int(code.rawValue)]) {
+                return true
+            }
+        }
+        return false
     }
 }

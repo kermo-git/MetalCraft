@@ -13,7 +13,7 @@ struct MetalCraftApp: App {
                     .onChanged { value in
                         let width = Float(value.translation.width)
                         let height = Float(value.translation.height)
-                        Mouse.move(width * DRAG_SENSITIVITY, height * DRAG_SENSITIVITY)
+                        Input.rotateCamera(width * DRAG_SENSITIVITY, height * DRAG_SENSITIVITY)
                     }
             )
         }

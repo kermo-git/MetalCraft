@@ -1,17 +1,3 @@
-
-class Keyboard {
-    private static let KEY_COUNT = 256
-    private static var keys: [Bool] = [Bool].init(repeating: false, count: KEY_COUNT)
-    
-    static func setKeyPressed(_ keyCode: UInt16, _ isPressed: Bool) {
-        keys[Int(keyCode)] = isPressed
-    }
-    
-    static func isKeyPressed(_ keyCode: KeyCode) -> Bool {
-        return keys[Int(keyCode.rawValue)]
-    }
-}
-
 // Copied from https://github.com/twohyjr/Metal-Game-Engine-Tutorial/blob/master/Helpful%20Files/InputCodeFiles/Keycodes.swift
 
 enum KeyCode: UInt16 {
@@ -20,8 +6,13 @@ enum KeyCode: UInt16 {
     case RETURN   = 0x24
     case ENTER    = 0x4C
     case ESCAPE   = 0x35
-    case SHIFT    = 0x38
-    case COMMAND  = 0x37
+    case CONTROL = 0x3B
+    case LEFT_SHIFT = 0x38
+    case LEFT_COMMAND = 0x37
+    case LEFT_OPTION = 0x3A
+    case RIGHT_SHIFT = 0x3C
+    case RIGHT_COMMAND = 0x36
+    case RIGHT_OPTION = 0x61
 
     // Arrow Keys
     case LEFT     = 0x7B
@@ -81,3 +72,10 @@ enum KeyCode: UInt16 {
     case KEYPAD_8 = 0x5B
     case KEYPAD_9 = 0x5C
 }
+
+let MOVE_FORWARD_KEY = KeyCode.W
+let MOVE_BACKWARD_KEY = KeyCode.S
+let MOVE_LEFT_KEY = KeyCode.A
+let MOVE_RIGHT_KEY = KeyCode.D
+let FLY_UP_KEY = KeyCode.SPACE
+let FLY_DOWN_KEY = [KeyCode.LEFT_SHIFT, KeyCode.RIGHT_SHIFT]
