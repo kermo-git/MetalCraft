@@ -12,14 +12,14 @@ struct SceneConstants {
 };
 
 struct FragmentIn {
-    float4 position [[ position ]];
+    float4 screenPosition [[ position ]];
     float3 worldPosition;
     float2 textureCoords;
     int textureID [[ flat ]];
 };
 
 struct FragmentConstants {
-    float3 playerPos;
+    float3 cameraPos;
     float renderDistance;
     float4 fogColor;
 };
@@ -30,7 +30,7 @@ vertex FragmentIn vertexShader(const VertexIn vIn [[ stage_in ]],
     FragmentIn fIn;
     
     float4 worldPosition = float4(vIn.position, 1);
-    fIn.position = sceneConstants.projectionViewMatrix * worldPosition;
+    fIn.screenPosition = sceneConstants.projectionViewMatrix * worldPosition;
     fIn.worldPosition = vIn.position;
     fIn.textureCoords = vIn.textureCoords;
     fIn.textureID = vIn.textureID;
@@ -46,15 +46,15 @@ fragment half4 fragmentShader(FragmentIn fIn [[ stage_in ]],
     texture2d<half> texture = textures[fIn.textureID];
     half4 textureColor = texture.sample(sampler2D, fIn.textureCoords);
     
-    float distanceFromPlayer = distance(fIn.worldPosition, constants.playerPos);
+    float distanceFromCamera = distance(fIn.worldPosition, constants.cameraPos);
     float fogStartDistance = 0.6 * constants.renderDistance;
     float fullFogDistance = 0.9 * constants.renderDistance;
     half4 fogColor = half4(constants.fogColor);
     
-    if (distanceFromPlayer < fogStartDistance)
+    if (distanceFromCamera < fogStartDistance)
         return textureColor;
-    if (distanceFromPlayer < fullFogDistance) {
-        half fogLevel = (distanceFromPlayer - fogStartDistance) / (fullFogDistance - fogStartDistance);
+    if (distanceFromCamera < fullFogDistance) {
+        half fogLevel = (distanceFromCamera - fogStartDistance) / (fullFogDistance - fogStartDistance);
         return textureColor + fogLevel * (fogColor - textureColor);
     }
     return fogColor;
