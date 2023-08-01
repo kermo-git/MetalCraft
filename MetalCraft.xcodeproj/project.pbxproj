@@ -194,7 +194,6 @@
 			children = (
 				4F641E122A40287B00474D04 /* Types.swift */,
 				4FD31146286A3F1F00BB55ED /* World */,
-				4FD3113C286A3F1400BB55ED /* Geometry */,
 				4FD310DB286A3F0100BB55ED /* Textures */,
 				4FD310DA286A3F0100BB55ED /* RenderEngine */,
 				4F3B74C92A40953D008A508A /* WorldEngine */,
@@ -228,6 +227,8 @@
 		4FD310DA286A3F0100BB55ED /* RenderEngine */ = {
 			isa = PBXGroup;
 			children = (
+				4FD3113D286A3F1400BB55ED /* Math.swift */,
+				4FD3112E286A3F0C00BB55ED /* Camera.swift */,
 				4FD310EC286A3F0100BB55ED /* Engine.swift */,
 				4FD310ED286A3F0100BB55ED /* Preferences.swift */,
 				4FD310F5286A3F0100BB55ED /* Sizeable.swift */,
@@ -270,15 +271,6 @@
 				4FD31148286A3F1F00BB55ED /* WorldGenerator.swift */,
 			);
 			path = GameLogic;
-			sourceTree = "<group>";
-		};
-		4FD3113C286A3F1400BB55ED /* Geometry */ = {
-			isa = PBXGroup;
-			children = (
-				4FD3113D286A3F1400BB55ED /* Math.swift */,
-				4FD3112E286A3F0C00BB55ED /* Camera.swift */,
-			);
-			path = Geometry;
 			sourceTree = "<group>";
 		};
 		4FD31146286A3F1F00BB55ED /* World */ = {

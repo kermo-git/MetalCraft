@@ -33,7 +33,7 @@ class WorldRenderer: Renderer {
             Engine.loadTexture(fileName: $0.rawValue)
         }
     
-    private var sceneConstants = SceneConstants()
+    private var vertexConstants = VertexConstants()
     private var fragmentConstants = FragmentConstants()
     
     override func updateScene(deltaTime: Float) {
@@ -45,7 +45,7 @@ class WorldRenderer: Renderer {
         }
         cameraPos = newCameraPos
         
-        sceneConstants.projectionViewMatrix = projectionMatrix * camera.getViewMatrix()
+        vertexConstants.projectionViewMatrix = projectionMatrix * camera.getViewMatrix()
         fragmentConstants.cameraPos = camera.position
         fragmentConstants.renderDistance = RENDER_DISTANCE_BLOCKS
     }
@@ -54,13 +54,13 @@ class WorldRenderer: Renderer {
         encoder.setFragmentSamplerState(Engine.SamplerState, index: 0)
         encoder.setFragmentTextures(textures, range: 0..<textures.count)
         
-        encoder.setVertexBytes(&sceneConstants, length: SceneConstants.size(), index: 1)
+        encoder.setVertexBytes(&vertexConstants, length: VertexConstants.size(), index: 1)
         encoder.setFragmentBytes(&fragmentConstants, length: FragmentConstants.size(), index: 1)
         
         for (_, chunk) in await loader.renderedChunks {
-            let (buffer, faceCount) = await chunk.getRenderData()
+            let (buffer, vertexCount) = await chunk.getRenderData()
             encoder.setVertexBuffer(buffer, offset: 0, index: 0)
-            encoder.drawPrimitives(type: .triangle, vertexStart: 0, vertexCount: faceCount * 6)
+            encoder.drawPrimitives(type: .triangle, vertexStart: 0, vertexCount: vertexCount)
         }
     }
 }
@@ -178,38 +178,46 @@ private actor LoadedChunk {
     var pos: ChunkPos
     var data: Chunk
     var faces: Faces
-    var vertexBuffer: MTLBuffer!
+    
+    var vertexBuffer: MTLBuffer
+    var vertexCount: Int
     
     init(pos: ChunkPos, data: Chunk, faces: Faces) {
         self.pos = pos
         self.data = data
         self.faces = faces
-        vertexBuffer = compile(chunkPos: pos, faces: faces)
+        
+        let (vertexBuffer, vertexCount) = compile(pos: pos, faces: faces)
+        self.vertexBuffer = vertexBuffer
+        self.vertexCount = vertexCount
     }
     
     func addFaces(_ newFaces: Faces) {
         faces.append(newFaces)
-        vertexBuffer = compile(chunkPos: pos, faces: faces)
+        let (vertexBuffer, vertexCount) = compile(pos: pos, faces: faces)
+        self.vertexBuffer = vertexBuffer
+        self.vertexCount = vertexCount
     }
     
     func getRenderData() -> (MTLBuffer, Int) {
-        return (vertexBuffer, faces.count)
+        return (vertexBuffer, vertexCount)
     }
 }
 
-private func compile(chunkPos: ChunkPos, faces: Faces) -> MTLBuffer {
+private func compile(pos: ChunkPos, faces: Faces) -> (MTLBuffer, Int) {
     var vertices: [Vertex] = []
     
     for (facePos, block) in faces {
-        let globalPos = getGlobalPos(chunk: chunkPos, local: facePos.blockPos)
+        let globalPos = getGlobalPos(chunk: pos, local: facePos.blockPos)
         vertices.append(contentsOf: createVertices(pos: globalPos,
                                                    dir: facePos.direction,
                                                    block: block))
     }
     
-    return Engine.Device.makeBuffer(bytes: vertices,
-                                    length: Vertex.size(vertices.count),
-                                    options: [])!
+    let buffer = Engine.Device.makeBuffer(bytes: vertices,
+                                          length: Vertex.size(vertices.count),
+                                          options: [])!
+    return (buffer, vertices.count)
 }
 
 

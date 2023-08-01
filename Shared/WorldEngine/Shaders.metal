@@ -7,7 +7,7 @@ struct VertexIn {
     int textureID [[ attribute(2) ]];
 };
 
-struct SceneConstants {
+struct VertexConstants {
     float4x4 projectionViewMatrix;
 };
 
@@ -25,12 +25,12 @@ struct FragmentConstants {
 };
 
 vertex FragmentIn vertexShader(const VertexIn vIn [[ stage_in ]],
-                               constant SceneConstants &sceneConstants [[ buffer(1) ]]) {
+                               constant VertexConstants &constants [[ buffer(1) ]]) {
     
     FragmentIn fIn;
     
     float4 worldPosition = float4(vIn.position, 1);
-    fIn.screenPosition = sceneConstants.projectionViewMatrix * worldPosition;
+    fIn.screenPosition = constants.projectionViewMatrix * worldPosition;
     fIn.worldPosition = vIn.position;
     fIn.textureCoords = vIn.textureCoords;
     fIn.textureID = vIn.textureID;

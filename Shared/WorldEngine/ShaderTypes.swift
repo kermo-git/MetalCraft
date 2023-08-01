@@ -33,7 +33,7 @@ func getVertexDescriptor() -> MTLVertexDescriptor {
     return descriptor
 }
 
-struct SceneConstants: Sizeable {
+struct VertexConstants: Sizeable {
     var projectionViewMatrix: Float4x4 = matrix_identity_float4x4
 }
 
