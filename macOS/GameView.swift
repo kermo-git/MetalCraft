@@ -13,6 +13,6 @@ struct GameView: View {
 
 struct GameView_Previews: PreviewProvider {
     static var previews: some View {
-        GameView(renderer: gameRenderer)
+        GameView(renderer: ExampleRenderer())
     }
 }

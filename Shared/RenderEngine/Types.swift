@@ -1,14 +1,23 @@
+import simd
+
+typealias Float2 = SIMD2<Float>
+typealias Float3 = SIMD3<Float>
+typealias Float4 = SIMD4<Float>
+typealias Float4x4 = simd_float4x4
+
 protocol Sizeable {
     static func size() -> Int
-    static func size(_ count: Int) -> Int
 }
 
 extension Sizeable {
     static func size() -> Int {
         return MemoryLayout<Self>.stride
     }
-    static func size(_ count: Int) -> Int {
-        return MemoryLayout<Self>.stride * count
+}
+
+extension Array where Element: Sizeable {
+    func memorySize() -> Int {
+        return Element.size() * count
     }
 }
 
