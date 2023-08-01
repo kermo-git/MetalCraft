@@ -13,7 +13,7 @@ struct Vertex: Sizeable {
     }
 }
 
-func getVertexDescriptor() -> MTLVertexDescriptor {
+func createVertexDescriptor() -> MTLVertexDescriptor {
     let descriptor = MTLVertexDescriptor()
     
     descriptor.attributes[0].format = .float3
@@ -29,16 +29,15 @@ func getVertexDescriptor() -> MTLVertexDescriptor {
     descriptor.attributes[2].offset = Float3.size() + Float2.size()
     
     descriptor.layouts[0].stride = Vertex.size()
-    
     return descriptor
 }
 
 struct VertexConstants: Sizeable {
-    var projectionViewMatrix: Float4x4 = matrix_identity_float4x4
+    var projectionViewMatrix = matrix_identity_float4x4
 }
 
 struct FragmentConstants: Sizeable {
-    var cameraPos: Float3 = Float3(0, 0, 0)
+    var cameraPos = Float3(0, 0, 0)
     var renderDistance: Float = RENDER_DISTANCE_BLOCKS
     var fogColor: Float4 = BACKGROUND_COLOR
 }

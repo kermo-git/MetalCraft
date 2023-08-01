@@ -17,7 +17,7 @@ struct MetalView {
         mtkView.isPaused = false
         
         mtkView.device = Engine.Device
-        mtkView.clearColor = Preferences.ClearColor
+        mtkView.clearColor = renderer.clearColor
         mtkView.colorPixelFormat = Preferences.PixelFormat
         mtkView.depthStencilPixelFormat = Preferences.DepthPixelFormat
         

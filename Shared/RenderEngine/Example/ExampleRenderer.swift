@@ -70,7 +70,7 @@ class ExampleRenderer: Renderer {
         
         super.init(
             camera: Camera(),
-            renderPipelineState: Engine.getRenderPipelineState(
+            renderPipeline: Engine.getRenderPipelineState(
                 vertexShaderName: "exampleVertex",
                 fragmentShaderName: "exampleFragment",
                 vDescriptor: descriptor

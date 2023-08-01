@@ -10,7 +10,7 @@ class FlyingCamera: Camera {
     }
     
     override func update(deltaTime: Float) {
-        let viewDir = getViewDirection()
+        let viewDir = viewDirection
         let xzViewDir = normalize(Float2(viewDir.x, viewDir.z))
         
         let inc = deltaTime * flySpeed

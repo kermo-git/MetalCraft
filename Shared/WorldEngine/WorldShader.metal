@@ -24,7 +24,7 @@ struct FragmentConstants {
     float4 fogColor;
 };
 
-vertex FragmentIn vertexShader(const VertexIn vIn [[ stage_in ]],
+vertex FragmentIn worldVertex(const VertexIn vIn [[ stage_in ]],
                                constant VertexConstants &constants [[ buffer(1) ]]) {
     
     FragmentIn fIn;
@@ -38,7 +38,7 @@ vertex FragmentIn vertexShader(const VertexIn vIn [[ stage_in ]],
     return fIn;
 }
 
-fragment half4 fragmentShader(FragmentIn fIn [[ stage_in ]],
+fragment half4 worldFragment(FragmentIn fIn [[ stage_in ]],
                               constant FragmentConstants &constants [[ buffer(1) ]],
                               sampler sampler2D [[ sampler(0) ]],
                               array<texture2d<half>, 5> textures [[ texture(0) ]]) {

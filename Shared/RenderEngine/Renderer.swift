@@ -3,14 +3,15 @@ import Metal
 
 class Renderer {
     var camera: Camera
-    private var renderPipelineState: MTLRenderPipelineState
+    var clearColor = MTLClearColor(red: 0, green: 0, blue: 0, alpha: 0)
+    private var renderPipeline: MTLRenderPipelineState
     
     var projectionMatrix: Float4x4 = matrix_identity_float4x4
     var projectionViewMatrix: Float4x4 = matrix_identity_float4x4
     
-    init(camera: Camera, renderPipelineState: MTLRenderPipelineState) {
+    init(camera: Camera, renderPipeline: MTLRenderPipelineState) {
         self.camera = camera
-        self.renderPipelineState = renderPipelineState
+        self.renderPipeline = renderPipeline
         setAspectRatio(1)
     }
     
@@ -23,7 +24,7 @@ class Renderer {
     
     func update(deltaTime: Float) {
         camera.update(deltaTime: deltaTime)
-        projectionViewMatrix = projectionMatrix * camera.getViewMatrix()
+        projectionViewMatrix = projectionMatrix * camera.viewMatrix
         updateScene(deltaTime: deltaTime)
     }
     
@@ -32,7 +33,7 @@ class Renderer {
     }
     
     func render(_ encoder: MTLRenderCommandEncoder) async {
-        encoder.setRenderPipelineState(renderPipelineState)
+        encoder.setRenderPipelineState(renderPipeline)
         await renderScene(encoder)
     }
     
