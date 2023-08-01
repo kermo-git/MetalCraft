@@ -24,15 +24,15 @@ func getBlockFaces(chunk: Chunk) -> Faces {
     var result = Faces()
     
     for localX in 0..<CHUNK_SIDE {
-        for globalY in 0..<CHUNK_HEIGHT {
+        for globalY in chunk.minY...chunk.maxY {
             for localZ in 0..<CHUNK_SIDE {
                 
                 let localPos = BlockPos(X: localX, Y: globalY, Z: localZ)
                 let block = chunk[localPos]
                 
                 switch block {
-                    case .AIR: break
-                    default:
+                case .AIR: break
+                default:
                     
                     if (globalY > 0) {
                         if (chunk[localPos.move(.DOWN)] == .AIR) {
@@ -78,73 +78,77 @@ func getBlockFaces(chunk: Chunk) -> Faces {
 
 func getNorthBorderBlockFaces(southChunk: Chunk,
                               northChunk: Chunk) -> (Faces, Faces) {
-   
-   var southChunkFaces = Faces()
-   var northChunkFaces = Faces()
-   
-   for localX in 0..<CHUNK_SIDE {
-       for globalY in 0..<CHUNK_HEIGHT {
-           
-           let northWallPos = BlockPos(X: localX, Y: globalY, Z: 0)
-           let southWallPos = BlockPos(X: localX, Y: globalY, Z: CHUNK_SIDE - 1)
-           
-           let southChunkBlock = southChunk[northWallPos]
-           let northChunkBlock = northChunk[southWallPos]
-           
-           switch southChunkBlock {
-               case .AIR:
-                   switch northChunkBlock {
-                       case .AIR:
-                           break
-                       default:
-                           northChunkFaces[southWallPos, .SOUTH] = northChunkBlock
-                   }
-               default:
-                   switch northChunkBlock {
-                       case .AIR:
-                           southChunkFaces[northWallPos, .NORTH] = southChunkBlock
-                       default:
-                           break
-                   }
-           }
-       }
-   }
-   return (southChunkFaces, northChunkFaces)
+    var southChunkFaces = Faces()
+    var northChunkFaces = Faces()
+    
+    let minY = min(southChunk.minY, northChunk.minY)
+    let maxY = max(southChunk.maxY, northChunk.maxY)
+    
+    for localX in 0..<CHUNK_SIDE {
+        for globalY in minY...maxY {
+            let northWallPos = BlockPos(X: localX, Y: globalY, Z: 0)
+            let southWallPos = BlockPos(X: localX, Y: globalY, Z: CHUNK_SIDE - 1)
+            
+            let southChunkBlock = southChunk[northWallPos]
+            let northChunkBlock = northChunk[southWallPos]
+            
+            switch southChunkBlock {
+            case .AIR:
+                switch northChunkBlock {
+                case .AIR:
+                    break
+                default:
+                    northChunkFaces[southWallPos, .SOUTH] = northChunkBlock
+                }
+            default:
+                switch northChunkBlock {
+                case .AIR:
+                    southChunkFaces[northWallPos, .NORTH] = southChunkBlock
+                default:
+                    break
+                }
+            }
+        }
+    }
+    return (southChunkFaces, northChunkFaces)
 }
 
 
 func getWestBorderBlockFaces(eastChunk: Chunk,
                              westChunk: Chunk) -> (Faces, Faces) {
-   
-   var eastChunkFaces = Faces()
-   var westChunkFaces = Faces()
-   
-   for localZ in 0..<CHUNK_SIDE {
-       for globalY in 0..<CHUNK_HEIGHT {
-           
-           let westWallPos = BlockPos(X: 0, Y: globalY, Z: localZ)
-           let eastWallPos = BlockPos(X: CHUNK_SIDE - 1, Y: globalY, Z: localZ)
-           
-           let eastChunkBlock = eastChunk[westWallPos]
-           let westChunkBlock = westChunk[eastWallPos]
-           
-           switch eastChunkBlock {
-               case .AIR:
-                   switch westChunkBlock {
-                       case .AIR:
-                           break
-                       default:
-                           westChunkFaces[eastWallPos, .EAST] = westChunkBlock
-                   }
-               default:
-                   switch westChunkBlock {
-                       case .AIR:
-                           eastChunkFaces[westWallPos, .WEST] = eastChunkBlock
-                       default:
-                           break
-                   }
-           }
-       }
-   }
-   return (eastChunkFaces, westChunkFaces)
+    
+    var eastChunkFaces = Faces()
+    var westChunkFaces = Faces()
+    
+    let minY = min(eastChunk.minY, westChunk.minY)
+    let maxY = max(eastChunk.maxY, westChunk.maxY)
+    
+    for localZ in 0..<CHUNK_SIDE {
+        for globalY in minY...maxY {
+            
+            let westWallPos = BlockPos(X: 0, Y: globalY, Z: localZ)
+            let eastWallPos = BlockPos(X: CHUNK_SIDE - 1, Y: globalY, Z: localZ)
+            
+            let eastChunkBlock = eastChunk[westWallPos]
+            let westChunkBlock = westChunk[eastWallPos]
+            
+            switch eastChunkBlock {
+            case .AIR:
+                switch westChunkBlock {
+                case .AIR:
+                    break
+                default:
+                    westChunkFaces[eastWallPos, .EAST] = westChunkBlock
+                }
+            default:
+                switch westChunkBlock {
+                case .AIR:
+                    eastChunkFaces[westWallPos, .WEST] = eastChunkBlock
+                default:
+                    break
+                }
+            }
+        }
+    }
+    return (eastChunkFaces, westChunkFaces)
 }

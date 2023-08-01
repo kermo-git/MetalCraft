@@ -1,22 +1,25 @@
 let CHUNK_SIDE = 16
 let CHUNK_HEIGHT = 256
 
-let BLOCKS_IN_SLICE_YZ = CHUNK_SIDE * CHUNK_HEIGHT
-let BLOCKS_IN_CHUNK = BLOCKS_IN_SLICE_YZ * CHUNK_SIDE
-
-class Chunk {
-    var data: [Block] = Array(repeating: .AIR, count: BLOCKS_IN_CHUNK)
-    
+struct Chunk {
+    private var data: [Block] = Array(
+        repeating: .AIR,
+        count: CHUNK_SIDE * CHUNK_SIDE * CHUNK_HEIGHT
+    )
     private func getIndex(_ pos: BlockPos) -> Int {
-        return pos.X * BLOCKS_IN_SLICE_YZ + pos.Y * CHUNK_SIDE + pos.Z
+        return CHUNK_SIDE * (pos.X * CHUNK_HEIGHT + pos.Y) + pos.Z
     }
+    private(set) var minY = 0
+    private(set) var maxY = 0
     
     subscript(_ pos: BlockPos) -> Block {
         get {
             return data[getIndex(pos)]
         }
-        set {
-            data[getIndex(pos)] = newValue
+        set(block) {
+            minY = min(minY, pos.Y)
+            maxY = max(maxY, pos.Y)
+            data[getIndex(pos)] = block
         }
     }
 }
