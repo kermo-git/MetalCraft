@@ -35,7 +35,7 @@ struct FractalNoise: NoiseGenerator {
     }
 }
 
-struct WorldNoise {
+struct TerrainNoise {
     let generator: NoiseGenerator
     let unitSquareBlocks: Float
     let minTerrainHeight: Int

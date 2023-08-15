@@ -1,10 +1,10 @@
-let plains = WorldNoise(
+let plains = TerrainNoise(
     generator: SimplexNoise(),
     unitSquareBlocks: 50,
     minTerrainHeight: 10,
     heightRange: 10
 )
-let mountains = WorldNoise(
+let mountains = TerrainNoise(
     generator: FractalNoise(
         octaves: 4, persistence: 0.4
     ),
@@ -12,7 +12,7 @@ let mountains = WorldNoise(
     minTerrainHeight: 30,
     heightRange: 40
 )
-let terrainType = WorldNoise(
+let terrainType = TerrainNoise(
     generator: SimplexNoise(),
     unitSquareBlocks: 200,
     minTerrainHeight: 10,
