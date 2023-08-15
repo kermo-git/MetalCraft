@@ -79,7 +79,7 @@ class ExampleRenderer: Renderer {
     }
     
     var time: Float = 0
-    override func updateScene(deltaTime: Float) {
+    override func updateScene(deltaTime: Float) async {
         time = max(time + deltaTime, 2 * Float.pi)
         let modelMarix = translate(0, 0, -3) * rotateAroundY(time) * rotateAroundX(toRadians(30))
         vertexConstants.projectionViewModelMatrix = projectionViewMatrix * modelMarix

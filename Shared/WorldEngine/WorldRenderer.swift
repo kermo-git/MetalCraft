@@ -36,18 +36,17 @@ class WorldRenderer: Renderer {
                                    alpha: Double(BACKGROUND_COLOR.w))
     }
     
-    override func updateScene(deltaTime: Float) {
+    override func updateScene(deltaTime: Float) async {
         let newCameraPos = getChunkPos(camera.position)
         let posChanged = cameraPos != newCameraPos
         
-        Task {
-            await loader.update(cameraPos: newCameraPos, posChanged: posChanged)
-        }
         cameraPos = newCameraPos
         
         vertexConstants.projectionViewMatrix = projectionMatrix * camera.viewMatrix
         fragmentConstants.cameraPos = camera.position
         fragmentConstants.renderDistance = RENDER_DISTANCE_BLOCKS
+        
+        await loader.update(cameraPos: newCameraPos, posChanged: posChanged)
     }
     
     override func renderScene(_ encoder: MTLRenderCommandEncoder) async {

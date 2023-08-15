@@ -22,13 +22,13 @@ class Renderer {
                                        far: 1000)
     }
     
-    func update(deltaTime: Float) {
+    func update(deltaTime: Float) async {
         camera.update(deltaTime: deltaTime)
         projectionViewMatrix = projectionMatrix * camera.viewMatrix
-        updateScene(deltaTime: deltaTime)
+        await updateScene(deltaTime: deltaTime)
     }
     
-    func updateScene(deltaTime: Float) {
+    func updateScene(deltaTime: Float) async {
         // Override in subclass
     }
     
