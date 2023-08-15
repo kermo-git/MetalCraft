@@ -2,7 +2,7 @@
 using namespace metal;
 
 struct VertexIn {
-    float3 position [[ attribute(0) ]];
+    float4 position [[ attribute(0) ]];
     float2 textureCoords [[ attribute(1) ]];
     int textureID [[ attribute(2) ]];
 };
@@ -13,24 +13,22 @@ struct VertexConstants {
 
 struct FragmentIn {
     float4 screenPosition [[ position ]];
-    float3 worldPosition;
+    float4 worldPosition;
     float2 textureCoords;
     int textureID [[ flat ]];
 };
 
 struct FragmentConstants {
-    float3 cameraPos;
+    float4 cameraPos;
     float renderDistance;
     float4 fogColor;
 };
 
 vertex FragmentIn worldVertex(const VertexIn vIn [[ stage_in ]],
-                               constant VertexConstants &constants [[ buffer(1) ]]) {
-    
+                              constant VertexConstants &constants [[ buffer(1) ]]) {
     FragmentIn fIn;
     
-    float4 worldPosition = float4(vIn.position, 1);
-    fIn.screenPosition = constants.projectionViewMatrix * worldPosition;
+    fIn.screenPosition = constants.projectionViewMatrix * vIn.position;
     fIn.worldPosition = vIn.position;
     fIn.textureCoords = vIn.textureCoords;
     fIn.textureID = vIn.textureID;
@@ -38,24 +36,23 @@ vertex FragmentIn worldVertex(const VertexIn vIn [[ stage_in ]],
     return fIn;
 }
 
-fragment half4 worldFragment(FragmentIn fIn [[ stage_in ]],
+fragment float4 worldFragment(FragmentIn fIn [[ stage_in ]],
                               constant FragmentConstants &constants [[ buffer(1) ]],
                               sampler sampler2D [[ sampler(0) ]],
-                              array<texture2d<half>, 5> textures [[ texture(0) ]]) {
+                              array<texture2d<float>, 5> textures [[ texture(0) ]]) {
     
-    texture2d<half> texture = textures[fIn.textureID];
-    half4 textureColor = texture.sample(sampler2D, fIn.textureCoords);
+    texture2d<float> texture = textures[fIn.textureID];
+    float4 textureColor = texture.sample(sampler2D, fIn.textureCoords);
     
     float distanceFromCamera = distance(fIn.worldPosition, constants.cameraPos);
     float fogStartDistance = 0.6 * constants.renderDistance;
     float fullFogDistance = 0.9 * constants.renderDistance;
-    half4 fogColor = half4(constants.fogColor);
     
     if (distanceFromCamera < fogStartDistance)
         return textureColor;
     if (distanceFromCamera < fullFogDistance) {
         half fogLevel = (distanceFromCamera - fogStartDistance) / (fullFogDistance - fogStartDistance);
-        return textureColor + fogLevel * (fogColor - textureColor);
+        return textureColor + fogLevel * (constants.fogColor - textureColor);
     }
-    return fogColor;
+    return constants.fogColor;
 }
