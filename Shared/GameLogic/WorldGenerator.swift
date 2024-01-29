@@ -66,8 +66,3 @@ func generateChunk(pos: ChunkPos) -> Chunk {
     
     return chunk
 }
-
-let gameRenderer = WorldRenderer(
-    generator: generateChunk,
-    camera: FlyingCamera(startPos: Float3(0, 60, 0))
-)

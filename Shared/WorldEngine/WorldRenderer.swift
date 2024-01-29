@@ -6,7 +6,7 @@ let BACKGROUND_COLOR = Float4(x: 0.075,
                               z: 0.95,
                               w: 1)
 
-class WorldRenderer: Renderer {
+class WorldRenderer: Renderer, ObservableObject {
     private var vertexConstants = VertexConstants()
     private var fragmentConstants = FragmentConstants()
     
