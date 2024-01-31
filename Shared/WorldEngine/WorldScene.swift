@@ -45,7 +45,6 @@ class WorldScene: GameScene {
         let posChanged = cameraChunkPos != newCameraChunkPos
         
         cameraChunkPos = newCameraChunkPos
-        cameraBlockPos = getBlockPos(camera.position)
         
         vertexConstants.projectionViewMatrix = projectionMatrix * camera.viewMatrix
         fragmentConstants.cameraPos = camera.position
