@@ -52,6 +52,9 @@ class WorldScene: GameScene {
         fragmentConstants.renderDistance = RENDER_DISTANCE_BLOCKS
         
         await loader.update(cameraPos: newCameraChunkPos, posChanged: posChanged)
+        await MainActor.run {
+            cameraBlockPos = getBlockPos(camera.position)
+        }
     }
     
     override func renderScene(_ encoder: MTLRenderCommandEncoder) async {

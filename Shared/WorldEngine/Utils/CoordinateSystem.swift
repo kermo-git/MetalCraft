@@ -146,7 +146,7 @@ struct ChunkPos: Hashable {
 
 func getBlockPos(_ pointPos: Float3) -> BlockPos {
     return BlockPos(X: Int(floor(pointPos.x)),
-                    Y: Int(floor(pointPos.z)),
+                    Y: Int(floor(pointPos.y)),
                     Z: Int(floor(pointPos.z)))
 }
 
