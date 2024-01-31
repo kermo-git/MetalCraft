@@ -175,8 +175,11 @@
 		4F3B74C92A40953D008A508A /* WorldEngine */ = {
 			isa = PBXGroup;
 			children = (
-				4FD31146286A3F1F00BB55ED /* Utils */,
 				4FD310DB286A3F0100BB55ED /* Textures */,
+				4FD3114C286A3F1F00BB55ED /* CoordinateSystem.swift */,
+				4F0220602A402E1A000ACC7E /* Block.swift */,
+				4FD3114D286A3F1F00BB55ED /* Chunk.swift */,
+				4F0220692A406EC8000ACC7E /* BlockTexture.swift */,
 				4F0220662A40422A000ACC7E /* ChunkFaces.swift */,
 				4F9E1AE22A7923BB0055A782 /* ShaderTypes.swift */,
 				4FD3113F286A3F1400BB55ED /* BlockfaceVertices.swift */,
@@ -266,7 +269,6 @@
 		4FD310DB286A3F0100BB55ED /* Textures */ = {
 			isa = PBXGroup;
 			children = (
-				4F0220692A406EC8000ACC7E /* BlockTexture.swift */,
 				4F19D4C62870890E00FA6EED /* LEAVES_PINK_FLOWERS.png */,
 				4F19D4C52870890E00FA6EED /* LEAVES_YELLOW_FLOWERS.png */,
 				4FD310DC286A3F0100BB55ED /* DIRT_GRASS.png */,
@@ -295,16 +297,6 @@
 				4FD31148286A3F1F00BB55ED /* WorldGenerator.swift */,
 			);
 			path = GameLogic;
-			sourceTree = "<group>";
-		};
-		4FD31146286A3F1F00BB55ED /* Utils */ = {
-			isa = PBXGroup;
-			children = (
-				4FD3114C286A3F1F00BB55ED /* CoordinateSystem.swift */,
-				4F0220602A402E1A000ACC7E /* Block.swift */,
-				4FD3114D286A3F1F00BB55ED /* Chunk.swift */,
-			);
-			path = Utils;
 			sourceTree = "<group>";
 		};
 		4FD31149286A3F1F00BB55ED /* Noise */ = {
