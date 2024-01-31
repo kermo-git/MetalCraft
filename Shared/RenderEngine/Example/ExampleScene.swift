@@ -1,7 +1,7 @@
 import simd
 import Metal
 
-class ExampleRenderer: Renderer {
+class ExampleScene: GameScene {
     struct Vertex: Sizeable {
         let position: Float3
         let color: Float3
@@ -69,7 +69,6 @@ class ExampleRenderer: Renderer {
         descriptor.layouts[0].stride = Vertex.size()
         
         super.init(
-            camera: Camera(),
             renderPipeline: Engine.getRenderPipelineState(
                 vertexShaderName: "exampleVertex",
                 fragmentShaderName: "exampleFragment",

@@ -19,14 +19,13 @@
 		4F19D4C92870890E00FA6EED /* LEAVES_PINK_FLOWERS.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F19D4C62870890E00FA6EED /* LEAVES_PINK_FLOWERS.png */; };
 		4F19D4CA2870890E00FA6EED /* LEAVES_PINK_FLOWERS.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F19D4C62870890E00FA6EED /* LEAVES_PINK_FLOWERS.png */; };
 		4F2FD3732A78655B00AB43D0 /* App.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F2FD3722A78655B00AB43D0 /* App.swift */; };
-		4F3B74C72A408656008A508A /* Renderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F3B74C62A408656008A508A /* Renderer.swift */; };
-		4F3B74C82A408656008A508A /* Renderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F3B74C62A408656008A508A /* Renderer.swift */; };
+		4F3B74C72A408656008A508A /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F3B74C62A408656008A508A /* GameScene.swift */; };
+		4F3B74C82A408656008A508A /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F3B74C62A408656008A508A /* GameScene.swift */; };
 		4F3B74CC2A40B76B008A508A /* App.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F3B74CA2A40B76B008A508A /* App.swift */; };
-		4F7645A72B62B08400E15329 /* GameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F2FD3742A7865B300AB43D0 /* GameView.swift */; };
-		4F7645A92B62B22D00E15329 /* GameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F7645A82B62B22D00E15329 /* GameView.swift */; };
-		4F9E1AD72A79186F0055A782 /* ExampleRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F9E1AD62A79186F0055A782 /* ExampleRenderer.swift */; };
+		4F7645A92B62B22D00E15329 /* MacOSGameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F7645A82B62B22D00E15329 /* MacOSGameView.swift */; };
+		4F9E1AD72A79186F0055A782 /* ExampleScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F9E1AD62A79186F0055A782 /* ExampleScene.swift */; };
 		4F9E1AD92A7919000055A782 /* ExampleShader.metal in Sources */ = {isa = PBXBuildFile; fileRef = 4F9E1AD82A7919000055A782 /* ExampleShader.metal */; };
-		4F9E1ADA2A791DE40055A782 /* ExampleRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F9E1AD62A79186F0055A782 /* ExampleRenderer.swift */; };
+		4F9E1ADA2A791DE40055A782 /* ExampleScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F9E1AD62A79186F0055A782 /* ExampleScene.swift */; };
 		4F9E1ADB2A791DE80055A782 /* ExampleShader.metal in Sources */ = {isa = PBXBuildFile; fileRef = 4F9E1AD82A7919000055A782 /* ExampleShader.metal */; };
 		4F9E1ADD2A7920CB0055A782 /* RenderableChunk.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F9E1ADC2A7920CB0055A782 /* RenderableChunk.swift */; };
 		4F9E1ADF2A7921550055A782 /* ChunkLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F9E1ADE2A7921550055A782 /* ChunkLoader.swift */; };
@@ -36,6 +35,9 @@
 		4F9E1AE42A7923BB0055A782 /* ShaderTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F9E1AE22A7923BB0055A782 /* ShaderTypes.swift */; };
 		4F9E1AE62A7955660055A782 /* Preferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F9E1AE52A7955660055A782 /* Preferences.swift */; };
 		4F9E1AE72A7955660055A782 /* Preferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F9E1AE52A7955660055A782 /* Preferences.swift */; };
+		4F9EAA1A2B69BC340080B613 /* iOSGameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F9EAA192B69BC340080B613 /* iOSGameView.swift */; };
+		4F9EAA1D2B69BCA00080B613 /* PositionLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F9EAA1C2B69BCA00080B613 /* PositionLabel.swift */; };
+		4F9EAA1E2B69BD960080B613 /* PositionLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F9EAA1C2B69BCA00080B613 /* PositionLabel.swift */; };
 		4FD3107B286A3BCD00BB55ED /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4FD31069286A3BCD00BB55ED /* Assets.xcassets */; };
 		4FD3107C286A3BCD00BB55ED /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4FD31069286A3BCD00BB55ED /* Assets.xcassets */; };
 		4FD31086286A3C2200BB55ED /* MouseHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FD31085286A3C2200BB55ED /* MouseHandler.swift */; };
@@ -73,8 +75,8 @@
 		4FD31117286A3F0100BB55ED /* Engine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FD310EC286A3F0100BB55ED /* Engine.swift */; };
 		4FD31122286A3F0100BB55ED /* WorldShader.metal in Sources */ = {isa = PBXBuildFile; fileRef = 4FD310F3286A3F0100BB55ED /* WorldShader.metal */; };
 		4FD31123286A3F0100BB55ED /* WorldShader.metal in Sources */ = {isa = PBXBuildFile; fileRef = 4FD310F3286A3F0100BB55ED /* WorldShader.metal */; };
-		4FD31124286A3F0100BB55ED /* WorldRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FD310F4286A3F0100BB55ED /* WorldRenderer.swift */; };
-		4FD31125286A3F0100BB55ED /* WorldRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FD310F4286A3F0100BB55ED /* WorldRenderer.swift */; };
+		4FD31124286A3F0100BB55ED /* WorldScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FD310F4286A3F0100BB55ED /* WorldScene.swift */; };
+		4FD31125286A3F0100BB55ED /* WorldScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FD310F4286A3F0100BB55ED /* WorldScene.swift */; };
 		4FD31126286A3F0100BB55ED /* Types.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FD310F5286A3F0100BB55ED /* Types.swift */; };
 		4FD31127286A3F0100BB55ED /* Types.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FD310F5286A3F0100BB55ED /* Types.swift */; };
 		4FD31138286A3F0C00BB55ED /* Camera.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FD3112E286A3F0C00BB55ED /* Camera.swift */; };
@@ -105,16 +107,17 @@
 		4F19D4C52870890E00FA6EED /* LEAVES_YELLOW_FLOWERS.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = LEAVES_YELLOW_FLOWERS.png; sourceTree = "<group>"; };
 		4F19D4C62870890E00FA6EED /* LEAVES_PINK_FLOWERS.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = LEAVES_PINK_FLOWERS.png; sourceTree = "<group>"; };
 		4F2FD3722A78655B00AB43D0 /* App.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = App.swift; sourceTree = "<group>"; };
-		4F2FD3742A7865B300AB43D0 /* GameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = GameView.swift; path = ../Shared/Views/GameView.swift; sourceTree = "<group>"; };
-		4F3B74C62A408656008A508A /* Renderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Renderer.swift; sourceTree = "<group>"; };
+		4F3B74C62A408656008A508A /* GameScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameScene.swift; sourceTree = "<group>"; };
 		4F3B74CA2A40B76B008A508A /* App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = App.swift; sourceTree = "<group>"; };
-		4F7645A82B62B22D00E15329 /* GameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameView.swift; sourceTree = "<group>"; };
-		4F9E1AD62A79186F0055A782 /* ExampleRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExampleRenderer.swift; sourceTree = "<group>"; };
+		4F7645A82B62B22D00E15329 /* MacOSGameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacOSGameView.swift; sourceTree = "<group>"; };
+		4F9E1AD62A79186F0055A782 /* ExampleScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExampleScene.swift; sourceTree = "<group>"; };
 		4F9E1AD82A7919000055A782 /* ExampleShader.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = ExampleShader.metal; sourceTree = "<group>"; };
 		4F9E1ADC2A7920CB0055A782 /* RenderableChunk.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RenderableChunk.swift; sourceTree = "<group>"; };
 		4F9E1ADE2A7921550055A782 /* ChunkLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChunkLoader.swift; sourceTree = "<group>"; };
 		4F9E1AE22A7923BB0055A782 /* ShaderTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShaderTypes.swift; sourceTree = "<group>"; };
 		4F9E1AE52A7955660055A782 /* Preferences.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Preferences.swift; sourceTree = "<group>"; };
+		4F9EAA192B69BC340080B613 /* iOSGameView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = iOSGameView.swift; sourceTree = "<group>"; };
+		4F9EAA1C2B69BCA00080B613 /* PositionLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PositionLabel.swift; sourceTree = "<group>"; };
 		4FD31069286A3BCD00BB55ED /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		4FD3106E286A3BCD00BB55ED /* MetalCraft.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MetalCraft.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4FD31074286A3BCD00BB55ED /* MetalCraft.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MetalCraft.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -138,7 +141,7 @@
 		4FD310EB286A3F0100BB55ED /* YELLOW_FLOWERS.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = YELLOW_FLOWERS.png; sourceTree = "<group>"; };
 		4FD310EC286A3F0100BB55ED /* Engine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Engine.swift; sourceTree = "<group>"; };
 		4FD310F3286A3F0100BB55ED /* WorldShader.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = WorldShader.metal; sourceTree = "<group>"; };
-		4FD310F4286A3F0100BB55ED /* WorldRenderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WorldRenderer.swift; sourceTree = "<group>"; };
+		4FD310F4286A3F0100BB55ED /* WorldScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WorldScene.swift; sourceTree = "<group>"; };
 		4FD310F5286A3F0100BB55ED /* Types.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Types.swift; sourceTree = "<group>"; };
 		4FD3112E286A3F0C00BB55ED /* Camera.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Camera.swift; sourceTree = "<group>"; };
 		4FD3113D286A3F1400BB55ED /* Math.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Math.swift; sourceTree = "<group>"; };
@@ -179,7 +182,7 @@
 				4FD3113F286A3F1400BB55ED /* BlockfaceVertices.swift */,
 				4F9E1ADC2A7920CB0055A782 /* RenderableChunk.swift */,
 				4F9E1ADE2A7921550055A782 /* ChunkLoader.swift */,
-				4FD310F4286A3F0100BB55ED /* WorldRenderer.swift */,
+				4FD310F4286A3F0100BB55ED /* WorldScene.swift */,
 				4FD310F3286A3F0100BB55ED /* WorldShader.metal */,
 			);
 			path = WorldEngine;
@@ -188,10 +191,18 @@
 		4F9E1AD52A7916560055A782 /* Example */ = {
 			isa = PBXGroup;
 			children = (
-				4F9E1AD62A79186F0055A782 /* ExampleRenderer.swift */,
+				4F9E1AD62A79186F0055A782 /* ExampleScene.swift */,
 				4F9E1AD82A7919000055A782 /* ExampleShader.metal */,
 			);
 			path = Example;
+			sourceTree = "<group>";
+		};
+		4F9EAA1B2B69BC850080B613 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				4F9EAA1C2B69BCA00080B613 /* PositionLabel.swift */,
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 		4FD31061286A3BCC00BB55ED = {
@@ -211,6 +222,7 @@
 				4FD310DA286A3F0100BB55ED /* RenderEngine */,
 				4F3B74C92A40953D008A508A /* WorldEngine */,
 				4FD31128286A3F0C00BB55ED /* GameLogic */,
+				4F9EAA1B2B69BC850080B613 /* Views */,
 				4FD31069286A3BCD00BB55ED /* Assets.xcassets */,
 			);
 			path = Shared;
@@ -230,7 +242,7 @@
 			children = (
 				4FD31076286A3BCD00BB55ED /* macOS.entitlements */,
 				4F3B74CA2A40B76B008A508A /* App.swift */,
-				4F7645A82B62B22D00E15329 /* GameView.swift */,
+				4F7645A82B62B22D00E15329 /* MacOSGameView.swift */,
 				4FD31085286A3C2200BB55ED /* MouseHandler.swift */,
 			);
 			path = macOS;
@@ -244,7 +256,7 @@
 				4FD3112E286A3F0C00BB55ED /* Camera.swift */,
 				4F9E1AE52A7955660055A782 /* Preferences.swift */,
 				4FD310EC286A3F0100BB55ED /* Engine.swift */,
-				4F3B74C62A408656008A508A /* Renderer.swift */,
+				4F3B74C62A408656008A508A /* GameScene.swift */,
 				4FD3115A286A3F6C00BB55ED /* MetalView.swift */,
 				4F9E1AD52A7916560055A782 /* Example */,
 			);
@@ -307,8 +319,8 @@
 		4FED3E672A3EFA0700343CD5 /* iOS */ = {
 			isa = PBXGroup;
 			children = (
+				4F9EAA192B69BC340080B613 /* iOSGameView.swift */,
 				4F2FD3722A78655B00AB43D0 /* App.swift */,
-				4F2FD3742A7865B300AB43D0 /* GameView.swift */,
 				4F050C2C2B683409007269BB /* GameButton.swift */,
 			);
 			path = iOS;
@@ -453,16 +465,15 @@
 				4F02206A2A406EC8000ACC7E /* BlockTexture.swift in Sources */,
 				4FD31152286A3F1F00BB55ED /* NoiseGenerator.swift in Sources */,
 				4FD31116286A3F0100BB55ED /* Engine.swift in Sources */,
-				4FD31124286A3F0100BB55ED /* WorldRenderer.swift in Sources */,
+				4FD31124286A3F0100BB55ED /* WorldScene.swift in Sources */,
 				4FD31144286A3F1400BB55ED /* BlockfaceVertices.swift in Sources */,
-				4F3B74C72A408656008A508A /* Renderer.swift in Sources */,
+				4F3B74C72A408656008A508A /* GameScene.swift in Sources */,
 				4F9E1AE32A7923BB0055A782 /* ShaderTypes.swift in Sources */,
 				4FD31140286A3F1400BB55ED /* Math.swift in Sources */,
 				4FD31122286A3F0100BB55ED /* WorldShader.metal in Sources */,
 				4F9E1AD92A7919000055A782 /* ExampleShader.metal in Sources */,
 				4F0220612A402E1A000ACC7E /* Block.swift in Sources */,
-				4F7645A72B62B08400E15329 /* GameView.swift in Sources */,
-				4F9E1AD72A79186F0055A782 /* ExampleRenderer.swift in Sources */,
+				4F9E1AD72A79186F0055A782 /* ExampleScene.swift in Sources */,
 				4FD31154286A3F1F00BB55ED /* SimplexNoise.swift in Sources */,
 				4F9E1ADF2A7921550055A782 /* ChunkLoader.swift in Sources */,
 				4FD31126286A3F0100BB55ED /* Types.swift in Sources */,
@@ -470,7 +481,9 @@
 				4F9E1AE62A7955660055A782 /* Preferences.swift in Sources */,
 				4FD3115B286A3F6C00BB55ED /* MetalView.swift in Sources */,
 				4F2FD3732A78655B00AB43D0 /* App.swift in Sources */,
+				4F9EAA1D2B69BCA00080B613 /* PositionLabel.swift in Sources */,
 				4F9E1ADD2A7920CB0055A782 /* RenderableChunk.swift in Sources */,
+				4F9EAA1A2B69BC340080B613 /* iOSGameView.swift in Sources */,
 				4FD31156286A3F1F00BB55ED /* CoordinateSystem.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -483,7 +496,7 @@
 				4FD31145286A3F1400BB55ED /* BlockfaceVertices.swift in Sources */,
 				4F9E1AE72A7955660055A782 /* Preferences.swift in Sources */,
 				4FD31127286A3F0100BB55ED /* Types.swift in Sources */,
-				4F9E1ADA2A791DE40055A782 /* ExampleRenderer.swift in Sources */,
+				4F9E1ADA2A791DE40055A782 /* ExampleScene.swift in Sources */,
 				4FD3115C286A3F6C00BB55ED /* MetalView.swift in Sources */,
 				4FD31159286A3F1F00BB55ED /* Chunk.swift in Sources */,
 				4F9E1AE42A7923BB0055A782 /* ShaderTypes.swift in Sources */,
@@ -491,17 +504,18 @@
 				4FD31117286A3F0100BB55ED /* Engine.swift in Sources */,
 				4FD31123286A3F0100BB55ED /* WorldShader.metal in Sources */,
 				4F3B74CC2A40B76B008A508A /* App.swift in Sources */,
-				4F3B74C82A408656008A508A /* Renderer.swift in Sources */,
+				4F3B74C82A408656008A508A /* GameScene.swift in Sources */,
 				4FD31151286A3F1F00BB55ED /* WorldGenerator.swift in Sources */,
-				4FD31125286A3F0100BB55ED /* WorldRenderer.swift in Sources */,
+				4FD31125286A3F0100BB55ED /* WorldScene.swift in Sources */,
 				4F0220622A402E1A000ACC7E /* Block.swift in Sources */,
 				4F0220682A40422B000ACC7E /* ChunkFaces.swift in Sources */,
 				4FD31141286A3F1400BB55ED /* Math.swift in Sources */,
 				4FD31157286A3F1F00BB55ED /* CoordinateSystem.swift in Sources */,
-				4F7645A92B62B22D00E15329 /* GameView.swift in Sources */,
+				4F7645A92B62B22D00E15329 /* MacOSGameView.swift in Sources */,
 				4FD31153286A3F1F00BB55ED /* NoiseGenerator.swift in Sources */,
 				4FD31086286A3C2200BB55ED /* MouseHandler.swift in Sources */,
 				4FD31139286A3F0C00BB55ED /* Camera.swift in Sources */,
+				4F9EAA1E2B69BD960080B613 /* PositionLabel.swift in Sources */,
 				4F9E1AE12A7921580055A782 /* RenderableChunk.swift in Sources */,
 				4F02206B2A406EC8000ACC7E /* BlockTexture.swift in Sources */,
 				4F9E1AE02A7921550055A782 /* ChunkLoader.swift in Sources */,
@@ -639,9 +653,8 @@
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations = "";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -670,9 +683,8 @@
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations = "";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

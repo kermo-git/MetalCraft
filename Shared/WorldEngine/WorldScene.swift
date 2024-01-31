@@ -6,7 +6,10 @@ let BACKGROUND_COLOR = Float4(x: 0.075,
                               z: 0.95,
                               w: 1)
 
-class WorldRenderer: Renderer, ObservableObject {
+class WorldScene: GameScene {
+    @Published var cameraBlockPos = BlockPos(X: 0, Y: 0, Z: 0)
+    private var cameraChunkPos = ChunkPos(X: 0, Z: 0)
+    
     private var vertexConstants = VertexConstants()
     private var fragmentConstants = FragmentConstants()
     
@@ -15,21 +18,22 @@ class WorldRenderer: Renderer, ObservableObject {
             Engine.loadTexture(fileName: $0.rawValue)
         }
     
-    private var cameraPos: ChunkPos
     private let loader: ChunkLoader
     
-    init(generator: @escaping (_ pos: ChunkPos) -> Chunk, camera: Camera) {
-        cameraPos = getChunkPos(camera.position)
+    init(generator: @escaping (_ pos: ChunkPos) -> Chunk, cameraPos: Float3) {
         loader = ChunkLoader(generator: generator)
         
         super.init(
-            camera: camera,
             renderPipeline: Engine.getRenderPipelineState(
                 vertexShaderName: "worldVertex",
                 fragmentShaderName: "worldFragment",
                 vDescriptor: createVertexDescriptor()
             )!
         )
+        camera.position = cameraPos
+        self.cameraBlockPos = getBlockPos(camera.position)
+        cameraChunkPos = getChunkPos(cameraPos)
+        
         clearColor = MTLClearColor(red: Double(BACKGROUND_COLOR.x),
                                    green: Double(BACKGROUND_COLOR.y),
                                    blue: Double(BACKGROUND_COLOR.z),
@@ -37,16 +41,17 @@ class WorldRenderer: Renderer, ObservableObject {
     }
     
     override func updateScene(deltaTime: Float) async {
-        let newCameraPos = getChunkPos(camera.position)
-        let posChanged = cameraPos != newCameraPos
+        let newCameraChunkPos = getChunkPos(camera.position)
+        let posChanged = cameraChunkPos != newCameraChunkPos
         
-        cameraPos = newCameraPos
+        cameraChunkPos = newCameraChunkPos
+        cameraBlockPos = getBlockPos(camera.position)
         
         vertexConstants.projectionViewMatrix = projectionMatrix * camera.viewMatrix
         fragmentConstants.cameraPos = camera.position
         fragmentConstants.renderDistance = RENDER_DISTANCE_BLOCKS
         
-        await loader.update(cameraPos: newCameraPos, posChanged: posChanged)
+        await loader.update(cameraPos: newCameraChunkPos, posChanged: posChanged)
     }
     
     override func renderScene(_ encoder: MTLRenderCommandEncoder) async {

@@ -1,16 +1,17 @@
 import simd
 import Metal
+import SwiftUI
 
-class Renderer {
-    var camera: Camera
+class GameScene: ObservableObject {
+    var camera = Camera()
+    
     var clearColor = MTLClearColor(red: 0, green: 0, blue: 0, alpha: 0)
     private var renderPipeline: MTLRenderPipelineState
     
     var projectionMatrix: Float4x4 = matrix_identity_float4x4
     var projectionViewMatrix: Float4x4 = matrix_identity_float4x4
     
-    init(camera: Camera, renderPipeline: MTLRenderPipelineState) {
-        self.camera = camera
+    init(renderPipeline: MTLRenderPipelineState) {
         self.renderPipeline = renderPipeline
         setAspectRatio(1)
     }

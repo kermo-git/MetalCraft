@@ -26,3 +26,9 @@ extension Float2: Sizeable {}
 extension Float3: Sizeable {}
 extension Float4: Sizeable {}
 extension Float4x4: Sizeable {}
+
+extension Float3 {
+    func toString() -> String {
+        return "\(x), \(y), \(z)"
+    }
+}

@@ -1,5 +1,10 @@
 import simd
 
+func roundFloat(_ value: Float, _ decimals: Int) -> Float {
+    let multiplier = Float(pow(10, Double(decimals)))
+    return round(value * multiplier) / multiplier
+}
+
 func toRadians(_ degrees: Float) -> Float {
     return degrees * Float.pi / 180
 }

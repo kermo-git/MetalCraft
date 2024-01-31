@@ -1,9 +1,10 @@
 import simd
 
 class Camera {
+    var position: Float3
+    
     var rotationX: Float = 0
     var rotationY: Float = 0
-    var position: Float3
     var degreesFov: Float = 45
     
     var moveForward = false
