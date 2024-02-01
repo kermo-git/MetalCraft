@@ -11,8 +11,6 @@
 		4F0220622A402E1A000ACC7E /* Block.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F0220602A402E1A000ACC7E /* Block.swift */; };
 		4F0220672A40422B000ACC7E /* ChunkFaces.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F0220662A40422A000ACC7E /* ChunkFaces.swift */; };
 		4F0220682A40422B000ACC7E /* ChunkFaces.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F0220662A40422A000ACC7E /* ChunkFaces.swift */; };
-		4F02206A2A406EC8000ACC7E /* BlockTexture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F0220692A406EC8000ACC7E /* BlockTexture.swift */; };
-		4F02206B2A406EC8000ACC7E /* BlockTexture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F0220692A406EC8000ACC7E /* BlockTexture.swift */; };
 		4F050C2D2B683409007269BB /* GameButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F050C2C2B683409007269BB /* GameButton.swift */; };
 		4F19D4C72870890E00FA6EED /* LEAVES_YELLOW_FLOWERS.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F19D4C52870890E00FA6EED /* LEAVES_YELLOW_FLOWERS.png */; };
 		4F19D4C82870890E00FA6EED /* LEAVES_YELLOW_FLOWERS.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F19D4C52870890E00FA6EED /* LEAVES_YELLOW_FLOWERS.png */; };
@@ -33,8 +31,6 @@
 		4F9E1AE12A7921580055A782 /* RenderableChunk.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F9E1ADC2A7920CB0055A782 /* RenderableChunk.swift */; };
 		4F9E1AE32A7923BB0055A782 /* ShaderTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F9E1AE22A7923BB0055A782 /* ShaderTypes.swift */; };
 		4F9E1AE42A7923BB0055A782 /* ShaderTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F9E1AE22A7923BB0055A782 /* ShaderTypes.swift */; };
-		4F9E1AE62A7955660055A782 /* Preferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F9E1AE52A7955660055A782 /* Preferences.swift */; };
-		4F9E1AE72A7955660055A782 /* Preferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F9E1AE52A7955660055A782 /* Preferences.swift */; };
 		4F9EAA1A2B69BC340080B613 /* iOSGameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F9EAA192B69BC340080B613 /* iOSGameView.swift */; };
 		4F9EAA1D2B69BCA00080B613 /* PositionLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F9EAA1C2B69BCA00080B613 /* PositionLabel.swift */; };
 		4F9EAA1E2B69BD960080B613 /* PositionLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F9EAA1C2B69BCA00080B613 /* PositionLabel.swift */; };
@@ -102,7 +98,6 @@
 /* Begin PBXFileReference section */
 		4F0220602A402E1A000ACC7E /* Block.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Block.swift; sourceTree = "<group>"; };
 		4F0220662A40422A000ACC7E /* ChunkFaces.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChunkFaces.swift; sourceTree = "<group>"; };
-		4F0220692A406EC8000ACC7E /* BlockTexture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockTexture.swift; sourceTree = "<group>"; };
 		4F050C2C2B683409007269BB /* GameButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameButton.swift; sourceTree = "<group>"; };
 		4F19D4C52870890E00FA6EED /* LEAVES_YELLOW_FLOWERS.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = LEAVES_YELLOW_FLOWERS.png; sourceTree = "<group>"; };
 		4F19D4C62870890E00FA6EED /* LEAVES_PINK_FLOWERS.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = LEAVES_PINK_FLOWERS.png; sourceTree = "<group>"; };
@@ -115,7 +110,6 @@
 		4F9E1ADC2A7920CB0055A782 /* RenderableChunk.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RenderableChunk.swift; sourceTree = "<group>"; };
 		4F9E1ADE2A7921550055A782 /* ChunkLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChunkLoader.swift; sourceTree = "<group>"; };
 		4F9E1AE22A7923BB0055A782 /* ShaderTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShaderTypes.swift; sourceTree = "<group>"; };
-		4F9E1AE52A7955660055A782 /* Preferences.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Preferences.swift; sourceTree = "<group>"; };
 		4F9EAA192B69BC340080B613 /* iOSGameView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = iOSGameView.swift; sourceTree = "<group>"; };
 		4F9EAA1C2B69BCA00080B613 /* PositionLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PositionLabel.swift; sourceTree = "<group>"; };
 		4FD31069286A3BCD00BB55ED /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -179,7 +173,6 @@
 				4FD3114C286A3F1F00BB55ED /* CoordinateSystem.swift */,
 				4F0220602A402E1A000ACC7E /* Block.swift */,
 				4FD3114D286A3F1F00BB55ED /* Chunk.swift */,
-				4F0220692A406EC8000ACC7E /* BlockTexture.swift */,
 				4F0220662A40422A000ACC7E /* ChunkFaces.swift */,
 				4F9E1AE22A7923BB0055A782 /* ShaderTypes.swift */,
 				4FD3113F286A3F1400BB55ED /* BlockfaceVertices.swift */,
@@ -257,7 +250,6 @@
 				4FD310F5286A3F0100BB55ED /* Types.swift */,
 				4FD3113D286A3F1400BB55ED /* Math.swift */,
 				4FD3112E286A3F0C00BB55ED /* Camera.swift */,
-				4F9E1AE52A7955660055A782 /* Preferences.swift */,
 				4FD310EC286A3F0100BB55ED /* Engine.swift */,
 				4F3B74C62A408656008A508A /* GameScene.swift */,
 				4FD3115A286A3F6C00BB55ED /* MetalView.swift */,
@@ -454,7 +446,6 @@
 				4FD31138286A3F0C00BB55ED /* Camera.swift in Sources */,
 				4F0220672A40422B000ACC7E /* ChunkFaces.swift in Sources */,
 				4FD31150286A3F1F00BB55ED /* WorldGenerator.swift in Sources */,
-				4F02206A2A406EC8000ACC7E /* BlockTexture.swift in Sources */,
 				4FD31152286A3F1F00BB55ED /* NoiseGenerator.swift in Sources */,
 				4FD31116286A3F0100BB55ED /* Engine.swift in Sources */,
 				4FD31124286A3F0100BB55ED /* WorldScene.swift in Sources */,
@@ -470,7 +461,6 @@
 				4F9E1ADF2A7921550055A782 /* ChunkLoader.swift in Sources */,
 				4FD31126286A3F0100BB55ED /* Types.swift in Sources */,
 				4FD31158286A3F1F00BB55ED /* Chunk.swift in Sources */,
-				4F9E1AE62A7955660055A782 /* Preferences.swift in Sources */,
 				4FD3115B286A3F6C00BB55ED /* MetalView.swift in Sources */,
 				4F2FD3732A78655B00AB43D0 /* App.swift in Sources */,
 				4F9EAA1D2B69BCA00080B613 /* PositionLabel.swift in Sources */,
@@ -486,7 +476,6 @@
 			files = (
 				4FD31155286A3F1F00BB55ED /* SimplexNoise.swift in Sources */,
 				4FD31145286A3F1400BB55ED /* BlockfaceVertices.swift in Sources */,
-				4F9E1AE72A7955660055A782 /* Preferences.swift in Sources */,
 				4FD31127286A3F0100BB55ED /* Types.swift in Sources */,
 				4F9E1ADA2A791DE40055A782 /* ExampleScene.swift in Sources */,
 				4FD3115C286A3F6C00BB55ED /* MetalView.swift in Sources */,
@@ -509,7 +498,6 @@
 				4FD31139286A3F0C00BB55ED /* Camera.swift in Sources */,
 				4F9EAA1E2B69BD960080B613 /* PositionLabel.swift in Sources */,
 				4F9E1AE12A7921580055A782 /* RenderableChunk.swift in Sources */,
-				4F02206B2A406EC8000ACC7E /* BlockTexture.swift in Sources */,
 				4F9E1AE02A7921550055A782 /* ChunkLoader.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

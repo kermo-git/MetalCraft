@@ -4,20 +4,24 @@ import MetalKit
 // Shadow mapping: https://github.com/carolight/Metal-Shadow-Map
 
 class Engine {
-    static let Device: MTLDevice = MTLCreateSystemDefaultDevice()!
-    static let CommandQueue: MTLCommandQueue = Device.makeCommandQueue()!
-    static let DefaultLibrary: MTLLibrary = Device.makeDefaultLibrary()!
-    static let DepthPencilState: MTLDepthStencilState = getDepthStencilState()
-    static let SamplerState: MTLSamplerState = getSamplerState()
+    static let device: MTLDevice = MTLCreateSystemDefaultDevice()!
+    static let commandQueue: MTLCommandQueue = device.makeCommandQueue()!
+    static let library: MTLLibrary = device.makeDefaultLibrary()!
+    static let depthStencil: MTLDepthStencilState = getDepthStencilState()
+    static let sampler: MTLSamplerState = getSamplerState()
     
-    static func loadTexture(fileName: String, fileExtension: String = "png",
-                           origin: MTKTextureLoader.Origin = MTKTextureLoader.Origin.topLeft) -> MTLTexture {
+    static let pixelFormat = MTLPixelFormat.bgra8Unorm
+    static let depthPixelFormat = MTLPixelFormat.depth32Float
+    
+    static func loadTexture(fileName: String, 
+                            loader: MTKTextureLoader = MTKTextureLoader(device: device),
+                            fileExtension: String = "png",
+                            origin: MTKTextureLoader.Origin = MTKTextureLoader.Origin.topLeft) -> MTLTexture {
         
         var result: MTLTexture!
         
         if let url = Bundle.main.url(forResource: fileName, withExtension: fileExtension) {
             
-            let loader = MTKTextureLoader(device: Device)
             let options: [MTKTextureLoader.Option : Any] = [
                 MTKTextureLoader.Option.origin: origin,
                 MTKTextureLoader.Option.generateMipmaps: true
@@ -35,23 +39,58 @@ class Engine {
         return result
     }
     
+    static func loadTextureArray(fileNames: [String], imageWidth: Int, imageHeight: Int) -> MTLTexture {
+        let descriptor = MTLTextureDescriptor()
+        descriptor.textureType = .type2DArray
+        descriptor.pixelFormat = pixelFormat
+        descriptor.width = imageWidth
+        descriptor.height = imageHeight
+        descriptor.depth = 1
+        descriptor.mipmapLevelCount = 1
+        descriptor.sampleCount = 1
+        descriptor.arrayLength = fileNames.count
+        descriptor.allowGPUOptimizedContents = true
+        descriptor.usage = .shaderRead
+        
+        let textureArray = device.makeTexture(descriptor: descriptor)!
+        
+        let commandBuffer = commandQueue.makeCommandBuffer()!
+        let encoder = commandBuffer.makeBlitCommandEncoder()!
+        let loader = MTKTextureLoader(device: device)
+        
+        for (i, fileName) in fileNames.enumerated() {
+            let texture = loadTexture(fileName: fileName, loader: loader)
+            
+            encoder.copy(
+                from: texture, sourceSlice: 0, sourceLevel: 0,
+                to: textureArray, destinationSlice: i, destinationLevel: 0,
+                sliceCount: 1, levelCount: 1
+            )
+        }
+        encoder.endEncoding()
+        commandBuffer.commit()
+        commandBuffer.waitUntilCompleted()
+        
+        return textureArray
+    }
+    
     static func getSamplerState() -> MTLSamplerState {
         let descriptor = MTLSamplerDescriptor()
         descriptor.minFilter = .nearest
         descriptor.magFilter = .nearest
         descriptor.mipFilter = .linear
-        return Device.makeSamplerState(descriptor: descriptor)!
+        return device.makeSamplerState(descriptor: descriptor)!
     }
 
     static func getDepthStencilState() -> MTLDepthStencilState {
         let descriptor = MTLDepthStencilDescriptor()
         descriptor.isDepthWriteEnabled = true
         descriptor.depthCompareFunction = .less
-        return Device.makeDepthStencilState(descriptor: descriptor)!
+        return device.makeDepthStencilState(descriptor: descriptor)!
     }
     
     static func getShaderFunction(name: String) -> MTLFunction {
-        return DefaultLibrary.makeFunction(name: name)!
+        return library.makeFunction(name: name)!
     }
 
     static func getRenderPipelineState(vertexShaderName: String,
@@ -62,14 +101,14 @@ class Engine {
         let fragmentFunction = getShaderFunction(name: fragmentShaderName)
         
         let descriptor = MTLRenderPipelineDescriptor()
-        descriptor.colorAttachments[0].pixelFormat = Preferences.PixelFormat
-        descriptor.depthAttachmentPixelFormat = Preferences.DepthPixelFormat
+        descriptor.colorAttachments[0].pixelFormat = pixelFormat
+        descriptor.depthAttachmentPixelFormat = depthPixelFormat
         descriptor.vertexFunction = vertexFunction
         descriptor.fragmentFunction = fragmentFunction
         descriptor.vertexDescriptor = vDescriptor
         
         do {
-            return try Device.makeRenderPipelineState(descriptor: descriptor)
+            return try device.makeRenderPipelineState(descriptor: descriptor)
         } catch {
             print(error.localizedDescription)
         }

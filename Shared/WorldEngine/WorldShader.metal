@@ -39,10 +39,9 @@ vertex FragmentIn worldVertex(const VertexIn vIn [[ stage_in ]],
 fragment float4 worldFragment(FragmentIn fIn [[ stage_in ]],
                               constant FragmentConstants &constants [[ buffer(1) ]],
                               sampler sampler2D [[ sampler(0) ]],
-                              array<texture2d<float>, 5> textures [[ texture(0) ]]) {
+                              texture2d_array<float> textures [[ texture(0) ]]) {
     
-    texture2d<float> texture = textures[fIn.textureID];
-    float4 textureColor = texture.sample(sampler2D, fIn.textureCoords);
+    float4 textureColor = textures.sample(sampler2D, fIn.textureCoords, fIn.textureID);
     
     float distanceFromCamera = distance(fIn.worldPosition, constants.cameraPos);
     float fogStartDistance = 0.6 * constants.renderDistance;

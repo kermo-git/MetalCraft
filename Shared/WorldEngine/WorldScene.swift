@@ -13,10 +13,13 @@ class WorldScene: GameScene {
     private var vertexConstants = VertexConstants()
     private var fragmentConstants = FragmentConstants()
     
-    private let textures: [MTLTexture] =
-        TextureType.allCases.map {
-            Engine.loadTexture(fileName: $0.rawValue)
-        }
+    private let textures: MTLTexture = Engine.loadTextureArray(
+        fileNames: TextureType.allCases.map {
+            $0.rawValue
+        },
+        imageWidth: 16,
+        imageHeight: 16
+    )
     
     private let loader: ChunkLoader
     
@@ -57,11 +60,11 @@ class WorldScene: GameScene {
     }
     
     override func renderScene(_ encoder: MTLRenderCommandEncoder) async {
-        encoder.setFragmentSamplerState(Engine.SamplerState, index: 0)
-        encoder.setFragmentTextures(textures, range: 0..<textures.count)
+        encoder.setFragmentSamplerState(Engine.sampler, index: 0)
+        encoder.setFragmentTexture(textures, index: 0)
         
-        encoder.setVertexBytes(&vertexConstants, length: VertexConstants.size(), index: 1)
-        encoder.setFragmentBytes(&fragmentConstants, length: FragmentConstants.size(), index: 1)
+        encoder.setVertexBytes(&vertexConstants, length: VertexConstants.memorySize(), index: 1)
+        encoder.setFragmentBytes(&fragmentConstants, length: FragmentConstants.memorySize(), index: 1)
         
         for (_, chunk) in await loader.renderedChunks {
             let (buffer, vertexCount) = await chunk.getRenderData()

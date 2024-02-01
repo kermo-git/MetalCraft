@@ -40,7 +40,7 @@ private func compile(pos: ChunkPos, faces: Faces) -> (MTLBuffer, Int) {
                                                    block: block))
     }
     
-    let buffer = Engine.Device.makeBuffer(bytes: vertices,
+    let buffer = Engine.device.makeBuffer(bytes: vertices,
                                           length: vertices.memorySize(),
                                           options: [])!
     return (buffer, vertices.count)

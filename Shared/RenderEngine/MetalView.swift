@@ -4,7 +4,7 @@ import MetalKit
 // https://gist.github.com/HugoNijmek/d5b983784cf4519c5b352f41a790c237
 
 struct MetalView {
-    let renderer: GameScene
+    let scene: GameScene
 
     func makeMTKView(_ context: MetalView.Context) -> MTKView {
         let mtkView = MTKView()
@@ -16,10 +16,10 @@ struct MetalView {
         mtkView.enableSetNeedsDisplay = true
         mtkView.isPaused = false
         
-        mtkView.device = Engine.Device
-        mtkView.clearColor = renderer.clearColor
-        mtkView.colorPixelFormat = Preferences.PixelFormat
-        mtkView.depthStencilPixelFormat = Preferences.DepthPixelFormat
+        mtkView.device = Engine.device
+        mtkView.clearColor = scene.clearColor
+        mtkView.colorPixelFormat = Engine.pixelFormat
+        mtkView.depthStencilPixelFormat = Engine.depthPixelFormat
         
         return mtkView
     }
@@ -42,7 +42,7 @@ struct MetalView {
         
         func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {
             let screenSize = getScreenSize(view: view)
-            parent.renderer.setAspectRatio(screenSize.x / screenSize.y)
+            parent.scene.setAspectRatio(screenSize.x / screenSize.y)
         }
         
         func draw(in view: MTKView) {
@@ -54,12 +54,12 @@ struct MetalView {
             }
             let deltaTime = 1 / Float(view.preferredFramesPerSecond)
             
-            if let commandBuffer = Engine.CommandQueue.makeCommandBuffer(),
+            if let commandBuffer = Engine.commandQueue.makeCommandBuffer(),
                let encoder = commandBuffer.makeRenderCommandEncoder(descriptor: renderPassDescriptor) {
-                encoder.setDepthStencilState(Engine.DepthPencilState)
+                encoder.setDepthStencilState(Engine.depthStencil)
                 Task {
-                    await parent.renderer.update(deltaTime: deltaTime)
-                    await parent.renderer.render(encoder)
+                    await parent.scene.update(deltaTime: deltaTime)
+                    await parent.scene.render(encoder)
                     
                     encoder.endEncoding()
                     commandBuffer.present(drawable)

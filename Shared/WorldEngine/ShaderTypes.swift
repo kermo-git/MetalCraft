@@ -22,13 +22,13 @@ func createVertexDescriptor() -> MTLVertexDescriptor {
     
     descriptor.attributes[1].format = .float2
     descriptor.attributes[1].bufferIndex = 0
-    descriptor.attributes[1].offset = Float3.size()
+    descriptor.attributes[1].offset = Float3.memorySize()
     
     descriptor.attributes[2].format = .int
     descriptor.attributes[2].bufferIndex = 0
-    descriptor.attributes[2].offset = Float3.size() + Float2.size()
+    descriptor.attributes[2].offset = Float3.memorySize() + Float2.memorySize()
     
-    descriptor.layouts[0].stride = Vertex.size()
+    descriptor.layouts[0].stride = Vertex.memorySize()
     return descriptor
 }
 

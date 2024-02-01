@@ -48,11 +48,11 @@ class ExampleScene: GameScene {
             6, 3, 7
         ]
         indexCount = indices.count
-        indexBuffer = Engine.Device.makeBuffer(bytes: indices,
+        indexBuffer = Engine.device.makeBuffer(bytes: indices,
                                                length: indices.memorySize(),
                                                options: [])!
         
-        vertexBuffer = Engine.Device.makeBuffer(bytes: vertices,
+        vertexBuffer = Engine.device.makeBuffer(bytes: vertices,
                                                 length: vertices.memorySize(),
                                                 options: [])!
         
@@ -64,9 +64,9 @@ class ExampleScene: GameScene {
         
         descriptor.attributes[1].format = .float3
         descriptor.attributes[1].bufferIndex = 0
-        descriptor.attributes[1].offset = Float3.size()
+        descriptor.attributes[1].offset = Float3.memorySize()
         
-        descriptor.layouts[0].stride = Vertex.size()
+        descriptor.layouts[0].stride = Vertex.memorySize()
         
         super.init(
             renderPipeline: Engine.getRenderPipelineState(
@@ -85,7 +85,7 @@ class ExampleScene: GameScene {
     }
     
     override func renderScene(_ encoder: MTLRenderCommandEncoder) async {
-        encoder.setVertexBytes(&vertexConstants, length: VertexConstants.size(), index: 1)
+        encoder.setVertexBytes(&vertexConstants, length: VertexConstants.memorySize(), index: 1)
         encoder.setVertexBuffer(vertexBuffer, offset: 0, index: 0)
         encoder.drawIndexedPrimitives(type: .triangle,
                                       indexCount: indexCount,

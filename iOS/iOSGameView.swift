@@ -84,7 +84,7 @@ struct iOSGameView: View {
         }
         
         ZStack {
-            MetalView(renderer: scene)
+            MetalView(scene: scene)
                 .edgesIgnoringSafeArea(.all)
                 .gesture(
                     DragGesture()

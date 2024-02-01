@@ -7,7 +7,7 @@ struct MacOSGameView: View {
     
     var body: some View {
         ZStack {
-            MetalView(renderer: scene)
+            MetalView(scene: scene)
                 .focusable()
                 .focused($focused)
                 .onKeyPress(phases: .down, action: { press in

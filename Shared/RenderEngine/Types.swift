@@ -6,18 +6,18 @@ typealias Float4 = SIMD4<Float>
 typealias Float4x4 = simd_float4x4
 
 protocol Sizeable {
-    static func size() -> Int
+    static func memorySize() -> Int
 }
 
 extension Sizeable {
-    static func size() -> Int {
+    static func memorySize() -> Int {
         return MemoryLayout<Self>.stride
     }
 }
 
 extension Array where Element: Sizeable {
     func memorySize() -> Int {
-        return Element.size() * count
+        return Element.memorySize() * count
     }
 }
 
