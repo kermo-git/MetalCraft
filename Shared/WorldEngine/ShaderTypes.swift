@@ -4,13 +4,7 @@ import Metal
 struct Vertex: Sizeable {
     let position: Float3
     let textureCoords: Float2
-    private let textureID: Int
-    
-    init(position: Float3, textureCoords: Float2, texture: TextureType) {
-        self.position = position
-        self.textureCoords = textureCoords
-        textureID = getTextureID(texture)
-    }
+    let textureID: Int
 }
 
 func createVertexDescriptor() -> MTLVertexDescriptor {

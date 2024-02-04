@@ -12,6 +12,8 @@
 		4F0220672A40422B000ACC7E /* ChunkFaces.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F0220662A40422A000ACC7E /* ChunkFaces.swift */; };
 		4F0220682A40422B000ACC7E /* ChunkFaces.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F0220662A40422A000ACC7E /* ChunkFaces.swift */; };
 		4F050C2D2B683409007269BB /* GameButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F050C2C2B683409007269BB /* GameButton.swift */; };
+		4F1288992B703B5C003860E8 /* WorldGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F1288982B703B5C003860E8 /* WorldGenerator.swift */; };
+		4F12889A2B703B5C003860E8 /* WorldGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F1288982B703B5C003860E8 /* WorldGenerator.swift */; };
 		4F19D4C72870890E00FA6EED /* LEAVES_YELLOW_FLOWERS.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F19D4C52870890E00FA6EED /* LEAVES_YELLOW_FLOWERS.png */; };
 		4F19D4C82870890E00FA6EED /* LEAVES_YELLOW_FLOWERS.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F19D4C52870890E00FA6EED /* LEAVES_YELLOW_FLOWERS.png */; };
 		4F19D4C92870890E00FA6EED /* LEAVES_PINK_FLOWERS.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F19D4C62870890E00FA6EED /* LEAVES_PINK_FLOWERS.png */; };
@@ -79,10 +81,8 @@
 		4FD31139286A3F0C00BB55ED /* Camera.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FD3112E286A3F0C00BB55ED /* Camera.swift */; };
 		4FD31140286A3F1400BB55ED /* Math.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FD3113D286A3F1400BB55ED /* Math.swift */; };
 		4FD31141286A3F1400BB55ED /* Math.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FD3113D286A3F1400BB55ED /* Math.swift */; };
-		4FD31144286A3F1400BB55ED /* BlockfaceVertices.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FD3113F286A3F1400BB55ED /* BlockfaceVertices.swift */; };
-		4FD31145286A3F1400BB55ED /* BlockfaceVertices.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FD3113F286A3F1400BB55ED /* BlockfaceVertices.swift */; };
-		4FD31150286A3F1F00BB55ED /* WorldGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FD31148286A3F1F00BB55ED /* WorldGenerator.swift */; };
-		4FD31151286A3F1F00BB55ED /* WorldGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FD31148286A3F1F00BB55ED /* WorldGenerator.swift */; };
+		4FD31150286A3F1F00BB55ED /* ExampleWorld.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FD31148286A3F1F00BB55ED /* ExampleWorld.swift */; };
+		4FD31151286A3F1F00BB55ED /* ExampleWorld.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FD31148286A3F1F00BB55ED /* ExampleWorld.swift */; };
 		4FD31152286A3F1F00BB55ED /* NoiseGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FD3114A286A3F1F00BB55ED /* NoiseGenerator.swift */; };
 		4FD31153286A3F1F00BB55ED /* NoiseGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FD3114A286A3F1F00BB55ED /* NoiseGenerator.swift */; };
 		4FD31154286A3F1F00BB55ED /* SimplexNoise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FD3114B286A3F1F00BB55ED /* SimplexNoise.swift */; };
@@ -99,6 +99,7 @@
 		4F0220602A402E1A000ACC7E /* Block.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Block.swift; sourceTree = "<group>"; };
 		4F0220662A40422A000ACC7E /* ChunkFaces.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChunkFaces.swift; sourceTree = "<group>"; };
 		4F050C2C2B683409007269BB /* GameButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameButton.swift; sourceTree = "<group>"; };
+		4F1288982B703B5C003860E8 /* WorldGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldGenerator.swift; sourceTree = "<group>"; };
 		4F19D4C52870890E00FA6EED /* LEAVES_YELLOW_FLOWERS.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = LEAVES_YELLOW_FLOWERS.png; sourceTree = "<group>"; };
 		4F19D4C62870890E00FA6EED /* LEAVES_PINK_FLOWERS.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = LEAVES_PINK_FLOWERS.png; sourceTree = "<group>"; };
 		4F2FD3722A78655B00AB43D0 /* App.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = App.swift; sourceTree = "<group>"; };
@@ -139,8 +140,7 @@
 		4FD310F5286A3F0100BB55ED /* Types.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Types.swift; sourceTree = "<group>"; };
 		4FD3112E286A3F0C00BB55ED /* Camera.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Camera.swift; sourceTree = "<group>"; };
 		4FD3113D286A3F1400BB55ED /* Math.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Math.swift; sourceTree = "<group>"; };
-		4FD3113F286A3F1400BB55ED /* BlockfaceVertices.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BlockfaceVertices.swift; sourceTree = "<group>"; };
-		4FD31148286A3F1F00BB55ED /* WorldGenerator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WorldGenerator.swift; sourceTree = "<group>"; };
+		4FD31148286A3F1F00BB55ED /* ExampleWorld.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExampleWorld.swift; sourceTree = "<group>"; };
 		4FD3114A286A3F1F00BB55ED /* NoiseGenerator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoiseGenerator.swift; sourceTree = "<group>"; };
 		4FD3114B286A3F1F00BB55ED /* SimplexNoise.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SimplexNoise.swift; sourceTree = "<group>"; };
 		4FD3114C286A3F1F00BB55ED /* CoordinateSystem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoordinateSystem.swift; sourceTree = "<group>"; };
@@ -173,9 +173,9 @@
 				4FD3114C286A3F1F00BB55ED /* CoordinateSystem.swift */,
 				4F0220602A402E1A000ACC7E /* Block.swift */,
 				4FD3114D286A3F1F00BB55ED /* Chunk.swift */,
+				4F1288982B703B5C003860E8 /* WorldGenerator.swift */,
 				4F0220662A40422A000ACC7E /* ChunkFaces.swift */,
 				4F9E1AE22A7923BB0055A782 /* ShaderTypes.swift */,
-				4FD3113F286A3F1400BB55ED /* BlockfaceVertices.swift */,
 				4F9E1ADC2A7920CB0055A782 /* RenderableChunk.swift */,
 				4F9E1ADE2A7921550055A782 /* ChunkLoader.swift */,
 				4FD310F4286A3F0100BB55ED /* WorldScene.swift */,
@@ -286,7 +286,7 @@
 			isa = PBXGroup;
 			children = (
 				4FD31149286A3F1F00BB55ED /* Noise */,
-				4FD31148286A3F1F00BB55ED /* WorldGenerator.swift */,
+				4FD31148286A3F1F00BB55ED /* ExampleWorld.swift */,
 			);
 			path = GameLogic;
 			sourceTree = "<group>";
@@ -444,12 +444,12 @@
 			files = (
 				4F050C2D2B683409007269BB /* GameButton.swift in Sources */,
 				4FD31138286A3F0C00BB55ED /* Camera.swift in Sources */,
+				4F1288992B703B5C003860E8 /* WorldGenerator.swift in Sources */,
 				4F0220672A40422B000ACC7E /* ChunkFaces.swift in Sources */,
-				4FD31150286A3F1F00BB55ED /* WorldGenerator.swift in Sources */,
+				4FD31150286A3F1F00BB55ED /* ExampleWorld.swift in Sources */,
 				4FD31152286A3F1F00BB55ED /* NoiseGenerator.swift in Sources */,
 				4FD31116286A3F0100BB55ED /* Engine.swift in Sources */,
 				4FD31124286A3F0100BB55ED /* WorldScene.swift in Sources */,
-				4FD31144286A3F1400BB55ED /* BlockfaceVertices.swift in Sources */,
 				4F3B74C72A408656008A508A /* GameScene.swift in Sources */,
 				4F9E1AE32A7923BB0055A782 /* ShaderTypes.swift in Sources */,
 				4FD31140286A3F1400BB55ED /* Math.swift in Sources */,
@@ -475,8 +475,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				4FD31155286A3F1F00BB55ED /* SimplexNoise.swift in Sources */,
-				4FD31145286A3F1400BB55ED /* BlockfaceVertices.swift in Sources */,
 				4FD31127286A3F0100BB55ED /* Types.swift in Sources */,
+				4F12889A2B703B5C003860E8 /* WorldGenerator.swift in Sources */,
 				4F9E1ADA2A791DE40055A782 /* ExampleScene.swift in Sources */,
 				4FD3115C286A3F6C00BB55ED /* MetalView.swift in Sources */,
 				4FD31159286A3F1F00BB55ED /* Chunk.swift in Sources */,
@@ -486,7 +486,7 @@
 				4FD31123286A3F0100BB55ED /* WorldShader.metal in Sources */,
 				4F3B74CC2A40B76B008A508A /* App.swift in Sources */,
 				4F3B74C82A408656008A508A /* GameScene.swift in Sources */,
-				4FD31151286A3F1F00BB55ED /* WorldGenerator.swift in Sources */,
+				4FD31151286A3F1F00BB55ED /* ExampleWorld.swift in Sources */,
 				4FD31125286A3F0100BB55ED /* WorldScene.swift in Sources */,
 				4F0220622A402E1A000ACC7E /* Block.swift in Sources */,
 				4F0220682A40422B000ACC7E /* ChunkFaces.swift in Sources */,

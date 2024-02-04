@@ -13,18 +13,19 @@ class WorldScene: GameScene {
     private var vertexConstants = VertexConstants()
     private var fragmentConstants = FragmentConstants()
     
-    private let textures: MTLTexture = Engine.loadTextureArray(
-        fileNames: TextureType.allCases.map {
-            $0.rawValue
-        },
-        imageWidth: 16,
-        imageHeight: 16
-    )
+    private let blocks: [BlockShaderInfo]
+    private let textures: MTLTexture
     
     private let loader: ChunkLoader
     
-    init(generator: @escaping (_ pos: ChunkPos) -> Chunk, cameraPos: Float3) {
-        loader = ChunkLoader(generator: generator)
+    init(generator: WorldGenerator,
+         cameraPos: Float3) {
+        
+        let (blocks, textures) = compileBlockCollection(generator.blocks)
+        self.blocks = blocks
+        self.textures = textures
+        
+        loader = ChunkLoader(blocks: blocks, generator: generator)
         
         super.init(
             renderPipeline: Engine.getRenderPipelineState(

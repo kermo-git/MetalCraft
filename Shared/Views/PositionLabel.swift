@@ -23,7 +23,7 @@ struct PositionLabel: View {
         
         PositionLabel()
             .environmentObject(
-                WorldScene(generator: generateChunk,
+                WorldScene(generator: ExampleWorld(),
                            cameraPos: Float3(0, 70, 0))
             )
     }

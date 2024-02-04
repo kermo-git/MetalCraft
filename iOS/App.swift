@@ -3,7 +3,7 @@ import SwiftUI
 @main
 struct MetalCraftApp: App {
     @StateObject var scene = WorldScene(
-        generator: generateChunk,
+        generator: ExampleWorld(),
         cameraPos: Float3(0, 70, 0)
     )
     

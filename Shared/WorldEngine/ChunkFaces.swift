@@ -1,73 +1,64 @@
-struct FacePos: Hashable {
-    var blockPos: BlockPos
-    var direction: Direction
-}
-
-typealias Faces = [FacePos : Block]
+typealias Faces = [BlockPos : Set<Direction>]
 
 extension Faces {
-    subscript(_ pos: BlockPos, _ dir: Direction) -> Block? {
-        get {
-            return self[FacePos(blockPos: pos, direction: dir)]
-        }
-        set {
-            self[FacePos(blockPos: pos, direction: dir)] = newValue
-        }
-    }
-    
     mutating func append(_ other: Faces) {
-        self.merge(other) { t1, t2 in t1 }
+        merge(other) { current, other in current.union(other) }
     }
+}
+
+func createVertices(blocks: [BlockShaderInfo],
+                    chunk: Chunk, faces: Faces) -> [Vertex] {
+    
+    var vertices: [Vertex] = []
+    
+    for (localPos, directions) in faces {
+        let block = blocks[chunk[localPos]]
+        let globalPos = getGlobalPos(chunk: chunk.pos, local: localPos)
+        
+        vertices.append(
+            contentsOf:
+                block.getVertices(
+                    pos: globalPos,
+                    directions: directions
+                )
+        )
+    }
+    return vertices
 }
 
 func getBlockFaces(chunk: Chunk) -> Faces {
-    var result = Faces()
+    var result: Faces = [:]
     
     for localX in 0..<CHUNK_SIDE {
         for globalY in chunk.minY...chunk.maxY {
             for localZ in 0..<CHUNK_SIDE {
                 
                 let localPos = BlockPos(X: localX, Y: globalY, Z: localZ)
-                let block = chunk[localPos]
+                let blockID = chunk[localPos]
                 
-                switch block {
-                case .AIR: break
-                default:
+                if blockID != AIR_ID {
+                    var directions = Set<Direction>()
                     
-                    if (globalY > 0) {
-                        if (chunk[localPos.move(.DOWN)] == .AIR) {
-                            result[localPos, .DOWN] = block
-                        }
+                    if (globalY > 0 && chunk[localPos.move(.DOWN)] == AIR_ID) {
+                        directions.insert(.DOWN)
                     }
-                    
-                    if (globalY < CHUNK_HEIGHT - 1) {
-                        if (chunk[localPos.move(.UP)] == .AIR) {
-                            result[localPos, .UP] = block
-                        }
-                    } else {
-                        result[localPos, .UP] = block
+                    if (globalY >= CHUNK_HEIGHT - 1 || chunk[localPos.move(.UP)] == AIR_ID) {
+                        directions.insert(.UP)
                     }
-                    
-                    if (localX > 0) {
-                        if (chunk[localPos.move(.WEST)] == .AIR) {
-                            result[localPos, .WEST] = block
-                        }
+                    if (localX > 0 && chunk[localPos.move(.WEST)] == AIR_ID) {
+                        directions.insert(.WEST)
                     }
-                    if (localX < CHUNK_SIDE - 1) {
-                        if (chunk[localPos.move(.EAST)] == .AIR) {
-                            result[localPos, .EAST] = block
-                        }
+                    if (localX < CHUNK_SIDE - 1 && chunk[localPos.move(.EAST)] == AIR_ID) {
+                        directions.insert(.EAST)
                     }
-                    
-                    if (localZ > 0) {
-                        if (chunk[localPos.move(.NORTH)] == .AIR) {
-                            result[localPos, .NORTH] = block
-                        }
+                    if (localZ > 0 && chunk[localPos.move(.NORTH)] == AIR_ID) {
+                        directions.insert(.NORTH)
                     }
-                    if (localZ < CHUNK_SIDE - 1) {
-                        if (chunk[localPos.move(.SOUTH)] == .AIR) {
-                            result[localPos, .SOUTH] = block
-                        }
+                    if (localZ < CHUNK_SIDE - 1 && chunk[localPos.move(.SOUTH)] == AIR_ID) {
+                        directions.insert(.SOUTH)
+                    }
+                    if !directions.isEmpty {
+                        result[localPos] = directions
                     }
                 }
             }
@@ -76,37 +67,26 @@ func getBlockFaces(chunk: Chunk) -> Faces {
     return result
 }
 
-func getNorthBorderBlockFaces(southChunk: Chunk,
-                              northChunk: Chunk) -> (Faces, Faces) {
-    var southChunkFaces = Faces()
-    var northChunkFaces = Faces()
+func getNorthBorderBlockFaces(southChunk: Chunk, northChunk: Chunk) -> (Faces, Faces) {
+    var southChunkFaces: Faces = [:]
+    var northChunkFaces: Faces = [:]
     
     let minY = min(southChunk.minY, northChunk.minY)
     let maxY = max(southChunk.maxY, northChunk.maxY)
     
     for localX in 0..<CHUNK_SIDE {
         for globalY in minY...maxY {
-            let northWallPos = BlockPos(X: localX, Y: globalY, Z: 0)
-            let southWallPos = BlockPos(X: localX, Y: globalY, Z: CHUNK_SIDE - 1)
+            let southChunkBlockPos = BlockPos(X: localX, Y: globalY, Z: 0)
+            let northChunkBlockPos = BlockPos(X: localX, Y: globalY, Z: CHUNK_SIDE - 1)
             
-            let southChunkBlock = southChunk[northWallPos]
-            let northChunkBlock = northChunk[southWallPos]
+            let southChunkBlockID = southChunk[southChunkBlockPos]
+            let northChunkBlockID = northChunk[northChunkBlockPos]
             
-            switch southChunkBlock {
-            case .AIR:
-                switch northChunkBlock {
-                case .AIR:
-                    break
-                default:
-                    northChunkFaces[southWallPos, .SOUTH] = northChunkBlock
-                }
-            default:
-                switch northChunkBlock {
-                case .AIR:
-                    southChunkFaces[northWallPos, .NORTH] = southChunkBlock
-                default:
-                    break
-                }
+            if southChunkBlockID == AIR_ID && northChunkBlockID != AIR_ID {
+                northChunkFaces[northChunkBlockPos] = [.SOUTH]
+            } 
+            else if southChunkBlockID != AIR_ID && northChunkBlockID == AIR_ID {
+                southChunkFaces[southChunkBlockPos] = [.NORTH]
             }
         }
     }
@@ -114,39 +94,26 @@ func getNorthBorderBlockFaces(southChunk: Chunk,
 }
 
 
-func getWestBorderBlockFaces(eastChunk: Chunk,
-                             westChunk: Chunk) -> (Faces, Faces) {
-    
-    var eastChunkFaces = Faces()
-    var westChunkFaces = Faces()
+func getWestBorderBlockFaces(eastChunk: Chunk, westChunk: Chunk) -> (Faces, Faces) {
+    var eastChunkFaces: Faces = [:]
+    var westChunkFaces: Faces = [:]
     
     let minY = min(eastChunk.minY, westChunk.minY)
     let maxY = max(eastChunk.maxY, westChunk.maxY)
     
     for localZ in 0..<CHUNK_SIDE {
         for globalY in minY...maxY {
+            let eastChunkBlockPos = BlockPos(X: 0, Y: globalY, Z: localZ)
+            let westChunkBlockPos = BlockPos(X: CHUNK_SIDE - 1, Y: globalY, Z: localZ)
             
-            let westWallPos = BlockPos(X: 0, Y: globalY, Z: localZ)
-            let eastWallPos = BlockPos(X: CHUNK_SIDE - 1, Y: globalY, Z: localZ)
+            let eastChunkBlockID = eastChunk[eastChunkBlockPos]
+            let westChunkBlockID = westChunk[westChunkBlockPos]
             
-            let eastChunkBlock = eastChunk[westWallPos]
-            let westChunkBlock = westChunk[eastWallPos]
-            
-            switch eastChunkBlock {
-            case .AIR:
-                switch westChunkBlock {
-                case .AIR:
-                    break
-                default:
-                    westChunkFaces[eastWallPos, .EAST] = westChunkBlock
-                }
-            default:
-                switch westChunkBlock {
-                case .AIR:
-                    eastChunkFaces[westWallPos, .WEST] = eastChunkBlock
-                default:
-                    break
-                }
+            if eastChunkBlockID == AIR_ID && westChunkBlockID != AIR_ID{
+                westChunkFaces[westChunkBlockPos] = [.EAST]
+            }
+            else if eastChunkBlockID != AIR_ID && westChunkBlockID == AIR_ID {
+                eastChunkFaces[eastChunkBlockPos] = [.WEST]
             }
         }
     }

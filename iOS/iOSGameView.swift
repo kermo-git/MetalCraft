@@ -116,7 +116,7 @@ struct EmptyGridCell: View {
 #Preview(traits: .landscapeRight) {
     iOSGameView()
         .environmentObject(
-            WorldScene(generator: generateChunk,
-                          cameraPos: Float3(0, 70, 0))
+            WorldScene(generator: ExampleWorld(),
+                       cameraPos: Float3(0, 70, 0))
         )
 }

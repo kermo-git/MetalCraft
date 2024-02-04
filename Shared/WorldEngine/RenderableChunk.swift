@@ -1,26 +1,24 @@
 import Metal
 
 actor RenderableChunk {
-    var pos: ChunkPos
     var data: Chunk
     var faces: Faces
     
     var vertexBuffer: MTLBuffer
     var vertexCount: Int
     
-    init(pos: ChunkPos, data: Chunk, faces: Faces) {
-        self.pos = pos
+    init(blocks: [BlockShaderInfo], data: Chunk, faces: Faces) {
         self.data = data
         self.faces = faces
         
-        let (vertexBuffer, vertexCount) = compile(pos: pos, faces: faces)
+        let (vertexBuffer, vertexCount) = compileChunk(blocks: blocks, chunk: data, faces: faces)
         self.vertexBuffer = vertexBuffer
         self.vertexCount = vertexCount
     }
     
-    func addFaces(_ newFaces: Faces) {
+    func addFaces(blocks: [BlockShaderInfo], newFaces: Faces) {
         faces.append(newFaces)
-        let (vertexBuffer, vertexCount) = compile(pos: pos, faces: faces)
+        let (vertexBuffer, vertexCount) = compileChunk(blocks: blocks, chunk: data, faces: faces)
         self.vertexBuffer = vertexBuffer
         self.vertexCount = vertexCount
     }
@@ -30,14 +28,21 @@ actor RenderableChunk {
     }
 }
 
-private func compile(pos: ChunkPos, faces: Faces) -> (MTLBuffer, Int) {
+private func compileChunk(blocks: [BlockShaderInfo],
+                     chunk: Chunk, faces: Faces) -> (MTLBuffer, Int) {
     var vertices: [Vertex] = []
     
-    for (facePos, block) in faces {
-        let globalPos = getGlobalPos(chunk: pos, local: facePos.blockPos)
-        vertices.append(contentsOf: createVertices(pos: globalPos,
-                                                   dir: facePos.direction,
-                                                   block: block))
+    for (localPos, directions) in faces {
+        let block = blocks[chunk[localPos]]
+        let globalPos = getGlobalPos(chunk: chunk.pos, local: localPos)
+        
+        vertices.append(
+            contentsOf:
+                block.getVertices(
+                    pos: globalPos,
+                    directions: directions
+                )
+        )
     }
     
     let buffer = Engine.device.makeBuffer(bytes: vertices,
