@@ -10,50 +10,28 @@ struct MacOSGameView: View {
             MetalView(scene: scene)
                 .focusable()
                 .focused($focused)
-                .onKeyPress(phases: .down, action: { press in
+                .onKeyPress(phases: .all, action: { press in
+                    let isMoving = press.phase != .up
+                    
                     switch press.characters {
                     case "w":
-                        scene.camera.moveForward = true
+                        scene.camera.moveForward = isMoving
                     case "a":
-                        scene.camera.moveLeft = true
+                        scene.camera.moveLeft = isMoving
                     case "s":
-                        scene.camera.moveBackward = true
+                        scene.camera.moveBackward = isMoving
                     case "d":
-                        scene.camera.moveRight = true
+                        scene.camera.moveRight = isMoving
                     default:
-                        break
+                        switch press.key {
+                        case .space:
+                            scene.camera.moveUp = isMoving
+                        case .tab:
+                            scene.camera.moveDown = isMoving
+                        default:
+                            break
+                        }
                     }
-                    return .handled
-                })
-                .onKeyPress(phases: .up, action: { press in
-                    switch press.characters {
-                    case "w":
-                        scene.camera.moveForward = false
-                    case "a":
-                        scene.camera.moveLeft = false
-                    case "s":
-                        scene.camera.moveBackward = false
-                    case "d":
-                        scene.camera.moveRight = false
-                    default:
-                        break
-                    }
-                    return .handled
-                })
-                .onKeyPress(.space, phases: .down, action: { _ in
-                    scene.camera.moveUp = true
-                    return .handled
-                })
-                .onKeyPress(.space, phases: .up, action: { _ in
-                    scene.camera.moveUp = false
-                    return .handled
-                })
-                .onKeyPress(.tab, phases: .down, action: { _ in
-                    scene.camera.moveDown = true
-                    return .handled
-                })
-                .onKeyPress(.tab, phases: .up, action: { _ in
-                    scene.camera.moveDown = false
                     return .handled
                 })
                 .background(MouseHandler(onMouseMove: {
