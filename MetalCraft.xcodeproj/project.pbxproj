@@ -146,6 +146,7 @@
 		4FD3114C286A3F1F00BB55ED /* CoordinateSystem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoordinateSystem.swift; sourceTree = "<group>"; };
 		4FD3114D286A3F1F00BB55ED /* Chunk.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Chunk.swift; sourceTree = "<group>"; };
 		4FD3115A286A3F6C00BB55ED /* MetalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetalView.swift; sourceTree = "<group>"; };
+		4FFA2A9D2C1DC1550015ADAB /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -204,6 +205,7 @@
 		4FD31061286A3BCC00BB55ED = {
 			isa = PBXGroup;
 			children = (
+				4FFA2A9D2C1DC1550015ADAB /* README.md */,
 				4FD310D9286A3E2900BB55ED /* .gitignore */,
 				4FD31066286A3BCD00BB55ED /* Shared */,
 				4FED3E672A3EFA0700343CD5 /* iOS */,
