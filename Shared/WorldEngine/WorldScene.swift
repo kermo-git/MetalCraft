@@ -31,7 +31,7 @@ class WorldScene: GameScene {
             renderPipeline: Engine.getRenderPipelineState(
                 vertexShaderName: "worldVertex",
                 fragmentShaderName: "worldFragment",
-                vDescriptor: createVertexDescriptor()
+                vertexDescriptor: createVertexDescriptor()
             )!
         )
         camera.position = cameraPos

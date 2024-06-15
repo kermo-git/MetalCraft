@@ -88,24 +88,17 @@ class Engine {
         descriptor.depthCompareFunction = .less
         return device.makeDepthStencilState(descriptor: descriptor)!
     }
-    
-    static func getShaderFunction(name: String) -> MTLFunction {
-        return library.makeFunction(name: name)!
-    }
 
     static func getRenderPipelineState(vertexShaderName: String,
                                        fragmentShaderName: String,
-                                       vDescriptor: MTLVertexDescriptor) -> MTLRenderPipelineState? {
-        
-        let vertexFunction = getShaderFunction(name: vertexShaderName)
-        let fragmentFunction = getShaderFunction(name: fragmentShaderName)
+                                       vertexDescriptor: MTLVertexDescriptor) -> MTLRenderPipelineState? {
         
         let descriptor = MTLRenderPipelineDescriptor()
         descriptor.colorAttachments[0].pixelFormat = pixelFormat
         descriptor.depthAttachmentPixelFormat = depthPixelFormat
-        descriptor.vertexFunction = vertexFunction
-        descriptor.fragmentFunction = fragmentFunction
-        descriptor.vertexDescriptor = vDescriptor
+        descriptor.vertexFunction = library.makeFunction(name: vertexShaderName)
+        descriptor.fragmentFunction = library.makeFunction(name: fragmentShaderName)
+        descriptor.vertexDescriptor = vertexDescriptor
         
         do {
             return try device.makeRenderPipelineState(descriptor: descriptor)

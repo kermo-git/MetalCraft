@@ -72,7 +72,7 @@ class ExampleScene: GameScene {
             renderPipeline: Engine.getRenderPipelineState(
                 vertexShaderName: "exampleVertex",
                 fragmentShaderName: "exampleFragment",
-                vDescriptor: descriptor
+                vertexDescriptor: descriptor
             )!
         )
     }
