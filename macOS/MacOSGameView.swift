@@ -1,5 +1,7 @@
 import SwiftUI
 
+let DRAG_SENSITIVITY: Float = 0.3
+
 struct MacOSGameView: View {
     @FocusState private var focused: Bool
     
@@ -36,7 +38,10 @@ struct MacOSGameView: View {
                 })
                 .background(MouseHandler(onMouseMove: {
                     deltaX, deltaY in
-                        scene.camera.setRotationInput(deltaX, deltaY)
+                        scene.camera.setRotationInput(
+                            deltaX * DRAG_SENSITIVITY,
+                            deltaY * DRAG_SENSITIVITY
+                        )
                 }))
             VStack {
                 HStack {

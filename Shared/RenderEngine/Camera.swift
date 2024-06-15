@@ -15,7 +15,6 @@ class Camera {
     var moveDown = false
     
     let moveSpeed: Float = 5
-    let rotateSpeed: Float = 0.005
     
     private var rotationInputDeltaX: Float = 0
     private var rotationInputDeltaY: Float = 0
@@ -83,9 +82,9 @@ class Camera {
         if (moveUp) {
             position.y += moveDistance
         }
-        rotationY -= getRotationInputDeltaX() * rotateSpeed
+        rotationY -= getRotationInputDeltaX() * deltaTime
         
-        let newRotationX = rotationX - getRotationInputDeltaY() * rotateSpeed
+        let newRotationX = rotationX - getRotationInputDeltaY() * deltaTime
         if (abs(newRotationX) < RIGHT_ANGLE_RADIANS) {
             rotationX = newRotationX
         }

@@ -1,6 +1,6 @@
 import SwiftUI
 
-let DRAG_SENSITIVITY: Float = 0.05
+let DRAG_SENSITIVITY: Float = 0.01
 
 struct iOSGameView: View {
     @EnvironmentObject var scene: WorldScene
