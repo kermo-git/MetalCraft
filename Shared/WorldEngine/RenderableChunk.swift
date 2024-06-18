@@ -22,14 +22,10 @@ actor RenderableChunk {
         self.vertexBuffer = vertexBuffer
         self.vertexCount = vertexCount
     }
-    
-    func getRenderData() -> (MTLBuffer, Int) {
-        return (vertexBuffer, vertexCount)
-    }
 }
 
 private func compileChunk(blocks: [BlockShaderInfo],
-                     chunk: Chunk, faces: Faces) -> (MTLBuffer, Int) {
+                          chunk: Chunk, faces: Faces) -> (MTLBuffer, Int) {
     var vertices: [Vertex] = []
     
     for (localPos, directions) in faces {

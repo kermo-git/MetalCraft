@@ -6,26 +6,6 @@ extension Faces {
     }
 }
 
-func createVertices(blocks: [BlockShaderInfo],
-                    chunk: Chunk, faces: Faces) -> [Vertex] {
-    
-    var vertices: [Vertex] = []
-    
-    for (localPos, directions) in faces {
-        let block = blocks[chunk[localPos]]
-        let globalPos = getGlobalPos(chunk: chunk.pos, local: localPos)
-        
-        vertices.append(
-            contentsOf:
-                block.getVertices(
-                    pos: globalPos,
-                    directions: directions
-                )
-        )
-    }
-    return vertices
-}
-
 func getBlockFaces(chunk: Chunk) -> Faces {
     var result: Faces = [:]
     

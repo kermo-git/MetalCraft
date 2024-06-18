@@ -68,7 +68,9 @@ class WorldScene: GameScene {
         encoder.setFragmentBytes(&fragmentConstants, length: FragmentConstants.memorySize(), index: 1)
         
         for (_, chunk) in await loader.renderedChunks {
-            let (buffer, vertexCount) = await chunk.getRenderData()
+            let buffer = await chunk.vertexBuffer
+            let vertexCount = await chunk.vertexCount
+            
             encoder.setVertexBuffer(buffer, offset: 0, index: 0)
             encoder.drawPrimitives(type: .triangle, vertexStart: 0, vertexCount: vertexCount)
         }

@@ -35,7 +35,7 @@ class ExampleWorld: WorldGenerator {
     let YELLOW_FLOWERS = 3
     let BLUE_FLOWERS = 4
     let RED_FLOWERS = 5
-    let SAND = 6
+    let WOOD = 6
 
     func generate(_ pos: ChunkPos) -> Chunk {
         var chunk = Chunk(pos: pos)
@@ -65,11 +65,11 @@ class ExampleWorld: WorldGenerator {
                     terrainHeight = plains.terrainHeight(globalPos)
                 }
                 
-                let sandNoiseValue = sandNoise.signedNoise(globalPos)
+                let woodNoiseValue = woodNoise.signedNoise(globalPos)
                 
-                if sandNoiseValue > -0.1 && sandNoiseValue < 0.1 {
+                if woodNoiseValue > -0.1 && woodNoiseValue < 0.1 {
                     for k in 0..<terrainHeight {
-                        chunk[BlockPos(X: i, Y: k, Z: j)] = SAND
+                        chunk[BlockPos(X: i, Y: k, Z: j)] = WOOD
                     }
                 } else {
                     for k in 0..<(terrainHeight - 1) {
@@ -114,7 +114,7 @@ let transitionWidth: Float = 0.1
 let transitionStart = mountainsProbability - transitionWidth / 2
 let transitionEnd = mountainsProbability + transitionWidth / 2
 
-let sandNoise = TerrainNoise(
+let woodNoise = TerrainNoise(
     generator: FractalNoise(
         octaves: 4, persistence: 0.4
     ),

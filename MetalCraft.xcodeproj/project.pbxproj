@@ -170,7 +170,6 @@
 		4F3B74C92A40953D008A508A /* WorldEngine */ = {
 			isa = PBXGroup;
 			children = (
-				4FD310DB286A3F0100BB55ED /* Textures */,
 				4FD3114C286A3F1F00BB55ED /* CoordinateSystem.swift */,
 				4F0220602A402E1A000ACC7E /* Block.swift */,
 				4FD3114D286A3F1F00BB55ED /* Chunk.swift */,
@@ -288,6 +287,7 @@
 			isa = PBXGroup;
 			children = (
 				4FD31149286A3F1F00BB55ED /* Noise */,
+				4FD310DB286A3F0100BB55ED /* Textures */,
 				4FD31148286A3F1F00BB55ED /* ExampleWorld.swift */,
 			);
 			path = GameLogic;

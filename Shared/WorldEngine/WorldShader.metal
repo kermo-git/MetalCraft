@@ -44,8 +44,8 @@ fragment float4 worldFragment(FragmentIn fIn [[ stage_in ]],
     float4 textureColor = textures.sample(sampler2D, fIn.textureCoords, fIn.textureID);
     
     float distanceFromCamera = distance(fIn.worldPosition, constants.cameraPos);
-    float fogStartDistance = 0.6 * constants.renderDistance;
-    float fullFogDistance = 0.9 * constants.renderDistance;
+    float fogStartDistance = 0.7 * constants.renderDistance;
+    float fullFogDistance = constants.renderDistance;
     
     if (distanceFromCamera < fogStartDistance)
         return textureColor;
