@@ -18,6 +18,8 @@ class WorldScene: GameScene {
     
     private let loader: ChunkLoader
     
+    let input = Input()
+    
     init(generator: WorldGenerator,
          cameraPos: Float3) {
         
@@ -32,10 +34,10 @@ class WorldScene: GameScene {
                 vertexShaderName: "worldVertex",
                 fragmentShaderName: "worldFragment",
                 vertexDescriptor: createVertexDescriptor()
-            )!
+            )!,
+            camera: FlyingCamera(input: input, startPos: cameraPos)
         )
-        camera.position = cameraPos
-        self.cameraBlockPos = getBlockPos(camera.position)
+        cameraBlockPos = getBlockPos(cameraPos)
         cameraChunkPos = getChunkPos(cameraPos)
         
         clearColor = MTLClearColor(red: Double(BACKGROUND_COLOR.x),
@@ -50,7 +52,7 @@ class WorldScene: GameScene {
         
         cameraChunkPos = newCameraChunkPos
         
-        vertexConstants.projectionViewMatrix = projectionMatrix * camera.viewMatrix
+        vertexConstants.projectionViewMatrix = projectionViewMatrix
         fragmentConstants.cameraPos = camera.position
         fragmentConstants.renderDistance = RENDER_DISTANCE_BLOCKS
         

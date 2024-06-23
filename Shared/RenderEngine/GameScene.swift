@@ -3,7 +3,7 @@ import Metal
 import SwiftUI
 
 class GameScene: ObservableObject {
-    var camera = Camera()
+    var camera: Camera
     
     var clearColor = MTLClearColor(red: 0, green: 0, blue: 0, alpha: 0)
     private var renderPipeline: MTLRenderPipelineState
@@ -11,8 +11,9 @@ class GameScene: ObservableObject {
     var projectionMatrix: Float4x4 = matrix_identity_float4x4
     var projectionViewMatrix: Float4x4 = matrix_identity_float4x4
     
-    init(renderPipeline: MTLRenderPipelineState) {
+    init(renderPipeline: MTLRenderPipelineState, camera: Camera = Camera()) {
         self.renderPipeline = renderPipeline
+        self.camera = camera
         setAspectRatio(1)
     }
     

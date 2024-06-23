@@ -17,19 +17,19 @@ struct MacOSGameView: View {
                     
                     switch press.characters {
                     case "w":
-                        scene.camera.moveForward = isMoving
+                        scene.input.moveForward = isMoving
                     case "a":
-                        scene.camera.moveLeft = isMoving
+                        scene.input.moveLeft = isMoving
                     case "s":
-                        scene.camera.moveBackward = isMoving
+                        scene.input.moveBackward = isMoving
                     case "d":
-                        scene.camera.moveRight = isMoving
+                        scene.input.moveRight = isMoving
                     default:
                         switch press.key {
                         case .space:
-                            scene.camera.moveUp = isMoving
+                            scene.input.moveUp = isMoving
                         case .tab:
-                            scene.camera.moveDown = isMoving
+                            scene.input.moveDown = isMoving
                         default:
                             break
                         }
@@ -38,7 +38,7 @@ struct MacOSGameView: View {
                 })
                 .background(MouseHandler(onMouseMove: {
                     deltaX, deltaY in
-                        scene.camera.setRotationInput(
+                        scene.input.setRotationInput(
                             deltaX * DRAG_SENSITIVITY,
                             deltaY * DRAG_SENSITIVITY
                         )

@@ -20,10 +20,10 @@ struct iOSGameView: View {
                         GameButton(
                             systemName: "arrowshape.up.fill",
                             onTouchStart: {
-                                scene.camera.moveForward = true
+                                scene.input.moveForward = true
                             },
                             onTouchEnd: {
-                                scene.camera.moveForward = false
+                                scene.input.moveForward = false
                             })
                         EmptyGridCell()
                     }
@@ -31,10 +31,10 @@ struct iOSGameView: View {
                         GameButton(
                             systemName: "arrowshape.left.fill",
                             onTouchStart: {
-                                scene.camera.moveLeft = true
+                                scene.input.moveLeft = true
                             },
                             onTouchEnd: {
-                                scene.camera.moveLeft = false
+                                scene.input.moveLeft = false
                             })
                         
                         EmptyGridCell()
@@ -42,10 +42,10 @@ struct iOSGameView: View {
                         GameButton(
                             systemName: "arrowshape.right.fill",
                             onTouchStart: {
-                                scene.camera.moveRight = true
+                                scene.input.moveRight = true
                             },
                             onTouchEnd: {
-                                scene.camera.moveRight = false
+                                scene.input.moveRight = false
                             })
                     }
                     GridRow {
@@ -53,10 +53,10 @@ struct iOSGameView: View {
                         GameButton(
                             systemName: "arrowshape.down.fill",
                             onTouchStart: {
-                                scene.camera.moveBackward = true
+                                scene.input.moveBackward = true
                             },
                             onTouchEnd: {
-                                scene.camera.moveBackward = false
+                                scene.input.moveBackward = false
                             })
                         EmptyGridCell()
                     }
@@ -66,18 +66,18 @@ struct iOSGameView: View {
                     GameButton(
                         systemName: "square.and.arrow.up",
                         onTouchStart: {
-                            scene.camera.moveUp = true
+                            scene.input.moveUp = true
                         },
                         onTouchEnd: {
-                            scene.camera.moveUp = false
+                            scene.input.moveUp = false
                         })
                     GameButton(
                         systemName: "square.and.arrow.down",
                         onTouchStart: {
-                            scene.camera.moveDown = true
+                            scene.input.moveDown = true
                         },
                         onTouchEnd: {
-                            scene.camera.moveDown = false
+                            scene.input.moveDown = false
                         })
                 }
             }
@@ -91,7 +91,7 @@ struct iOSGameView: View {
                         .onChanged { value in
                             let width = Float(value.translation.width)
                             let height = Float(value.translation.height)
-                            scene.camera.setRotationInput(
+                            scene.input.setRotationInput(
                                 width * DRAG_SENSITIVITY,
                                 height * DRAG_SENSITIVITY
                             )
