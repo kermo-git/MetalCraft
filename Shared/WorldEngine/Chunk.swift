@@ -2,6 +2,11 @@ let CHUNK_SIDE = 16
 let CHUNK_HEIGHT = 256
 let AIR_ID = -1
 
+struct OrientedBlock {
+    let blockID: Int
+    let orientation: Orientation
+}
+
 struct Chunk {
     let pos: ChunkPos
     
@@ -9,8 +14,9 @@ struct Chunk {
         self.pos = pos
     }
     
-    private var data: [Int] = Array(
-        repeating: AIR_ID,
+    private var data: [OrientedBlock] = Array(
+        repeating: OrientedBlock(blockID: AIR_ID, 
+                                 orientation: .NONE),
         count: CHUNK_SIDE * CHUNK_SIDE * CHUNK_HEIGHT
     )
     private func getIndex(_ pos: BlockPos) -> Int {
@@ -19,14 +25,14 @@ struct Chunk {
     private(set) var minY = CHUNK_HEIGHT - 1
     private(set) var maxY = 0
     
-    subscript(_ pos: BlockPos) -> Int {
+    subscript(_ pos: BlockPos) -> OrientedBlock {
         get {
             return data[getIndex(pos)]
         }
-        set(blockID) {
+        set(block) {
             minY = min(minY, pos.Y)
             maxY = max(maxY, pos.Y)
-            data[getIndex(pos)] = blockID
+            data[getIndex(pos)] = block
         }
     }
 }

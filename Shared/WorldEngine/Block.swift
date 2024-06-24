@@ -11,71 +11,86 @@ struct BlockShaderInfo {
     let sideTextureID: Int
     let bottomTextureID: Int
 
-    func getVertices(pos: BlockPos, directions: Set<Direction>) -> [Vertex] {
-        let X = Float(pos.X)
-        let Y = Float(pos.Y)
-        let Z = Float(pos.Z)
+    func getVertices(pos: BlockPos, orientation: Orientation, directions: Set<Direction>) -> [Vertex] {
+        let offset = Float3(
+            Float(pos.X) + 0.5,
+            Float(pos.Y) + 0.5,
+            Float(pos.Z) + 0.5
+        )
+        func transform(_ vec: Float3) -> Float3 {
+            return orientVector(vec, orientation) + offset
+        }
+        let EDN = transform(Float3( 0.5, -0.5, -0.5))
+        let WDN = transform(Float3(-0.5, -0.5, -0.5))
+        let EDS = transform(Float3( 0.5, -0.5,  0.5))
+        let WDS = transform(Float3(-0.5, -0.5,  0.5))
+        
+        let EUN = transform(Float3( 0.5,  0.5, -0.5))
+        let WUN = transform(Float3(-0.5,  0.5, -0.5))
+        let EUS = transform(Float3( 0.5,  0.5,  0.5))
+        let WUS = transform(Float3(-0.5,  0.5,  0.5))
         
         var result: [Vertex] = []
         
-        for direction in directions {
+        for direction in reverseOrientDirections(orientation, directions) {
             switch direction {
                 case .DOWN:
                     result.append(contentsOf: [
-                        Vertex(position: Float3(X,     Y,     Z    ), textureCoords: Float2(0, 0), textureID: bottomTextureID),
-                        Vertex(position: Float3(X + 1, Y,     Z    ), textureCoords: Float2(1, 0), textureID: bottomTextureID),
-                        Vertex(position: Float3(X,     Y,     Z + 1), textureCoords: Float2(0, 1), textureID: bottomTextureID),
-                        Vertex(position: Float3(X,     Y,     Z + 1), textureCoords: Float2(0, 1), textureID: bottomTextureID),
-                        Vertex(position: Float3(X + 1, Y,     Z    ), textureCoords: Float2(1, 0), textureID: bottomTextureID),
-                        Vertex(position: Float3(X + 1, Y,     Z + 1), textureCoords: Float2(1, 1), textureID: bottomTextureID)
+                        Vertex(position: EDN, textureCoords: Float2(1, 0), textureID: bottomTextureID),
+                        Vertex(position: WDN, textureCoords: Float2(0, 0), textureID: bottomTextureID),
+                        Vertex(position: EDS, textureCoords: Float2(1, 1), textureID: bottomTextureID),
+                        Vertex(position: EDS, textureCoords: Float2(1, 1), textureID: bottomTextureID),
+                        Vertex(position: WDS, textureCoords: Float2(0, 1), textureID: bottomTextureID),
+                        Vertex(position: WDN, textureCoords: Float2(0, 0), textureID: bottomTextureID)
                     ])
                 case .UP:
                     result.append(contentsOf: [
-                        Vertex(position: Float3(X,     Y + 1, Z    ), textureCoords: Float2(0, 0), textureID: topTextureID),
-                        Vertex(position: Float3(X + 1, Y + 1, Z + 1), textureCoords: Float2(1, 1), textureID: topTextureID),
-                        Vertex(position: Float3(X,     Y + 1, Z + 1), textureCoords: Float2(0, 1), textureID: topTextureID),
-                        Vertex(position: Float3(X,     Y + 1, Z    ), textureCoords: Float2(0, 0), textureID: topTextureID),
-                        Vertex(position: Float3(X + 1, Y + 1, Z    ), textureCoords: Float2(1, 0), textureID: topTextureID),
-                        Vertex(position: Float3(X + 1, Y + 1, Z + 1), textureCoords: Float2(1, 1), textureID: topTextureID)
+                        Vertex(position: EUN, textureCoords: Float2(0, 0), textureID: topTextureID),
+                        Vertex(position: WUN, textureCoords: Float2(1, 0), textureID: topTextureID),
+                        Vertex(position: EUS, textureCoords: Float2(0, 1), textureID: topTextureID),
+                        Vertex(position: EUS, textureCoords: Float2(0, 1), textureID: topTextureID),
+                        Vertex(position: WUS, textureCoords: Float2(1, 1), textureID: topTextureID),
+                        Vertex(position: WUN, textureCoords: Float2(1, 0), textureID: topTextureID)
                     ])
                 case .WEST:
                     result.append(contentsOf: [
-                        Vertex(position: Float3(X,     Y,     Z    ), textureCoords: Float2(1, 1), textureID: sideTextureID),
-                        Vertex(position: Float3(X,     Y + 1, Z    ), textureCoords: Float2(1, 0), textureID: sideTextureID),
-                        Vertex(position: Float3(X,     Y,     Z + 1), textureCoords: Float2(0, 1), textureID: sideTextureID),
-                        Vertex(position: Float3(X,     Y + 1, Z    ), textureCoords: Float2(1, 0), textureID: sideTextureID),
-                        Vertex(position: Float3(X,     Y + 1, Z + 1), textureCoords: Float2(0, 0), textureID: sideTextureID),
-                        Vertex(position: Float3(X,     Y,     Z + 1), textureCoords: Float2(0, 1), textureID: sideTextureID)
+                        Vertex(position: WUN, textureCoords: Float2(1, 0), textureID: sideTextureID),
+                        Vertex(position: WUS, textureCoords: Float2(0, 0), textureID: sideTextureID),
+                        Vertex(position: WDS, textureCoords: Float2(0, 1), textureID: sideTextureID),
+                        Vertex(position: WDN, textureCoords: Float2(1, 1), textureID: sideTextureID),
+                        Vertex(position: WDS, textureCoords: Float2(0, 1), textureID: sideTextureID),
+                        Vertex(position: WUN, textureCoords: Float2(1, 0), textureID: sideTextureID)
                     ])
                 case .EAST:
                     result.append(contentsOf: [
-                        Vertex(position: Float3(X + 1, Y,     Z    ), textureCoords: Float2(0, 1), textureID: sideTextureID),
-                        Vertex(position: Float3(X + 1, Y + 1, Z + 1), textureCoords: Float2(1, 0), textureID: sideTextureID),
-                        Vertex(position: Float3(X + 1, Y,     Z + 1), textureCoords: Float2(1, 1), textureID: sideTextureID),
-                        Vertex(position: Float3(X + 1, Y,     Z    ), textureCoords: Float2(0, 1), textureID: sideTextureID),
-                        Vertex(position: Float3(X + 1, Y + 1, Z    ), textureCoords: Float2(0, 0), textureID: sideTextureID),
-                        Vertex(position: Float3(X + 1, Y + 1, Z + 1), textureCoords: Float2(1, 0), textureID: sideTextureID)
+                        Vertex(position: EUN, textureCoords: Float2(0, 0), textureID: sideTextureID),
+                        Vertex(position: EUS, textureCoords: Float2(1, 0), textureID: sideTextureID),
+                        Vertex(position: EDS, textureCoords: Float2(1, 1), textureID: sideTextureID),
+                        Vertex(position: EDN, textureCoords: Float2(0, 1), textureID: sideTextureID),
+                        Vertex(position: EDS, textureCoords: Float2(1, 1), textureID: sideTextureID),
+                        Vertex(position: EUN, textureCoords: Float2(0, 0), textureID: sideTextureID)
                     ])
                 case .NORTH:
                     result.append(contentsOf: [
-                        Vertex(position: Float3(X,     Y,     Z    ), textureCoords: Float2(1, 1), textureID: sideTextureID),
-                        Vertex(position: Float3(X,     Y + 1, Z    ), textureCoords: Float2(1, 0), textureID: sideTextureID),
-                        Vertex(position: Float3(X + 1, Y,     Z    ), textureCoords: Float2(0, 1), textureID: sideTextureID),
-                        Vertex(position: Float3(X,     Y + 1, Z    ), textureCoords: Float2(1, 0), textureID: sideTextureID),
-                        Vertex(position: Float3(X + 1, Y + 1, Z    ), textureCoords: Float2(0, 0), textureID: sideTextureID),
-                        Vertex(position: Float3(X + 1, Y,     Z    ), textureCoords: Float2(0, 1), textureID: sideTextureID)
+                        Vertex(position: EUN, textureCoords: Float2(1, 0), textureID: sideTextureID),
+                        Vertex(position: WUN, textureCoords: Float2(0, 0), textureID: sideTextureID),
+                        Vertex(position: WDN, textureCoords: Float2(0, 1), textureID: sideTextureID),
+                        Vertex(position: EDN, textureCoords: Float2(1, 1), textureID: sideTextureID),
+                        Vertex(position: WDN, textureCoords: Float2(0, 1), textureID: sideTextureID),
+                        Vertex(position: EUN, textureCoords: Float2(1, 0), textureID: sideTextureID)
                     ])
                 case .SOUTH:
                     result.append(contentsOf: [
-                        Vertex(position: Float3(X,     Y,     Z + 1), textureCoords: Float2(0, 1), textureID: sideTextureID),
-                        Vertex(position: Float3(X + 1, Y + 1, Z + 1), textureCoords: Float2(1, 0), textureID: sideTextureID),
-                        Vertex(position: Float3(X + 1, Y,     Z + 1), textureCoords: Float2(1, 1), textureID: sideTextureID),
-                        Vertex(position: Float3(X,     Y,     Z + 1), textureCoords: Float2(0, 1), textureID: sideTextureID),
-                        Vertex(position: Float3(X,     Y + 1, Z + 1), textureCoords: Float2(0, 0), textureID: sideTextureID),
-                        Vertex(position: Float3(X + 1, Y + 1, Z + 1), textureCoords: Float2(1, 0), textureID: sideTextureID)
+                        Vertex(position: EUS, textureCoords: Float2(0, 0), textureID: sideTextureID),
+                        Vertex(position: WUS, textureCoords: Float2(1, 0), textureID: sideTextureID),
+                        Vertex(position: EDS, textureCoords: Float2(0, 1), textureID: sideTextureID),
+                        Vertex(position: EDS, textureCoords: Float2(0, 1), textureID: sideTextureID),
+                        Vertex(position: WDS, textureCoords: Float2(1, 1), textureID: sideTextureID),
+                        Vertex(position: WUS, textureCoords: Float2(1, 0), textureID: sideTextureID)
                     ])
             }
         }
+        
         return result
     }
 }

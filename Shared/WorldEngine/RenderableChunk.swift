@@ -29,13 +29,15 @@ private func compileChunk(blocks: [BlockShaderInfo],
     var vertices: [Vertex] = []
     
     for (localPos, directions) in faces {
-        let block = blocks[chunk[localPos]]
+        let orientedBlock = chunk[localPos]
+        let block = blocks[orientedBlock.blockID]
         let globalPos = getGlobalPos(chunk: chunk.pos, local: localPos)
         
         vertices.append(
             contentsOf:
                 block.getVertices(
                     pos: globalPos,
+                    orientation: orientedBlock.orientation,
                     directions: directions
                 )
         )

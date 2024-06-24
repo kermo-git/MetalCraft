@@ -68,19 +68,36 @@ class ExampleWorld: WorldGenerator {
                 let woodNoiseValue = woodNoise.signedNoise(globalPos)
                 
                 if woodNoiseValue > -0.1 && woodNoiseValue < 0.1 {
-                    for k in 0..<terrainHeight {
-                        chunk[BlockPos(X: i, Y: k, Z: j)] = WOOD
+                    for k in 0..<terrainHeight-1 {
+                        chunk[BlockPos(X: i, Y: k, Z: j)] = OrientedBlock(blockID: WOOD,
+                                                                          orientation: .NONE)
                     }
+                    let orientations: [Orientation] = [.NONE, .X90, .X90_Y90, .X90_YNEG90, .X90_Y180]
+                    let orientation = orientations.randomElement() ?? .NONE
+                    chunk[BlockPos(X: i, Y: terrainHeight-1, Z: j)] = OrientedBlock(blockID: WOOD,
+                                                                                    orientation: orientation)
                 } else {
                     for k in 0..<(terrainHeight - 1) {
-                        chunk[BlockPos(X: i, Y: k, Z: j)] = DIRT
+                        chunk[BlockPos(X: i, Y: k, Z: j)] = OrientedBlock(blockID: DIRT,
+                                                                          orientation: .NONE)
                     }
                     
+                    let orientations: [Orientation] = [.NONE, .Y90, .YNEG90, .Y180]
+                    let orientation = orientations.randomElement() ?? .NONE
+                    
+                    let white = OrientedBlock(blockID: WHITE_FLOWERS,
+                                              orientation: orientation)
+                    let yellow = OrientedBlock(blockID: YELLOW_FLOWERS,
+                                              orientation: orientation)
+                    let blue = OrientedBlock(blockID: BLUE_FLOWERS,
+                                              orientation: orientation)
+                    let red = OrientedBlock(blockID: RED_FLOWERS,
+                                              orientation: orientation)
+                    let grass = OrientedBlock(blockID: GRASS,
+                                              orientation: orientation)
+                    
                     chunk[BlockPos(X: i, Y: terrainHeight - 1, Z: j)] =
-                    Float.random(in: 0...1) > 0.7 ? [WHITE_FLOWERS,
-                                                     YELLOW_FLOWERS,
-                                                     BLUE_FLOWERS,
-                                                     RED_FLOWERS].randomElement() ?? WHITE_FLOWERS : GRASS
+                    Float.random(in: 0...1) > 0.7 ? [white, yellow, blue, red].randomElement() ?? white : grass
                 }
             }
         }
