@@ -14,7 +14,7 @@ class Camera {
     
     var viewDirection: Float3 {
         let rotation = rotateAroundY(rotationY) * rotateAroundX(rotationX)
-        let result4 = Float4(0, 0, -1, 1) * rotation
+        let result4 = rotation * Float4(0, 0, -1, 1)
         return Float3(result4.x, result4.y, result4.z)
     }
     

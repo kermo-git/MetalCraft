@@ -39,27 +39,27 @@ class FlyingCamera: Camera {
     }
     
     override func update(deltaTime: Float) {
-        let viewDir = viewDirection
-        let xzViewDir = normalize(Float2(viewDir.x, viewDir.z))
-        
         let moveDistance = deltaTime * input.moveSpeed
         
-        func moveOnXZ(direction: Float2) {
-            position.z += moveDistance * direction.y
-            position.x -= moveDistance * direction.x
+        func moveOnXZ(_ x: Float, _ z: Float) {
+            position.x += moveDistance * x
+            position.z += moveDistance * z
         }
         
+        let viewDirX = -sin(rotationY)
+        let viewDirZ = -cos(rotationY)
+        
         if (input.moveLeft) {
-            moveOnXZ(direction: turnCounterClockwise(xzViewDir))
+            moveOnXZ(viewDirZ, -viewDirX)
         }
         if (input.moveRight) {
-            moveOnXZ(direction: turnClockwise(xzViewDir))
+            moveOnXZ(-viewDirZ, viewDirX)
         }
         if (input.moveForward) {
-            moveOnXZ(direction: xzViewDir)
+            moveOnXZ(viewDirX, viewDirZ)
         }
         if (input.moveBackward) {
-            moveOnXZ(direction: xzViewDir * -1)
+            moveOnXZ(-viewDirX, -viewDirZ)
         }
         
         if (input.moveDown) {
