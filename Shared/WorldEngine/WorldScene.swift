@@ -18,10 +18,12 @@ class WorldScene: GameScene {
     init(generator: WorldGenerator,
          cameraPos: Float3) {
         let sunColor = Float4(x: 1, y: 1, z: 1, w: 1)
+        let skyColor = Float4(x: 0.93, y: 1, z: 0.64, w: 1)
         
         fragmentConstants = FragmentConstants(cameraPos: cameraPos,
                                               sunDirection: normalize(Float3(0.8, 0.9, 1.3)),
                                               renderDistance: RENDER_DISTANCE_BLOCKS,
+                                              fogColor: skyColor,
                                               sunColor: sunColor)
         
         let (blocks, textures) = compileBlockCollection(generator.blocks)
@@ -41,7 +43,6 @@ class WorldScene: GameScene {
         cameraBlockPos = getBlockPos(cameraPos)
         cameraChunkPos = getChunkPos(cameraPos)
         
-        let skyColor = Float4(x: 0.075, y: 0.78, z: 0.95, w: 1)
         clearColor = MTLClearColor(red: Double(skyColor.x),
                                    green: Double(skyColor.y),
                                    blue: Double(skyColor.z),

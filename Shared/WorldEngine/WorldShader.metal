@@ -24,6 +24,7 @@ struct FragmentConstants {
     float3 cameraPos;
     float3 sunDirection;
     float renderDistance;
+    float4 fogColor;
     float4 sunColor;
 };
 
@@ -40,15 +41,16 @@ vertex FragmentIn worldVertex(const VertexIn vIn [[ stage_in ]],
     return fIn;
 }
 
-float schlick(float reflectivity, float cos) {
-    float _cos = 1 - cos;
-    return reflectivity + (1 - reflectivity) * _cos * _cos * _cos * _cos * _cos;
-}
-
 fragment float4 worldFragment(FragmentIn fIn [[ stage_in ]],
                               constant FragmentConstants &constants [[ buffer(1) ]],
                               sampler sampler2D [[ sampler(0) ]],
                               texture2d_array<float> textures [[ texture(0) ]]) {
+    
+    float distanceFromCamera = distance(fIn.worldPosition, constants.cameraPos);
+    float fullFogDistance = 0.95 * constants.renderDistance;
+    
+    if (distanceFromCamera > fullFogDistance)
+        return constants.fogColor;
     
     float4 textureColor = textures.sample(sampler2D, fIn.textureCoords, fIn.textureID);
     float4 color = textureColor * 0.2;
@@ -58,6 +60,19 @@ fragment float4 worldFragment(FragmentIn fIn [[ stage_in ]],
     if (sunIntensity > 0) {
         color += sunIntensity * constants.sunColor * textureColor;
     }
+    float3 incident = normalize(fIn.worldPosition - constants.cameraPos);
+    float3 shinyVec = normalize(constants.sunDirection - incident);
+    float specularIntensity = pow(dot(shinyVec, fIn.normal), 50);
     
-    return color;
+    if (specularIntensity > 0) {
+        color += 0.5 * constants.sunColor * specularIntensity;
+    }
+    
+    float fogStartDistance = 0.9 * constants.renderDistance;
+    if (distanceFromCamera < fogStartDistance) {
+        return color;
+    }
+    
+    float fogLevel = (distanceFromCamera - fogStartDistance) / (fullFogDistance - fogStartDistance);
+    return color + fogLevel * (constants.fogColor - color);
 }
