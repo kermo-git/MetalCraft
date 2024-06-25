@@ -1,17 +1,12 @@
 import simd
 import Metal
 
-let BACKGROUND_COLOR = Float4(x: 0.075,
-                              y: 0.78,
-                              z: 0.95,
-                              w: 1)
-
 class WorldScene: GameScene {
     @Published var cameraBlockPos = BlockPos(X: 0, Y: 0, Z: 0)
     private var cameraChunkPos = ChunkPos(X: 0, Z: 0)
     
     private var vertexConstants = VertexConstants()
-    private var fragmentConstants = FragmentConstants()
+    private var fragmentConstants: FragmentConstants
     
     private let blocks: [BlockShaderInfo]
     private let textures: MTLTexture
@@ -22,6 +17,12 @@ class WorldScene: GameScene {
     
     init(generator: WorldGenerator,
          cameraPos: Float3) {
+        let sunColor = Float4(x: 1, y: 1, z: 1, w: 1)
+        
+        fragmentConstants = FragmentConstants(cameraPos: cameraPos,
+                                              sunDirection: normalize(Float3(0.8, 0.9, 1.3)),
+                                              renderDistance: RENDER_DISTANCE_BLOCKS,
+                                              sunColor: sunColor)
         
         let (blocks, textures) = compileBlockCollection(generator.blocks)
         self.blocks = blocks
@@ -40,10 +41,11 @@ class WorldScene: GameScene {
         cameraBlockPos = getBlockPos(cameraPos)
         cameraChunkPos = getChunkPos(cameraPos)
         
-        clearColor = MTLClearColor(red: Double(BACKGROUND_COLOR.x),
-                                   green: Double(BACKGROUND_COLOR.y),
-                                   blue: Double(BACKGROUND_COLOR.z),
-                                   alpha: Double(BACKGROUND_COLOR.w))
+        let skyColor = Float4(x: 0.075, y: 0.78, z: 0.95, w: 1)
+        clearColor = MTLClearColor(red: Double(skyColor.x),
+                                   green: Double(skyColor.y),
+                                   blue: Double(skyColor.z),
+                                   alpha: Double(skyColor.w))
     }
     
     override func updateScene(deltaTime: Float) async {

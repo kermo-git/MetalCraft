@@ -35,58 +35,106 @@ struct BlockShaderInfo {
         for direction in reverseOrientDirections(orientation, directions) {
             switch direction {
                 case .DOWN:
+                    let normal = orientVector(Float3(0, -1, 0), orientation)
+                
                     result.append(contentsOf: [
-                        Vertex(position: EDN, textureCoords: Float2(1, 0), textureID: bottomTextureID),
-                        Vertex(position: WDN, textureCoords: Float2(0, 0), textureID: bottomTextureID),
-                        Vertex(position: EDS, textureCoords: Float2(1, 1), textureID: bottomTextureID),
-                        Vertex(position: EDS, textureCoords: Float2(1, 1), textureID: bottomTextureID),
-                        Vertex(position: WDS, textureCoords: Float2(0, 1), textureID: bottomTextureID),
-                        Vertex(position: WDN, textureCoords: Float2(0, 0), textureID: bottomTextureID)
+                        Vertex(position: EDN, normal: normal,
+                               textureCoords: Float2(1, 0), textureID: bottomTextureID),
+                        Vertex(position: WDN, normal: normal,
+                               textureCoords: Float2(0, 0), textureID: bottomTextureID),
+                        Vertex(position: EDS, normal: normal,
+                               textureCoords: Float2(1, 1), textureID: bottomTextureID),
+                        Vertex(position: EDS, normal: normal,
+                               textureCoords: Float2(1, 1), textureID: bottomTextureID),
+                        Vertex(position: WDS, normal: normal,
+                               textureCoords: Float2(0, 1), textureID: bottomTextureID),
+                        Vertex(position: WDN, normal: normal,
+                               textureCoords: Float2(0, 0), textureID: bottomTextureID)
                     ])
                 case .UP:
+                    let normal = orientVector(Float3(0, 1, 0), orientation)
+                
                     result.append(contentsOf: [
-                        Vertex(position: EUN, textureCoords: Float2(0, 0), textureID: topTextureID),
-                        Vertex(position: WUN, textureCoords: Float2(1, 0), textureID: topTextureID),
-                        Vertex(position: EUS, textureCoords: Float2(0, 1), textureID: topTextureID),
-                        Vertex(position: EUS, textureCoords: Float2(0, 1), textureID: topTextureID),
-                        Vertex(position: WUS, textureCoords: Float2(1, 1), textureID: topTextureID),
-                        Vertex(position: WUN, textureCoords: Float2(1, 0), textureID: topTextureID)
+                        Vertex(position: EUN, normal: normal,
+                               textureCoords: Float2(0, 0), textureID: topTextureID),
+                        Vertex(position: WUN, normal: normal,
+                               textureCoords: Float2(1, 0), textureID: topTextureID),
+                        Vertex(position: EUS, normal: normal,
+                               textureCoords: Float2(0, 1), textureID: topTextureID),
+                        Vertex(position: EUS, normal: normal,
+                               textureCoords: Float2(0, 1), textureID: topTextureID),
+                        Vertex(position: WUS, normal: normal,
+                               textureCoords: Float2(1, 1), textureID: topTextureID),
+                        Vertex(position: WUN, normal: normal,
+                               textureCoords: Float2(1, 0), textureID: topTextureID)
                     ])
                 case .WEST:
+                    let normal = orientVector(Float3(-1, 0, 0), orientation)
+                
                     result.append(contentsOf: [
-                        Vertex(position: WUN, textureCoords: Float2(1, 0), textureID: sideTextureID),
-                        Vertex(position: WUS, textureCoords: Float2(0, 0), textureID: sideTextureID),
-                        Vertex(position: WDS, textureCoords: Float2(0, 1), textureID: sideTextureID),
-                        Vertex(position: WDN, textureCoords: Float2(1, 1), textureID: sideTextureID),
-                        Vertex(position: WDS, textureCoords: Float2(0, 1), textureID: sideTextureID),
-                        Vertex(position: WUN, textureCoords: Float2(1, 0), textureID: sideTextureID)
+                        Vertex(position: WUN, normal: normal,
+                               textureCoords: Float2(1, 0), textureID: sideTextureID),
+                        Vertex(position: WUS, normal: normal,
+                               textureCoords: Float2(0, 0), textureID: sideTextureID),
+                        Vertex(position: WDS, normal: normal,
+                               textureCoords: Float2(0, 1), textureID: sideTextureID),
+                        Vertex(position: WDN, normal: normal,
+                               textureCoords: Float2(1, 1), textureID: sideTextureID),
+                        Vertex(position: WDS, normal: normal,
+                               textureCoords: Float2(0, 1), textureID: sideTextureID),
+                        Vertex(position: WUN, normal: normal,
+                               textureCoords: Float2(1, 0), textureID: sideTextureID)
                     ])
                 case .EAST:
+                    let normal = orientVector(Float3(1, 0, 0), orientation)
+                
                     result.append(contentsOf: [
-                        Vertex(position: EUN, textureCoords: Float2(0, 0), textureID: sideTextureID),
-                        Vertex(position: EUS, textureCoords: Float2(1, 0), textureID: sideTextureID),
-                        Vertex(position: EDS, textureCoords: Float2(1, 1), textureID: sideTextureID),
-                        Vertex(position: EDN, textureCoords: Float2(0, 1), textureID: sideTextureID),
-                        Vertex(position: EDS, textureCoords: Float2(1, 1), textureID: sideTextureID),
-                        Vertex(position: EUN, textureCoords: Float2(0, 0), textureID: sideTextureID)
+                        Vertex(position: EUN, normal: normal,
+                               textureCoords: Float2(0, 0), textureID: sideTextureID),
+                        Vertex(position: EUS, normal: normal,
+                               textureCoords: Float2(1, 0), textureID: sideTextureID),
+                        Vertex(position: EDS, normal: normal,
+                               textureCoords: Float2(1, 1), textureID: sideTextureID),
+                        Vertex(position: EDN, normal: normal,
+                               textureCoords: Float2(0, 1), textureID: sideTextureID),
+                        Vertex(position: EDS, normal: normal,
+                               textureCoords: Float2(1, 1), textureID: sideTextureID),
+                        Vertex(position: EUN, normal: normal,
+                               textureCoords: Float2(0, 0), textureID: sideTextureID)
                     ])
                 case .NORTH:
+                    let normal = orientVector(Float3(0, 0, -1), orientation)
+                
                     result.append(contentsOf: [
-                        Vertex(position: EUN, textureCoords: Float2(1, 0), textureID: sideTextureID),
-                        Vertex(position: WUN, textureCoords: Float2(0, 0), textureID: sideTextureID),
-                        Vertex(position: WDN, textureCoords: Float2(0, 1), textureID: sideTextureID),
-                        Vertex(position: EDN, textureCoords: Float2(1, 1), textureID: sideTextureID),
-                        Vertex(position: WDN, textureCoords: Float2(0, 1), textureID: sideTextureID),
-                        Vertex(position: EUN, textureCoords: Float2(1, 0), textureID: sideTextureID)
+                        Vertex(position: EUN, normal: normal,
+                               textureCoords: Float2(1, 0), textureID: sideTextureID),
+                        Vertex(position: WUN, normal: normal,
+                               textureCoords: Float2(0, 0), textureID: sideTextureID),
+                        Vertex(position: WDN, normal: normal,
+                               textureCoords: Float2(0, 1), textureID: sideTextureID),
+                        Vertex(position: EDN, normal: normal,
+                               textureCoords: Float2(1, 1), textureID: sideTextureID),
+                        Vertex(position: WDN, normal: normal,
+                               textureCoords: Float2(0, 1), textureID: sideTextureID),
+                        Vertex(position: EUN, normal: normal,
+                               textureCoords: Float2(1, 0), textureID: sideTextureID)
                     ])
                 case .SOUTH:
+                    let normal = orientVector(Float3(0, 0, 1), orientation)
+                
                     result.append(contentsOf: [
-                        Vertex(position: EUS, textureCoords: Float2(0, 0), textureID: sideTextureID),
-                        Vertex(position: WUS, textureCoords: Float2(1, 0), textureID: sideTextureID),
-                        Vertex(position: EDS, textureCoords: Float2(0, 1), textureID: sideTextureID),
-                        Vertex(position: EDS, textureCoords: Float2(0, 1), textureID: sideTextureID),
-                        Vertex(position: WDS, textureCoords: Float2(1, 1), textureID: sideTextureID),
-                        Vertex(position: WUS, textureCoords: Float2(1, 0), textureID: sideTextureID)
+                        Vertex(position: EUS, normal: normal,
+                               textureCoords: Float2(0, 0), textureID: sideTextureID),
+                        Vertex(position: WUS, normal: normal,
+                               textureCoords: Float2(1, 0), textureID: sideTextureID),
+                        Vertex(position: EDS, normal: normal,
+                               textureCoords: Float2(0, 1), textureID: sideTextureID),
+                        Vertex(position: EDS, normal: normal,
+                               textureCoords: Float2(0, 1), textureID: sideTextureID),
+                        Vertex(position: WDS, normal: normal,
+                               textureCoords: Float2(1, 1), textureID: sideTextureID),
+                        Vertex(position: WUS, normal: normal,
+                               textureCoords: Float2(1, 0), textureID: sideTextureID)
                     ])
             }
         }

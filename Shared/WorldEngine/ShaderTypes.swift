@@ -3,6 +3,7 @@ import Metal
 
 struct Vertex: Sizeable {
     let position: Float3
+    let normal: Float3
     let textureCoords: Float2
     let textureID: Int
 }
@@ -14,13 +15,17 @@ func createVertexDescriptor() -> MTLVertexDescriptor {
     descriptor.attributes[0].bufferIndex = 0
     descriptor.attributes[0].offset = 0
     
-    descriptor.attributes[1].format = .float2
+    descriptor.attributes[1].format = .float3
     descriptor.attributes[1].bufferIndex = 0
     descriptor.attributes[1].offset = Float3.memorySize()
     
-    descriptor.attributes[2].format = .int
+    descriptor.attributes[2].format = .float2
     descriptor.attributes[2].bufferIndex = 0
-    descriptor.attributes[2].offset = Float3.memorySize() + Float2.memorySize()
+    descriptor.attributes[2].offset = 2 * Float3.memorySize()
+    
+    descriptor.attributes[3].format = .int
+    descriptor.attributes[3].bufferIndex = 0
+    descriptor.attributes[3].offset = 2 * Float3.memorySize() + Float2.memorySize()
     
     descriptor.layouts[0].stride = Vertex.memorySize()
     return descriptor
@@ -31,7 +36,8 @@ struct VertexConstants: Sizeable {
 }
 
 struct FragmentConstants: Sizeable {
-    var cameraPos = Float3(0, 0, 0)
-    var renderDistance: Float = RENDER_DISTANCE_BLOCKS
-    var fogColor: Float4 = BACKGROUND_COLOR
+    var cameraPos: Float3
+    var sunDirection: Float3
+    var renderDistance: Float
+    var sunColor: Float4
 }
