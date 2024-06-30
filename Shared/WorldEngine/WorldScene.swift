@@ -8,7 +8,7 @@ class WorldScene: GameScene {
     private var vertexConstants = VertexConstants()
     private var fragmentConstants: FragmentConstants
     
-    private let blocks: [BlockShaderInfo]
+    private let blocks: [Block]
     private let textures: MTLTexture
     
     private let loader: ChunkLoader

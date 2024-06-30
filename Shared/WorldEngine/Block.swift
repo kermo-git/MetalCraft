@@ -1,17 +1,32 @@
 import Metal
 
-struct BlockDescriptor {
+struct Block {
     let topTexture: String
     let sideTexture: String
     let bottomTexture: String
-}
+    
+    let topTexRotation: RandomTextureRotation
+    let sideTexRotation: RandomTextureRotation
+    
+    var topTextureID: Int = 0
+    var sideTextureID: Int = 0
+    var bottomTextureID: Int = 0
+    
+    func copyWithTextureIDs(textures: [String]) -> Block {
+        var result = Block(topTexture: topTexture,
+                           sideTexture: sideTexture,
+                           bottomTexture: bottomTexture,
+                           topTexRotation: topTexRotation,
+                           sideTexRotation: sideTexRotation)
+        
+        result.topTextureID = textures.firstIndex(of: topTexture) ?? 0
+        result.sideTextureID = textures.firstIndex(of: sideTexture) ?? 0
+        result.bottomTextureID = textures.firstIndex(of: bottomTexture) ?? 0
+        
+        return result
+    }
 
-struct BlockShaderInfo {
-    let topTextureID: Int
-    let sideTextureID: Int
-    let bottomTextureID: Int
-
-    func getVertices(pos: BlockPos, orientation: Orientation, directions: Set<Direction>) -> [Vertex] {
+    func getVertices(pos: BlockPos, orientation: BlockOrientation, directions: Set<Direction>) -> [Vertex] {
         let offset = Float3(
             Float(pos.X) + 0.5,
             Float(pos.Y) + 0.5,
@@ -31,6 +46,8 @@ struct BlockShaderInfo {
         let WUS = transform(Float3(-0.5,  0.5,  0.5))
         
         var result: [Vertex] = []
+        let topTexCoords = getTextureCoords(rotation: topTexRotation)
+        let sideTexCoords = getTextureCoords(rotation: sideTexRotation)
         
         for direction in reverseOrientDirections(orientation, directions) {
             switch direction {
@@ -39,102 +56,135 @@ struct BlockShaderInfo {
                 
                     result.append(contentsOf: [
                         Vertex(position: EDN, normal: normal,
-                               textureCoords: Float2(1, 0), textureID: bottomTextureID),
+                               textureCoords: topTexCoords.topRight,
+                               textureID: bottomTextureID),
+                        
                         Vertex(position: WDN, normal: normal,
-                               textureCoords: Float2(0, 0), textureID: bottomTextureID),
+                               textureCoords: topTexCoords.topLeft,
+                               textureID: bottomTextureID),
+                        
                         Vertex(position: EDS, normal: normal,
-                               textureCoords: Float2(1, 1), textureID: bottomTextureID),
+                               textureCoords: topTexCoords.bottomRight,
+                                textureID: bottomTextureID),
+                        
                         Vertex(position: EDS, normal: normal,
-                               textureCoords: Float2(1, 1), textureID: bottomTextureID),
+                               textureCoords: topTexCoords.bottomRight,
+                               textureID: bottomTextureID),
+                        
                         Vertex(position: WDS, normal: normal,
-                               textureCoords: Float2(0, 1), textureID: bottomTextureID),
+                               textureCoords: topTexCoords.bottomLeft, 
+                               textureID: bottomTextureID),
+                        
                         Vertex(position: WDN, normal: normal,
-                               textureCoords: Float2(0, 0), textureID: bottomTextureID)
+                               textureCoords: topTexCoords.topLeft, 
+                               textureID: bottomTextureID)
                     ])
                 case .UP:
                     let normal = orientVector(Float3(0, 1, 0), orientation)
                 
                     result.append(contentsOf: [
                         Vertex(position: EUN, normal: normal,
-                               textureCoords: Float2(0, 0), textureID: topTextureID),
+                               textureCoords: topTexCoords.topLeft, 
+                               textureID: topTextureID),
+                        
                         Vertex(position: WUN, normal: normal,
-                               textureCoords: Float2(1, 0), textureID: topTextureID),
+                               textureCoords: topTexCoords.topRight, 
+                               textureID: topTextureID),
+                        
                         Vertex(position: EUS, normal: normal,
-                               textureCoords: Float2(0, 1), textureID: topTextureID),
+                               textureCoords: topTexCoords.bottomLeft, 
+                               textureID: topTextureID),
+                        
                         Vertex(position: EUS, normal: normal,
-                               textureCoords: Float2(0, 1), textureID: topTextureID),
+                               textureCoords: topTexCoords.bottomLeft,
+                               textureID: topTextureID),
+                        
                         Vertex(position: WUS, normal: normal,
-                               textureCoords: Float2(1, 1), textureID: topTextureID),
+                               textureCoords: topTexCoords.bottomRight,
+                               textureID: topTextureID),
+                        
                         Vertex(position: WUN, normal: normal,
-                               textureCoords: Float2(1, 0), textureID: topTextureID)
+                               textureCoords: topTexCoords.topRight,
+                               textureID: topTextureID)
                     ])
                 case .WEST:
                     let normal = orientVector(Float3(-1, 0, 0), orientation)
                 
                     result.append(contentsOf: [
                         Vertex(position: WUN, normal: normal,
-                               textureCoords: Float2(1, 0), textureID: sideTextureID),
+                               textureCoords: sideTexCoords.topRight,
+                               textureID: sideTextureID),
+                        
                         Vertex(position: WUS, normal: normal,
-                               textureCoords: Float2(0, 0), textureID: sideTextureID),
+                               textureCoords: sideTexCoords.topLeft,
+                               textureID: sideTextureID),
+                        
                         Vertex(position: WDS, normal: normal,
-                               textureCoords: Float2(0, 1), textureID: sideTextureID),
+                               textureCoords: sideTexCoords.bottomLeft,
+                               textureID: sideTextureID),
+                        
                         Vertex(position: WDN, normal: normal,
-                               textureCoords: Float2(1, 1), textureID: sideTextureID),
+                               textureCoords: sideTexCoords.bottomRight,
+                               textureID: sideTextureID),
+                        
                         Vertex(position: WDS, normal: normal,
-                               textureCoords: Float2(0, 1), textureID: sideTextureID),
+                               textureCoords: sideTexCoords.bottomLeft,
+                               textureID: sideTextureID),
+                        
                         Vertex(position: WUN, normal: normal,
-                               textureCoords: Float2(1, 0), textureID: sideTextureID)
+                               textureCoords: sideTexCoords.topRight,
+                               textureID: sideTextureID)
                     ])
                 case .EAST:
                     let normal = orientVector(Float3(1, 0, 0), orientation)
                 
                     result.append(contentsOf: [
                         Vertex(position: EUN, normal: normal,
-                               textureCoords: Float2(0, 0), textureID: sideTextureID),
+                               textureCoords: sideTexCoords.topLeft, textureID: sideTextureID),
                         Vertex(position: EUS, normal: normal,
-                               textureCoords: Float2(1, 0), textureID: sideTextureID),
+                               textureCoords: sideTexCoords.topRight, textureID: sideTextureID),
                         Vertex(position: EDS, normal: normal,
-                               textureCoords: Float2(1, 1), textureID: sideTextureID),
+                               textureCoords: sideTexCoords.bottomRight, textureID: sideTextureID),
                         Vertex(position: EDN, normal: normal,
-                               textureCoords: Float2(0, 1), textureID: sideTextureID),
+                               textureCoords: sideTexCoords.bottomLeft, textureID: sideTextureID),
                         Vertex(position: EDS, normal: normal,
-                               textureCoords: Float2(1, 1), textureID: sideTextureID),
+                               textureCoords: sideTexCoords.bottomRight, textureID: sideTextureID),
                         Vertex(position: EUN, normal: normal,
-                               textureCoords: Float2(0, 0), textureID: sideTextureID)
+                               textureCoords: sideTexCoords.topLeft, textureID: sideTextureID)
                     ])
                 case .NORTH:
                     let normal = orientVector(Float3(0, 0, -1), orientation)
                 
                     result.append(contentsOf: [
                         Vertex(position: EUN, normal: normal,
-                               textureCoords: Float2(1, 0), textureID: sideTextureID),
+                               textureCoords: sideTexCoords.topRight, textureID: sideTextureID),
                         Vertex(position: WUN, normal: normal,
-                               textureCoords: Float2(0, 0), textureID: sideTextureID),
+                               textureCoords: sideTexCoords.topLeft, textureID: sideTextureID),
                         Vertex(position: WDN, normal: normal,
-                               textureCoords: Float2(0, 1), textureID: sideTextureID),
+                               textureCoords: sideTexCoords.bottomLeft, textureID: sideTextureID),
                         Vertex(position: EDN, normal: normal,
-                               textureCoords: Float2(1, 1), textureID: sideTextureID),
+                               textureCoords: sideTexCoords.bottomRight, textureID: sideTextureID),
                         Vertex(position: WDN, normal: normal,
-                               textureCoords: Float2(0, 1), textureID: sideTextureID),
+                               textureCoords: sideTexCoords.bottomLeft, textureID: sideTextureID),
                         Vertex(position: EUN, normal: normal,
-                               textureCoords: Float2(1, 0), textureID: sideTextureID)
+                               textureCoords: sideTexCoords.topRight, textureID: sideTextureID)
                     ])
                 case .SOUTH:
                     let normal = orientVector(Float3(0, 0, 1), orientation)
                 
                     result.append(contentsOf: [
                         Vertex(position: EUS, normal: normal,
-                               textureCoords: Float2(0, 0), textureID: sideTextureID),
+                               textureCoords: sideTexCoords.topLeft, textureID: sideTextureID),
                         Vertex(position: WUS, normal: normal,
-                               textureCoords: Float2(1, 0), textureID: sideTextureID),
+                               textureCoords: sideTexCoords.topRight, textureID: sideTextureID),
                         Vertex(position: EDS, normal: normal,
-                               textureCoords: Float2(0, 1), textureID: sideTextureID),
+                               textureCoords: sideTexCoords.bottomLeft, textureID: sideTextureID),
                         Vertex(position: EDS, normal: normal,
-                               textureCoords: Float2(0, 1), textureID: sideTextureID),
+                               textureCoords: sideTexCoords.bottomLeft, textureID: sideTextureID),
                         Vertex(position: WDS, normal: normal,
-                               textureCoords: Float2(1, 1), textureID: sideTextureID),
+                               textureCoords: sideTexCoords.bottomRight, textureID: sideTextureID),
                         Vertex(position: WUS, normal: normal,
-                               textureCoords: Float2(1, 0), textureID: sideTextureID)
+                               textureCoords: sideTexCoords.topRight, textureID: sideTextureID)
                     ])
             }
         }
@@ -143,31 +193,22 @@ struct BlockShaderInfo {
     }
 }
 
-func compileBlockCollection(_ blocksDescriptors: [BlockDescriptor]) -> ([BlockShaderInfo], MTLTexture) {
+func compileBlockCollection(_ blocks: [Block]) -> ([Block], MTLTexture) {
     var textureNameSet: Set<String> = []
     
-    for block in blocksDescriptors {
+    for block in blocks {
         textureNameSet.insert(block.topTexture)
         textureNameSet.insert(block.sideTexture)
         textureNameSet.insert(block.bottomTexture)
     }
     let textureNameList = Array(textureNameSet)
     
-    let textures = Engine.loadTextureArray(fileNames: textureNameList,
-                                           imageWidth: 16,
-                                           imageHeight: 16)
+    let textureBuffer = Engine.loadTextureArray(fileNames: textureNameList,
+                                                imageWidth: 16,
+                                                imageHeight: 16)
     
-    var blockInfo: [BlockShaderInfo] = []
-    
-    for block in blocksDescriptors {
-        blockInfo.append(
-            BlockShaderInfo(topTextureID:
-                                textureNameList.firstIndex(of: block.topTexture) ?? 0,
-                            sideTextureID:
-                                textureNameList.firstIndex(of: block.sideTexture) ?? 0,
-                            bottomTextureID:
-                                textureNameList.firstIndex(of: block.bottomTexture) ?? 0)
-        )
-    }
-    return (blockInfo, textures)
+    let compiledBlocks = blocks.map({
+        block in block.copyWithTextureIDs(textures: textureNameList)
+    })
+    return (compiledBlocks, textureBuffer)
 }

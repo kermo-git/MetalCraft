@@ -1,41 +1,27 @@
 class ExampleWorld: WorldGenerator {
     let blocks = [
-        BlockDescriptor(topTexture: "DIRT",
-                        sideTexture: "DIRT",
-                        bottomTexture: "DIRT"),
+        Block(topTexture: "dirt",
+              sideTexture: "dirt",
+              bottomTexture: "dirt",
+              topTexRotation: .FULL,
+              sideTexRotation: .FULL),
         
-        BlockDescriptor(topTexture: "GRASS",
-                        sideTexture: "DIRT_GRASS",
-                        bottomTexture: "DIRT"),
+        Block(topTexture: "grass",
+              sideTexture: "dirt_grass",
+              bottomTexture: "dirt",
+              topTexRotation: .FULL,
+              sideTexRotation: .HORIZONTAL),
         
-        BlockDescriptor(topTexture: "WHITE_FLOWERS",
-                        sideTexture: "DIRT_GRASS",
-                        bottomTexture: "DIRT"),
-        
-        BlockDescriptor(topTexture: "YELLOW_FLOWERS",
-                        sideTexture: "DIRT_GRASS",
-                        bottomTexture: "DIRT"),
-        
-        BlockDescriptor(topTexture: "BLUE_FLOWERS",
-                        sideTexture: "DIRT_GRASS",
-                        bottomTexture: "DIRT"),
-        
-        BlockDescriptor(topTexture: "RED_FLOWERS",
-                        sideTexture: "DIRT_GRASS",
-                        bottomTexture: "DIRT"),
-        
-        BlockDescriptor(topTexture: "TREE_CUT",
-                        sideTexture: "TREE_BARK",
-                        bottomTexture: "TREE_CUT"),
+        Block(topTexture: "stone",
+              sideTexture: "stone",
+              bottomTexture: "stone",
+              topTexRotation: .FULL,
+              sideTexRotation: .FULL)
     ]
     
-    let DIRT = 0
+    let SAND = 0
     let GRASS = 1
-    let WHITE_FLOWERS = 2
-    let YELLOW_FLOWERS = 3
-    let BLUE_FLOWERS = 4
-    let RED_FLOWERS = 5
-    let WOOD = 6
+    let STONE = 2
 
     func generate(_ pos: ChunkPos) -> Chunk {
         var chunk = Chunk(pos: pos)
@@ -47,6 +33,11 @@ class ExampleWorld: WorldGenerator {
                 
                 let probability = terrainType.noise(globalPos)
                 var terrainHeight = 0
+                
+                var block = OrientedBlock(blockID: SAND,
+                                          orientation: .NONE)
+                var topBlock = OrientedBlock(blockID: GRASS,
+                                             orientation: .NONE)
             
                 if (probability < transitionStart) {
                     terrainHeight = mountains.terrainHeight(globalPos)
@@ -61,18 +52,19 @@ class ExampleWorld: WorldGenerator {
                     terrainHeight = Int(
                         (1 - blendFactor) * mountainsHeight + blendFactor * plainsHeight
                     )
+                    block = OrientedBlock(blockID: STONE,
+                                          orientation: .NONE)
+                    topBlock = OrientedBlock(blockID: STONE,
+                                             orientation: .NONE)
                 } else {
                     terrainHeight = plains.terrainHeight(globalPos)
                 }
                 
                 for k in 0..<(terrainHeight - 1) {
-                    chunk[BlockPos(X: i, Y: k, Z: j)] = OrientedBlock(blockID: DIRT,
-                                                                      orientation: .NONE)
+                    chunk[BlockPos(X: i, Y: k, Z: j)] = block
                 }
-                let grass = OrientedBlock(blockID: GRASS,
-                                          orientation: .NONE)
                 
-                chunk[BlockPos(X: i, Y: terrainHeight - 1, Z: j)] = grass
+                chunk[BlockPos(X: i, Y: terrainHeight - 1, Z: j)] = topBlock
             }
         }
         
@@ -104,15 +96,6 @@ let mountainsProbability: Float = 0.7
 let transitionWidth: Float = 0.1
 let transitionStart = mountainsProbability - transitionWidth / 2
 let transitionEnd = mountainsProbability + transitionWidth / 2
-
-let woodNoise = TerrainNoise(
-    generator: FractalNoise(
-        octaves: 4, persistence: 0.4
-    ),
-    unitSquareBlocks: 50,
-    minTerrainHeight: 0,
-    heightRange: 0
-)
 
 func fade(_ t: Float) -> Float {
     t * t * t * (t * (t * 6 - 15) + 10)

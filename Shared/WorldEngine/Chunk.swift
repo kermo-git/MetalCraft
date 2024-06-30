@@ -4,7 +4,7 @@ let AIR_ID = -1
 
 struct OrientedBlock {
     let blockID: Int
-    let orientation: Orientation
+    let orientation: BlockOrientation
 }
 
 struct Chunk {

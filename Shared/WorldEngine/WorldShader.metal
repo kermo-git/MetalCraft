@@ -53,7 +53,7 @@ fragment float4 worldFragment(FragmentIn fIn [[ stage_in ]],
         return constants.fogColor;
     
     float4 textureColor = textures.sample(sampler2D, fIn.textureCoords, fIn.textureID);
-    float4 color = textureColor * 0.2;
+    float4 color = textureColor * 0.5;
 
     float sunIntensity = dot(fIn.normal, constants.sunDirection);
     
@@ -62,10 +62,10 @@ fragment float4 worldFragment(FragmentIn fIn [[ stage_in ]],
     }
     float3 incident = normalize(fIn.worldPosition - constants.cameraPos);
     float3 shinyVec = normalize(constants.sunDirection - incident);
-    float specularIntensity = pow(dot(shinyVec, fIn.normal), 50);
+    float specularIntensity = pow(dot(shinyVec, fIn.normal), 40);
     
     if (specularIntensity > 0) {
-        color += 0.5 * constants.sunColor * specularIntensity;
+        color += 0.4 * constants.sunColor * specularIntensity;
     }
     
     float fogStartDistance = 0.9 * constants.renderDistance;

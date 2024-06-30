@@ -15,10 +15,10 @@ actor ChunkLoader {
     private var memoryChunks: [ChunkPos : RenderableChunk] = [:]
     private var generationQueue: [ChunkPos] = localRenderCircle
     
-    private var blocks: [BlockShaderInfo]
+    private var blocks: [Block]
     private var generator: WorldGenerator
     
-    init(blocks: [BlockShaderInfo], generator: WorldGenerator) {
+    init(blocks: [Block], generator: WorldGenerator) {
         self.blocks = blocks
         self.generator = generator
     }

@@ -1,4 +1,4 @@
 protocol WorldGenerator {
-    var blocks: [BlockDescriptor] { get }
+    var blocks: [Block] { get }
     func generate(_ pos: ChunkPos) -> Chunk
 }

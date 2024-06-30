@@ -7,7 +7,7 @@ actor RenderableChunk {
     var vertexBuffer: MTLBuffer
     var vertexCount: Int
     
-    init(blocks: [BlockShaderInfo], data: Chunk, faces: Faces) {
+    init(blocks: [Block], data: Chunk, faces: Faces) {
         self.data = data
         self.faces = faces
         
@@ -16,7 +16,7 @@ actor RenderableChunk {
         self.vertexCount = vertexCount
     }
     
-    func addFaces(blocks: [BlockShaderInfo], newFaces: Faces) {
+    func addFaces(blocks: [Block], newFaces: Faces) {
         faces.append(newFaces)
         let (vertexBuffer, vertexCount) = compileChunk(blocks: blocks, chunk: data, faces: faces)
         self.vertexBuffer = vertexBuffer
@@ -24,7 +24,7 @@ actor RenderableChunk {
     }
 }
 
-private func compileChunk(blocks: [BlockShaderInfo],
+private func compileChunk(blocks: [Block],
                           chunk: Chunk, faces: Faces) -> (MTLBuffer, Int) {
     var vertices: [Vertex] = []
     
