@@ -1,4 +1,4 @@
-typealias Faces = [BlockPos : Set<Direction>]
+typealias Faces = [Int3 : Set<Direction>]
 
 extension Faces {
     mutating func append(_ other: Faces) {
@@ -13,7 +13,7 @@ func getBlockFaces(chunk: Chunk) -> Faces {
         for globalY in chunk.minY...chunk.maxY {
             for localZ in 0..<CHUNK_SIDE {
                 
-                let localPos = BlockPos(X: localX, Y: globalY, Z: localZ)
+                let localPos = Int3(localX, globalY, localZ)
                 let blockID = chunk[localPos].blockID
                 
                 if blockID != AIR_ID {
@@ -56,8 +56,8 @@ func getNorthBorderBlockFaces(southChunk: Chunk, northChunk: Chunk) -> (Faces, F
     
     for localX in 0..<CHUNK_SIDE {
         for globalY in minY...maxY {
-            let southChunkBlockPos = BlockPos(X: localX, Y: globalY, Z: 0)
-            let northChunkBlockPos = BlockPos(X: localX, Y: globalY, Z: CHUNK_SIDE - 1)
+            let southChunkBlockPos = Int3(localX, globalY, 0)
+            let northChunkBlockPos = Int3(localX, globalY, CHUNK_SIDE - 1)
             
             let southChunkBlockID = southChunk[southChunkBlockPos].blockID
             let northChunkBlockID = northChunk[northChunkBlockPos].blockID
@@ -83,8 +83,8 @@ func getWestBorderBlockFaces(eastChunk: Chunk, westChunk: Chunk) -> (Faces, Face
     
     for localZ in 0..<CHUNK_SIDE {
         for globalY in minY...maxY {
-            let eastChunkBlockPos = BlockPos(X: 0, Y: globalY, Z: localZ)
-            let westChunkBlockPos = BlockPos(X: CHUNK_SIDE - 1, Y: globalY, Z: localZ)
+            let eastChunkBlockPos = Int3(0, globalY, localZ)
+            let westChunkBlockPos = Int3(CHUNK_SIDE - 1, globalY, localZ)
             
             let eastChunkBlockID = eastChunk[eastChunkBlockPos].blockID
             let westChunkBlockID = westChunk[westChunkBlockPos].blockID

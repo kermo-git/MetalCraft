@@ -1,9 +1,11 @@
 import simd
 import Metal
 
+private let RENDER_DISTANCE_BLOCKS = Float(RENDER_DISTANCE_CHUNKS) * Float(CHUNK_SIDE)
+
 class WorldScene: GameScene {
-    @Published var cameraBlockPos = BlockPos(X: 0, Y: 0, Z: 0)
-    private var cameraChunkPos = ChunkPos(X: 0, Z: 0)
+    @Published var cameraBlockPos = Int3(0, 0, 0)
+    private var cameraChunkPos = Int2(0, 0)
     
     private var vertexConstants = VertexConstants()
     private var fragmentConstants: FragmentConstants

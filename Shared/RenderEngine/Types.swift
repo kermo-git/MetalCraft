@@ -1,5 +1,7 @@
 import simd
 
+typealias Int3 = SIMD3<Int>
+typealias Int2 = SIMD2<Int>
 typealias Float2 = SIMD2<Float>
 typealias Float3 = SIMD3<Float>
 typealias Float4 = SIMD4<Float>

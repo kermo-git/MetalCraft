@@ -26,11 +26,11 @@ struct Block {
         return result
     }
 
-    func getVertices(pos: BlockPos, orientation: BlockOrientation, directions: Set<Direction>) -> [Vertex] {
+    func getVertices(pos: Int3, orientation: BlockOrientation, directions: Set<Direction>) -> [Vertex] {
         let offset = Float3(
-            Float(pos.X) + 0.5,
-            Float(pos.Y) + 0.5,
-            Float(pos.Z) + 0.5
+            Float(pos.x) + 0.5,
+            Float(pos.y) + 0.5,
+            Float(pos.z) + 0.5
         )
         func transform(_ vec: Float3) -> Float3 {
             return orientVector(vec, orientation) + offset

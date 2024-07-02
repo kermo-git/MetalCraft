@@ -8,9 +8,9 @@ struct OrientedBlock {
 }
 
 struct Chunk {
-    let pos: ChunkPos
+    let pos: Int2
     
-    init(pos: ChunkPos) {
+    init(pos: Int2) {
         self.pos = pos
     }
     
@@ -19,19 +19,19 @@ struct Chunk {
                                  orientation: .NONE),
         count: CHUNK_SIDE * CHUNK_SIDE * CHUNK_HEIGHT
     )
-    private func getIndex(_ pos: BlockPos) -> Int {
-        return CHUNK_SIDE * (pos.X * CHUNK_HEIGHT + pos.Y) + pos.Z
+    private func getIndex(_ pos: Int3) -> Int {
+        return CHUNK_SIDE * (pos.x * CHUNK_HEIGHT + pos.y) + pos.z
     }
     private(set) var minY = CHUNK_HEIGHT - 1
     private(set) var maxY = 0
     
-    subscript(_ pos: BlockPos) -> OrientedBlock {
+    subscript(_ pos: Int3) -> OrientedBlock {
         get {
             return data[getIndex(pos)]
         }
         set(block) {
-            minY = min(minY, pos.Y)
-            maxY = max(maxY, pos.Y)
+            minY = min(minY, pos.y)
+            maxY = max(maxY, pos.y)
             data[getIndex(pos)] = block
         }
     }

@@ -23,12 +23,12 @@ class ExampleWorld: WorldGenerator {
     let GRASS = 1
     let STONE = 2
 
-    func generate(_ pos: ChunkPos) -> Chunk {
+    func generate(_ pos: Int2) -> Chunk {
         var chunk = Chunk(pos: pos)
         
         for i in 0..<CHUNK_SIDE {
             for j in 0..<CHUNK_SIDE {
-                let localPos = BlockPos(X: i, Y: 0, Z: j)
+                let localPos = Int3(i, 0, j)
                 let globalPos = getGlobalPos(chunk: pos, local: localPos)
                 
                 let probability = terrainType.noise(globalPos)
@@ -61,10 +61,10 @@ class ExampleWorld: WorldGenerator {
                 }
                 
                 for k in 0..<(terrainHeight - 1) {
-                    chunk[BlockPos(X: i, Y: k, Z: j)] = block
+                    chunk[Int3(i, k, j)] = block
                 }
                 
-                chunk[BlockPos(X: i, Y: terrainHeight - 1, Z: j)] = topBlock
+                chunk[Int3(i, terrainHeight - 1, j)] = topBlock
             }
         }
         

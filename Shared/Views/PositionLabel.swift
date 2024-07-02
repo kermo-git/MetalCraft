@@ -5,7 +5,7 @@ struct PositionLabel: View {
     
     func getPositionLabel() -> String {
         let pos = scene.cameraBlockPos
-        return "\(pos.X), \(pos.Y), \(pos.Z)"
+        return "\(pos.x), \(pos.y), \(pos.z)"
     }
     
     var body: some View {

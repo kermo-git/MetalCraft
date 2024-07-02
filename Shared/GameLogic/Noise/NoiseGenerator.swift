@@ -41,27 +41,27 @@ struct TerrainNoise {
     let minTerrainHeight: Int
     let heightRange: Float
     
-    func signedNoise(_ pos: BlockPos) -> Float {
-        let noiseX = Float(pos.X) / unitSquareBlocks
-        let noiseY = Float(pos.Z) / unitSquareBlocks
+    func signedNoise(_ pos: Int3) -> Float {
+        let noiseX = Float(pos.x) / unitSquareBlocks
+        let noiseY = Float(pos.z) / unitSquareBlocks
         
         return generator.signedNoise(noiseX, noiseY, 0)
     }
     
-    func noise(_ pos: BlockPos) -> Float {
+    func noise(_ pos: Int3) -> Float {
         return 0.5 * signedNoise(pos) + 0.5
     }
     
-    func turbulence(_ pos: BlockPos) -> Float {
+    func turbulence(_ pos: Int3) -> Float {
         let value = signedNoise(pos)
         return value > 0 ? value : -value
     }
     
-    func terrainHeight(_ pos: BlockPos) -> Int {
+    func terrainHeight(_ pos: Int3) -> Int {
         return minTerrainHeight + Int(noise(pos) * heightRange)
     }
     
-    func turbulentTerrainHeight(_ pos: BlockPos) -> Int {
+    func turbulentTerrainHeight(_ pos: Int3) -> Int {
         return minTerrainHeight + Int(turbulence(pos) * heightRange)
     }
 }

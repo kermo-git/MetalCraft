@@ -101,77 +101,64 @@ enum Direction: Hashable {
     case NORTH
 }
 
-struct BlockPos: Hashable {
-    let X: Int
-    let Y: Int
-    let Z: Int
-    
-    func move(_ direction: Direction) -> BlockPos {
+extension Int3 {
+    func move(_ direction: Direction) -> Int3 {
         switch direction {
             case .UP:
-                return BlockPos(X: X, Y: Y + 1, Z: Z)
+                return Int3(x, y + 1, z)
             case .DOWN:
-                return BlockPos(X: X, Y: Y - 1, Z: Z)
+                return Int3(x, y - 1, z)
             case .WEST:
-                return BlockPos(X: X - 1, Y: Y, Z: Z)
+                return Int3(x - 1, y, z)
             case .EAST:
-                return BlockPos(X: X + 1, Y: Y, Z: Z)
+                return Int3(x + 1, y, z)
             case .SOUTH:
-                return BlockPos(X: X, Y: Y, Z: Z + 1)
+                return Int3(x, y, z + 1)
             case .NORTH:
-                return BlockPos(X: X, Y: Y, Z: Z - 1)
+                return Int3(x, y, z - 1)
         }
     }
 }
 
-struct ChunkPos: Hashable {
-    let X: Int
-    let Z: Int
-    
-    func move(_ direction: Direction) -> ChunkPos {
+extension Int2 {
+    func move(_ direction: Direction) -> Int2 {
         switch direction {
             case .WEST:
-                return ChunkPos(X: X - 1, Z: Z)
+                return Int2(x - 1, y)
             case .EAST:
-                return ChunkPos(X: X + 1, Z: Z)
+                return Int2(x + 1, y)
             case .SOUTH:
-                return ChunkPos(X: X, Z: Z + 1)
+                return Int2(x, y + 1)
             case .NORTH:
-                return ChunkPos(X: X, Z: Z - 1)
+                return Int2(x, y - 1)
             default:
                 return self
         }
     }
 }
 
-func getBlockPos(_ pointPos: Float3) -> BlockPos {
-    return BlockPos(X: Int(floor(pointPos.x)),
-                    Y: Int(floor(pointPos.y)),
-                    Z: Int(floor(pointPos.z)))
+func getBlockPos(_ pointPos: Float3) -> Int3 {
+    return Int3(x: Int(floor(pointPos.x)),
+                y: Int(floor(pointPos.y)),
+                z: Int(floor(pointPos.z)))
 }
 
-func getChunkPos(_ pos: BlockPos) -> ChunkPos {
+func getChunkPos(_ pos: Int3) -> Int2 {
     func toChunkCoordinate(_ blockCoordinate: Int) -> Int {
         return (blockCoordinate >= 0) ?
             blockCoordinate / CHUNK_SIDE :
             ((blockCoordinate + 1) / CHUNK_SIDE) - 1
     }
-    return ChunkPos(X: toChunkCoordinate(pos.X),
-                    Z: toChunkCoordinate(pos.Z))
+    return Int2(x: toChunkCoordinate(pos.x),
+                y: toChunkCoordinate(pos.z))
 }
 
-func getChunkPos(_ pointPos: Float3) -> ChunkPos {
+func getChunkPos(_ pointPos: Float3) -> Int2 {
     return getChunkPos(getBlockPos(pointPos))
 }
 
-func getGlobalPos(chunk: ChunkPos, local: BlockPos) -> BlockPos {
-    return BlockPos(X: chunk.X * CHUNK_SIDE + local.X,
-                    Y: local.Y,
-                    Z: chunk.Z * CHUNK_SIDE + local.Z)
-}
-
-func distance(_ chunk1: ChunkPos, _ chunk2: ChunkPos) -> Float {
-    let fX = Float(chunk1.X - chunk2.X)
-    let fZ = Float(chunk1.Z - chunk2.Z)
-    return sqrt(fX * fX + fZ * fZ)
+func getGlobalPos(chunk: Int2, local: Int3) -> Int3 {
+    return Int3(x: chunk.x * CHUNK_SIDE + local.x,
+                y: local.y,
+                z: chunk.y * CHUNK_SIDE + local.z)
 }
