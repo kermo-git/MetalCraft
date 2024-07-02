@@ -23,7 +23,7 @@ struct FragmentIn {
 struct FragmentConstants {
     float3 cameraPos;
     float3 sunDirection;
-    float renderDistance;
+    float renderDistanceSquared;
     float4 fogColor;
     float4 sunColor;
 };
@@ -46,10 +46,10 @@ fragment float4 worldFragment(FragmentIn fIn [[ stage_in ]],
                               sampler sampler2D [[ sampler(0) ]],
                               texture2d_array<float> textures [[ texture(0) ]]) {
     
-    float distanceFromCamera = distance(fIn.worldPosition, constants.cameraPos);
-    float fullFogDistance = 0.95 * constants.renderDistance;
+    float distFromCameraSqr = distance_squared(fIn.worldPosition, constants.cameraPos);
+    float fullFogDistSqr = 0.9 * constants.renderDistanceSquared;
     
-    if (distanceFromCamera > fullFogDistance)
+    if (distFromCameraSqr > fullFogDistSqr)
         return constants.fogColor;
     
     float4 textureColor = textures.sample(sampler2D, fIn.textureCoords, fIn.textureID);
@@ -68,11 +68,11 @@ fragment float4 worldFragment(FragmentIn fIn [[ stage_in ]],
         color += 0.4 * constants.sunColor * specularIntensity;
     }
     
-    float fogStartDistance = 0.9 * constants.renderDistance;
-    if (distanceFromCamera < fogStartDistance) {
+    float fogStartDistSqr = 0.8 * constants.renderDistanceSquared;
+    if (distFromCameraSqr < fogStartDistSqr) {
         return color;
     }
     
-    float fogLevel = (distanceFromCamera - fogStartDistance) / (fullFogDistance - fogStartDistance);
+    float fogLevel = (distFromCameraSqr - fogStartDistSqr) / (fullFogDistSqr - fogStartDistSqr);
     return color + fogLevel * (constants.fogColor - color);
 }

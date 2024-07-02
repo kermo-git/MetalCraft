@@ -2,6 +2,11 @@ import simd
 import Metal
 
 class ExampleScene: GameScene {
+    var clearColor = MTLClearColor(red: 0, green: 0,
+                                   blue: 0, alpha: 0)
+    
+    private var renderPipeline: MTLRenderPipelineState
+    
     struct Vertex: Sizeable {
         let position: Float3
         let color: Float3
@@ -68,23 +73,34 @@ class ExampleScene: GameScene {
         
         descriptor.layouts[0].stride = Vertex.memorySize()
         
-        super.init(
-            renderPipeline: Engine.getRenderPipelineState(
-                vertexShaderName: "exampleVertex",
-                fragmentShaderName: "exampleFragment",
-                vertexDescriptor: descriptor
-            )!
-        )
+        renderPipeline = Engine.getRenderPipelineState(
+            vertexShaderName: "exampleVertex",
+            fragmentShaderName: "exampleFragment",
+            vertexDescriptor: descriptor
+        )!
+        setAspectRatio(1)
+    }
+    
+    var camera = Camera()
+    var projectionMatrix: Float4x4 = matrix_identity_float4x4
+    
+    func setAspectRatio(_ aspectRatio: Float) {
+        projectionMatrix = perspective(degreesFov: camera.degreesFov,
+                                       aspectRatio: aspectRatio,
+                                       near: 0.1,
+                                       far: 1000)
     }
     
     var time: Float = 0
-    override func updateScene(deltaTime: Float) async {
+    func update(deltaTime: Float) async {
         time = max(time + deltaTime, 2 * Float.pi)
         let modelMarix = translate(0, 0, -3) * rotateAroundY(time) * rotateAroundX(toRadians(30))
-        vertexConstants.projectionViewModelMatrix = projectionViewMatrix * modelMarix
+        let pvm = projectionMatrix * camera.viewMatrix * modelMarix
+        vertexConstants.projectionViewModelMatrix = pvm
     }
     
-    override func renderScene(_ encoder: MTLRenderCommandEncoder) async {
+    func render(_ encoder: MTLRenderCommandEncoder) async {
+        encoder.setRenderPipelineState(renderPipeline)
         encoder.setVertexBytes(&vertexConstants, length: VertexConstants.memorySize(), index: 1)
         encoder.setVertexBuffer(vertexBuffer, offset: 0, index: 0)
         encoder.drawIndexedPrimitives(type: .triangle,
