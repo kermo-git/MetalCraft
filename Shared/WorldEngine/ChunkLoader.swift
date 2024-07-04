@@ -1,13 +1,5 @@
 import simd
 
-let RENDER_DISTANCE_CHUNKS = 8
-let MEMORY_DISTANCE_CHUNKS = 64
-
-private let RENDER_DISTANCE_CHUNKS_SQUARED = RENDER_DISTANCE_CHUNKS * RENDER_DISTANCE_CHUNKS
-private let MEMORY_DISTANCE_CHUNKS_SQUARED = MEMORY_DISTANCE_CHUNKS * MEMORY_DISTANCE_CHUNKS
-
-private let localRenderCircle = generateCircle(radiusChunks: Int(RENDER_DISTANCE_CHUNKS))
-
 // https://docs.swift.org/swift-book/documentation/the-swift-programming-language/concurrency
 // https://swiftbysundell.com/articles/swift-actors/
 
@@ -15,14 +7,23 @@ actor ChunkLoader {
     var renderedChunks: [Int2 : RenderableChunk] = [:]
     
     private var memoryChunks: [Int2 : RenderableChunk] = [:]
-    private var generationQueue: [Int2] = localRenderCircle
+    private var renderCircle: [Int2]
+    private var generationQueue: [Int2]
     
-    private var blocks: [Block]
     private var generator: WorldGenerator
+    private var renderDistanceChunksSquared: Int
+    private var memoryDistanceChunksSquared: Int
     
-    init(blocks: [Block], generator: WorldGenerator) {
-        self.blocks = blocks
+    init(generator: WorldGenerator,
+         renderDistanceChunks: Int,
+         memoryDistanceChunks: Int) {
+        
+        renderCircle = getChunkPosCircle(radiusChunks: Int(renderDistanceChunks))
+        generationQueue = renderCircle
+        
         self.generator = generator
+        renderDistanceChunksSquared = renderDistanceChunks * renderDistanceChunks
+        memoryDistanceChunksSquared = memoryDistanceChunks * memoryDistanceChunks
     }
     
     private func distance_squared(_ chunk1: Int2, _ chunk2: Int2) -> Int {
@@ -36,17 +37,17 @@ actor ChunkLoader {
             for (pos, chunk) in memoryChunks {
                 let d_sqr = distance_squared(pos, cameraPos)
                 
-                if (d_sqr > MEMORY_DISTANCE_CHUNKS_SQUARED) {
+                if (d_sqr > memoryDistanceChunksSquared) {
                     memoryChunks.removeValue(forKey: pos)
                     renderedChunks.removeValue(forKey: pos)
-                } else if (d_sqr > RENDER_DISTANCE_CHUNKS_SQUARED) {
+                } else if (d_sqr > renderDistanceChunksSquared) {
                     renderedChunks.removeValue(forKey: pos)
                 } else {
                     renderedChunks[pos] = chunk
                 }
             }
             
-            let globalRenderCircle = localRenderCircle.map {
+            let globalRenderCircle = renderCircle.map {
                 Int2(x: cameraPos.x + $0.x,
                      y: cameraPos.y + $0.y)
             }
@@ -60,7 +61,7 @@ actor ChunkLoader {
             let pos = generationQueue.remove(at: 0)
             let d_sqr = distance_squared(pos, cameraPos)
             
-            if (d_sqr <= RENDER_DISTANCE_CHUNKS_SQUARED) {
+            if (d_sqr <= renderDistanceChunksSquared) {
                 addChunk(pos: pos)
             }
         }
@@ -68,7 +69,7 @@ actor ChunkLoader {
     
     private func addChunk(pos: Int2) {
         Task {
-            let newChunk = generator.generate(pos)
+            let newChunk = generator.generateChunk(pos)
             
             async let topFaces = getBlockFaces(chunk: newChunk)
             async let northFaces = getNorthFaces(pos, newChunk)
@@ -80,7 +81,8 @@ actor ChunkLoader {
             for sideFaces in await [topFaces, northFaces, southFaces, westFaces, eastFaces] {
                 faces.append(sideFaces)
             }
-            let newLoadedChunk = RenderableChunk(blocks: blocks, data: newChunk, faces: faces)
+            let newLoadedChunk = RenderableChunk(blocks: generator.blocks, chunkPos: pos,
+                                                 data: newChunk, faces: faces)
             memoryChunks[pos] = newLoadedChunk
             renderedChunks[pos] = newLoadedChunk
         }
@@ -93,7 +95,7 @@ actor ChunkLoader {
                 southChunk: await southChunk.data,
                 northChunk: newChunk
             )
-            await southChunk.addFaces(blocks: blocks,
+            await southChunk.addFaces(blocks: generator.blocks,
                                       newFaces: southChunkFaces)
             return newChunkFaces
         }
@@ -107,7 +109,7 @@ actor ChunkLoader {
                 southChunk: newChunk,
                 northChunk: await northChunk.data
             )
-            await northChunk.addFaces(blocks: blocks,
+            await northChunk.addFaces(blocks: generator.blocks,
                                       newFaces: northChunkFaces)
             return newChunkFaces
         }
@@ -121,7 +123,7 @@ actor ChunkLoader {
                 eastChunk: newChunk,
                 westChunk: await westChunk.data
             )
-            await westChunk.addFaces(blocks: blocks,
+            await westChunk.addFaces(blocks: generator.blocks,
                                      newFaces: westChunkFaces)
             return newChunkFaces
         }
@@ -135,7 +137,7 @@ actor ChunkLoader {
                 eastChunk: await eastChunk.data,
                 westChunk: newChunk
             )
-            await eastChunk.addFaces(blocks: blocks,
+            await eastChunk.addFaces(blocks: generator.blocks,
                                      newFaces: eastChunkFaces)
             return newChunkFaces
         }
@@ -144,7 +146,7 @@ actor ChunkLoader {
 }
 
 
-private func generateCircle(radiusChunks: Int) -> [Int2] {
+private func getChunkPosCircle(radiusChunks: Int) -> [Int2] {
     var result: [Int2] = []
     
     for X in -radiusChunks...radiusChunks {

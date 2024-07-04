@@ -1,12 +1,13 @@
 import simd
 import Metal
 
-class WorldScene: GameScene {
-    @Published var cameraBlockPos = Int3(0, 0, 0)
-    private var cameraChunkPos = Int2(0, 0)
-    var camera: FlyingCamera
+class WorldScene: MetalScene {
+    var clearColor: MTLClearColor
     
-    var clearColor = MTLClearColor(red: 0, green: 0, blue: 0, alpha: 0)
+    let input = Input()
+    var camera: FlyingCamera
+    @Published var cameraBlockPos: Int3
+    private var cameraChunkPos: Int2
 
     private var renderPipeline = Engine.getRenderPipelineState(
         vertexShaderName: "worldVertex",
@@ -15,42 +16,42 @@ class WorldScene: GameScene {
     )!
     private var vertexConstants = VertexConstants()
     private var fragmentConstants: FragmentConstants
-    
-    private let blocks: [Block]
     private let textures: MTLTexture
     
     private let loader: ChunkLoader
     
-    let input = Input()
-    
     init(generator: WorldGenerator,
          cameraPos: Float3) {
+        
         let sunColor = Float4(x: 1, y: 1, z: 1, w: 1)
         let skyColor = Float4(x: 0.93, y: 1, z: 0.64, w: 1)
-        let renderDistanceBlocks = Float(RENDER_DISTANCE_CHUNKS * CHUNK_SIDE)
-        
-        fragmentConstants = FragmentConstants(
-            cameraPos: cameraPos,
-            sunDirection: normalize(Float3(0.8, 0.9, 1.3)),
-            renderDistanceSquared: pow(renderDistanceBlocks, 2),
-            fogColor: skyColor,
-            sunColor: sunColor
-        )
-        
-        let (blocks, textures) = compileBlockCollection(generator.blocks)
-        self.blocks = blocks
-        self.textures = textures
-        
-        loader = ChunkLoader(blocks: blocks, generator: generator)
+        clearColor = MTLClearColor(red: Double(skyColor.x),
+                                   green: Double(skyColor.y),
+                                   blue: Double(skyColor.z),
+                                   alpha: Double(skyColor.w))
         
         camera = FlyingCamera(input: input, startPos: cameraPos)
         cameraBlockPos = getBlockPos(cameraPos)
         cameraChunkPos = getChunkPos(cameraPos)
         
-        clearColor = MTLClearColor(red: Double(skyColor.x),
-                                   green: Double(skyColor.y),
-                                   blue: Double(skyColor.z),
-                                   alpha: Double(skyColor.w))
+        let renderDistanceChunks = 8
+        let renderDistanceBlocks = Float(renderDistanceChunks * CHUNK_SIDE)
+        
+        fragmentConstants = FragmentConstants(
+            cameraPos: cameraPos,
+            sunDirection: normalize(Float3(0.8, 0.9, 1.3)),
+            fogDistanceSquared: pow(renderDistanceBlocks, 2),
+            fogColor: skyColor,
+            sunColor: sunColor
+        )
+        textures = Engine.loadTextureArray(fileNames: generator.textureNames,
+                                           imageWidth: 16,
+                                           imageHeight: 16)
+        loader = ChunkLoader(
+            generator: generator,
+            renderDistanceChunks: renderDistanceChunks,
+            memoryDistanceChunks: 64
+        )
         setAspectRatio(1)
     }
     

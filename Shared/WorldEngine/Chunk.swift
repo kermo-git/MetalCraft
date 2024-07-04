@@ -2,37 +2,70 @@ let CHUNK_SIDE = 16
 let CHUNK_HEIGHT = 256
 let AIR_ID = -1
 
-struct OrientedBlock {
-    let blockID: Int
-    let orientation: BlockOrientation
-}
-
 struct Chunk {
-    let pos: Int2
+    let lengthX: Int
+    let lengthY: Int
+    let lengthZ: Int
     
-    init(pos: Int2) {
-        self.pos = pos
+    private var blockID: [Int]
+    private var orientation: [BlockOrientation]
+    
+    private(set) var minY: Int
+    private(set) var maxY: Int
+    
+    init(lengthX: Int = CHUNK_SIDE,
+         lengthY: Int = CHUNK_HEIGHT,
+         lengthZ: Int = CHUNK_SIDE) {
+        
+        self.lengthX = lengthX
+        self.lengthY = lengthY
+        self.lengthZ = lengthZ
+        let numBlocks = lengthX * lengthZ * lengthY
+        
+        blockID = Array(repeating: AIR_ID, count: numBlocks)
+        orientation = Array(repeating: .NONE, count: numBlocks)
+        
+        self.minY = lengthY - 1
+        self.maxY = 0
     }
     
-    private var data: [OrientedBlock] = Array(
-        repeating: OrientedBlock(blockID: AIR_ID, 
-                                 orientation: .NONE),
-        count: CHUNK_SIDE * CHUNK_SIDE * CHUNK_HEIGHT
-    )
     private func getIndex(_ pos: Int3) -> Int {
-        return CHUNK_SIDE * (pos.x * CHUNK_HEIGHT + pos.y) + pos.z
+        return lengthX * (pos.x * lengthY + pos.y) + pos.z
     }
-    private(set) var minY = CHUNK_HEIGHT - 1
-    private(set) var maxY = 0
     
-    subscript(_ pos: Int3) -> OrientedBlock {
-        get {
-            return data[getIndex(pos)]
-        }
-        set(block) {
-            minY = min(minY, pos.y)
-            maxY = max(maxY, pos.y)
-            data[getIndex(pos)] = block
-        }
+    func get(_ pos: Int3) -> (Int, BlockOrientation) {
+        let index = getIndex(pos)
+        return (blockID[index], orientation[index])
+    }
+    
+    mutating func set(_ pos: Int3, _ blockID: Int, 
+                      _ orientation: BlockOrientation = .NONE) {
+        let index = getIndex(pos)
+        self.blockID[index] = blockID
+        self.orientation[index] = orientation
+        minY = min(minY, pos.y)
+        maxY = max(maxY, pos.y)
+    }
+    
+    func isEmpty(_ pos: Int3) -> Bool {
+        blockID[getIndex(pos)] == AIR_ID
+    }
+    
+    func getBlockID(_ pos: Int3) -> Int {
+        blockID[getIndex(pos)]
+    }
+    
+    mutating func setBlockID(_ pos: Int3, _ blockID: Int) {
+        self.blockID[getIndex(pos)] = blockID
+        minY = min(minY, pos.y)
+        maxY = max(maxY, pos.y)
+    }
+    
+    func getOrientation(_ pos: Int3) -> BlockOrientation {
+        orientation[getIndex(pos)]
+    }
+    
+    mutating func setOrientation(_ pos: Int3, _ orientation: BlockOrientation) {
+        self.orientation[getIndex(pos)] = orientation
     }
 }

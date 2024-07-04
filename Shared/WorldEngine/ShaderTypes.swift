@@ -38,7 +38,7 @@ struct VertexConstants: Sizeable {
 struct FragmentConstants: Sizeable {
     var cameraPos: Float3
     var sunDirection: Float3
-    var renderDistanceSquared: Float
+    var fogDistanceSquared: Float
     var fogColor: Float4
     var sunColor: Float4
 }

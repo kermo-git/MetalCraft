@@ -1,43 +1,58 @@
 class ExampleWorld: WorldGenerator {
-    let blocks = [
-        Block(topTexture: "dirt",
-              sideTexture: "dirt",
-              bottomTexture: "dirt",
-              topTexRotation: .FULL,
-              sideTexRotation: .FULL),
+    let textureNames: [String]
+    let blocks: [Block]
+    
+    init() {
+        let textureNames = [
+            "dirt",
+            "dirt_grass",
+            "grass",
+            "stone"
+        ]
+        self.textureNames = textureNames
         
-        Block(topTexture: "grass",
-              sideTexture: "dirt_grass",
-              bottomTexture: "dirt",
-              topTexRotation: .FULL,
-              sideTexRotation: .HORIZONTAL),
+        func texID(_ textureName: String) -> Int {
+            return textureNames.firstIndex(of: textureName) ?? 0
+        }
         
-        Block(topTexture: "stone",
-              sideTexture: "stone",
-              bottomTexture: "stone",
-              topTexRotation: .FULL,
-              sideTexRotation: .FULL)
-    ]
+        blocks = [
+            Block(topTextureID: texID("dirt"),
+                  sideTextureID: texID("dirt"),
+                  bottomTextureID: texID("dirt"),
+                  topTexRotation: .FULL,
+                  sideTexRotation: .FULL),
+            
+            Block(topTextureID: texID("grass"),
+                  sideTextureID: texID("dirt_grass"),
+                  bottomTextureID: texID("dirt"),
+                  topTexRotation: .FULL,
+                  sideTexRotation: .HORIZONTAL),
+            
+            Block(topTextureID: texID("stone"),
+                  sideTextureID: texID("stone"),
+                  bottomTextureID: texID("stone"),
+                  topTexRotation: .FULL,
+                  sideTexRotation: .FULL)
+        ]
+    }
     
     let SAND = 0
     let GRASS = 1
     let STONE = 2
 
-    func generate(_ pos: Int2) -> Chunk {
-        var chunk = Chunk(pos: pos)
+    func generateChunk(_ pos: Int2) -> Chunk {
+        var chunk = Chunk()
         
         for i in 0..<CHUNK_SIDE {
             for j in 0..<CHUNK_SIDE {
                 let localPos = Int3(i, 0, j)
-                let globalPos = getGlobalPos(chunk: pos, local: localPos)
+                let globalPos = getGlobalBlockPos(chunkPos: pos, localBlockPos: localPos)
                 
                 let probability = terrainType.noise(globalPos)
                 var terrainHeight = 0
                 
-                var block = OrientedBlock(blockID: SAND,
-                                          orientation: .NONE)
-                var topBlock = OrientedBlock(blockID: GRASS,
-                                             orientation: .NONE)
+                var block = SAND
+                var topBlock = GRASS
             
                 if (probability < transitionStart) {
                     terrainHeight = mountains.terrainHeight(globalPos)
@@ -52,19 +67,16 @@ class ExampleWorld: WorldGenerator {
                     terrainHeight = Int(
                         (1 - blendFactor) * mountainsHeight + blendFactor * plainsHeight
                     )
-                    block = OrientedBlock(blockID: STONE,
-                                          orientation: .NONE)
-                    topBlock = OrientedBlock(blockID: STONE,
-                                             orientation: .NONE)
+                    block = STONE
+                    topBlock = STONE
                 } else {
                     terrainHeight = plains.terrainHeight(globalPos)
                 }
                 
                 for k in 0..<(terrainHeight - 1) {
-                    chunk[Int3(i, k, j)] = block
+                    chunk.set(Int3(i, k, j), block)
                 }
-                
-                chunk[Int3(i, terrainHeight - 1, j)] = topBlock
+                chunk.set(Int3(i, terrainHeight - 1, j), topBlock)
             }
         }
         

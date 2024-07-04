@@ -1,43 +1,48 @@
 import Metal
 
 actor RenderableChunk {
+    var chunkPos: Int2
     var data: Chunk
     var faces: Faces
     
     var vertexBuffer: MTLBuffer
     var vertexCount: Int
     
-    init(blocks: [Block], data: Chunk, faces: Faces) {
+    init(blocks: [Block], chunkPos: Int2,
+         data: Chunk, faces: Faces) {
+        self.chunkPos = chunkPos
         self.data = data
         self.faces = faces
         
-        let (vertexBuffer, vertexCount) = compileChunk(blocks: blocks, chunk: data, faces: faces)
+        let (vertexBuffer, vertexCount) = compileChunk(blocks: blocks, chunkPos: chunkPos,
+                                                       chunk: data, faces: faces)
         self.vertexBuffer = vertexBuffer
         self.vertexCount = vertexCount
     }
     
     func addFaces(blocks: [Block], newFaces: Faces) {
         faces.append(newFaces)
-        let (vertexBuffer, vertexCount) = compileChunk(blocks: blocks, chunk: data, faces: faces)
+        let (vertexBuffer, vertexCount) = compileChunk(blocks: blocks, chunkPos: chunkPos,
+                                                       chunk: data, faces: faces)
         self.vertexBuffer = vertexBuffer
         self.vertexCount = vertexCount
     }
 }
 
-private func compileChunk(blocks: [Block],
+private func compileChunk(blocks: [Block], chunkPos: Int2,
                           chunk: Chunk, faces: Faces) -> (MTLBuffer, Int) {
     var vertices: [Vertex] = []
     
-    for (localPos, directions) in faces {
-        let orientedBlock = chunk[localPos]
-        let block = blocks[orientedBlock.blockID]
-        let globalPos = getGlobalPos(chunk: chunk.pos, local: localPos)
-        
+    for (localBlockPos, directions) in faces {
+        let (blockID, orientation) = chunk.get(localBlockPos)
+        let block = blocks[blockID]
+        let globalBlockPos = getGlobalBlockPos(chunkPos: chunkPos, 
+                                               localBlockPos: localBlockPos)
         vertices.append(
             contentsOf:
                 block.getVertices(
-                    pos: globalPos,
-                    orientation: orientedBlock.orientation,
+                    pos: globalBlockPos,
+                    orientation: orientation,
                     directions: directions
                 )
         )

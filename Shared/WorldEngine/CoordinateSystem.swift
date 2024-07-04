@@ -143,22 +143,22 @@ func getBlockPos(_ pointPos: Float3) -> Int3 {
                 z: Int(floor(pointPos.z)))
 }
 
-func getChunkPos(_ pos: Int3) -> Int2 {
+func getChunkPos(_ blockPos: Int3) -> Int2 {
     func toChunkCoordinate(_ blockCoordinate: Int) -> Int {
         return (blockCoordinate >= 0) ?
             blockCoordinate / CHUNK_SIDE :
             ((blockCoordinate + 1) / CHUNK_SIDE) - 1
     }
-    return Int2(x: toChunkCoordinate(pos.x),
-                y: toChunkCoordinate(pos.z))
+    return Int2(x: toChunkCoordinate(blockPos.x),
+                y: toChunkCoordinate(blockPos.z))
 }
 
 func getChunkPos(_ pointPos: Float3) -> Int2 {
     return getChunkPos(getBlockPos(pointPos))
 }
 
-func getGlobalPos(chunk: Int2, local: Int3) -> Int3 {
-    return Int3(x: chunk.x * CHUNK_SIDE + local.x,
-                y: local.y,
-                z: chunk.y * CHUNK_SIDE + local.z)
+func getGlobalBlockPos(chunkPos: Int2, localBlockPos: Int3) -> Int3 {
+    return Int3(x: chunkPos.x * CHUNK_SIDE + localBlockPos.x,
+                y: localBlockPos.y,
+                z: chunkPos.y * CHUNK_SIDE + localBlockPos.z)
 }

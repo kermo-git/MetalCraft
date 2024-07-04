@@ -15,8 +15,8 @@
 		4F1288992B703B5C003860E8 /* WorldGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F1288982B703B5C003860E8 /* WorldGenerator.swift */; };
 		4F12889A2B703B5C003860E8 /* WorldGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F1288982B703B5C003860E8 /* WorldGenerator.swift */; };
 		4F2FD3732A78655B00AB43D0 /* App.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F2FD3722A78655B00AB43D0 /* App.swift */; };
-		4F3B74C72A408656008A508A /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F3B74C62A408656008A508A /* GameScene.swift */; };
-		4F3B74C82A408656008A508A /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F3B74C62A408656008A508A /* GameScene.swift */; };
+		4F3B74C72A408656008A508A /* MetalScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F3B74C62A408656008A508A /* MetalScene.swift */; };
+		4F3B74C82A408656008A508A /* MetalScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F3B74C62A408656008A508A /* MetalScene.swift */; };
 		4F3B74CC2A40B76B008A508A /* App.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F3B74CA2A40B76B008A508A /* App.swift */; };
 		4F56A11B2C313B04000C7465 /* white_flowers.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F56A1192C313B04000C7465 /* white_flowers.png */; };
 		4F56A11C2C313B04000C7465 /* white_flowers.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F56A1192C313B04000C7465 /* white_flowers.png */; };
@@ -111,7 +111,7 @@
 		4F050C2C2B683409007269BB /* GameButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameButton.swift; sourceTree = "<group>"; };
 		4F1288982B703B5C003860E8 /* WorldGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldGenerator.swift; sourceTree = "<group>"; };
 		4F2FD3722A78655B00AB43D0 /* App.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = App.swift; sourceTree = "<group>"; };
-		4F3B74C62A408656008A508A /* GameScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameScene.swift; sourceTree = "<group>"; };
+		4F3B74C62A408656008A508A /* MetalScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetalScene.swift; sourceTree = "<group>"; };
 		4F3B74CA2A40B76B008A508A /* App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = App.swift; sourceTree = "<group>"; };
 		4F56A1192C313B04000C7465 /* white_flowers.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = white_flowers.png; sourceTree = "<group>"; };
 		4F56A11A2C313B04000C7465 /* yellow_flowers.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = yellow_flowers.png; sourceTree = "<group>"; };
@@ -269,7 +269,7 @@
 				4FD3113D286A3F1400BB55ED /* Math.swift */,
 				4FD3112E286A3F0C00BB55ED /* Camera.swift */,
 				4FD310EC286A3F0100BB55ED /* Engine.swift */,
-				4F3B74C62A408656008A508A /* GameScene.swift */,
+				4F3B74C62A408656008A508A /* MetalScene.swift */,
 				4FD3115A286A3F6C00BB55ED /* MetalView.swift */,
 				4F9E1AD52A7916560055A782 /* Example */,
 			);
@@ -480,7 +480,7 @@
 				4FD31116286A3F0100BB55ED /* Engine.swift in Sources */,
 				4FA26CE92C27576700AABCD6 /* BlockOrientation.swift in Sources */,
 				4FD31124286A3F0100BB55ED /* WorldScene.swift in Sources */,
-				4F3B74C72A408656008A508A /* GameScene.swift in Sources */,
+				4F3B74C72A408656008A508A /* MetalScene.swift in Sources */,
 				4F9E1AE32A7923BB0055A782 /* ShaderTypes.swift in Sources */,
 				4FD31140286A3F1400BB55ED /* Math.swift in Sources */,
 				4FD31122286A3F0100BB55ED /* WorldShader.metal in Sources */,
@@ -517,7 +517,7 @@
 				4FD31117286A3F0100BB55ED /* Engine.swift in Sources */,
 				4FD31123286A3F0100BB55ED /* WorldShader.metal in Sources */,
 				4F3B74CC2A40B76B008A508A /* App.swift in Sources */,
-				4F3B74C82A408656008A508A /* GameScene.swift in Sources */,
+				4F3B74C82A408656008A508A /* MetalScene.swift in Sources */,
 				4FD31151286A3F1F00BB55ED /* ExampleWorld.swift in Sources */,
 				4FD31125286A3F0100BB55ED /* WorldScene.swift in Sources */,
 				4F0220622A402E1A000ACC7E /* Block.swift in Sources */,

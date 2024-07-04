@@ -23,7 +23,7 @@ struct FragmentIn {
 struct FragmentConstants {
     float3 cameraPos;
     float3 sunDirection;
-    float renderDistanceSquared;
+    float fogDistanceSquared;
     float4 fogColor;
     float4 sunColor;
 };
@@ -47,7 +47,7 @@ fragment float4 worldFragment(FragmentIn fIn [[ stage_in ]],
                               texture2d_array<float> textures [[ texture(0) ]]) {
     
     float distFromCameraSqr = distance_squared(fIn.worldPosition, constants.cameraPos);
-    float fullFogDistSqr = 0.9 * constants.renderDistanceSquared;
+    float fullFogDistSqr = 0.9 * constants.fogDistanceSquared;
     
     if (distFromCameraSqr > fullFogDistSqr)
         return constants.fogColor;
@@ -68,7 +68,7 @@ fragment float4 worldFragment(FragmentIn fIn [[ stage_in ]],
         color += 0.4 * constants.sunColor * specularIntensity;
     }
     
-    float fogStartDistSqr = 0.8 * constants.renderDistanceSquared;
+    float fogStartDistSqr = 0.8 * constants.fogDistanceSquared;
     if (distFromCameraSqr < fogStartDistSqr) {
         return color;
     }

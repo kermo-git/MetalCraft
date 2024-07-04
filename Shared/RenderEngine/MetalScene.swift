@@ -1,8 +1,6 @@
-import simd
 import Metal
-import SwiftUI
 
-protocol GameScene: ObservableObject {
+protocol MetalScene: ObservableObject {
     var clearColor: MTLClearColor { get }
     
     func setAspectRatio(_ aspectRatio: Float)

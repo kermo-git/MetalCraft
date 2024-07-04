@@ -1,30 +1,12 @@
 import Metal
 
 struct Block {
-    let topTexture: String
-    let sideTexture: String
-    let bottomTexture: String
+    let topTextureID: Int
+    let sideTextureID: Int
+    let bottomTextureID: Int
     
     let topTexRotation: RandomTextureRotation
     let sideTexRotation: RandomTextureRotation
-    
-    var topTextureID: Int = 0
-    var sideTextureID: Int = 0
-    var bottomTextureID: Int = 0
-    
-    func copyWithTextureIDs(textures: [String]) -> Block {
-        var result = Block(topTexture: topTexture,
-                           sideTexture: sideTexture,
-                           bottomTexture: bottomTexture,
-                           topTexRotation: topTexRotation,
-                           sideTexRotation: sideTexRotation)
-        
-        result.topTextureID = textures.firstIndex(of: topTexture) ?? 0
-        result.sideTextureID = textures.firstIndex(of: sideTexture) ?? 0
-        result.bottomTextureID = textures.firstIndex(of: bottomTexture) ?? 0
-        
-        return result
-    }
 
     func getVertices(pos: Int3, orientation: BlockOrientation, directions: Set<Direction>) -> [Vertex] {
         let offset = Float3(
@@ -191,24 +173,4 @@ struct Block {
         
         return result
     }
-}
-
-func compileBlockCollection(_ blocks: [Block]) -> ([Block], MTLTexture) {
-    var textureNameSet: Set<String> = []
-    
-    for block in blocks {
-        textureNameSet.insert(block.topTexture)
-        textureNameSet.insert(block.sideTexture)
-        textureNameSet.insert(block.bottomTexture)
-    }
-    let textureNameList = Array(textureNameSet)
-    
-    let textureBuffer = Engine.loadTextureArray(fileNames: textureNameList,
-                                                imageWidth: 16,
-                                                imageHeight: 16)
-    
-    let compiledBlocks = blocks.map({
-        block in block.copyWithTextureIDs(textures: textureNameList)
-    })
-    return (compiledBlocks, textureBuffer)
 }

@@ -9,32 +9,31 @@ extension Faces {
 func getBlockFaces(chunk: Chunk) -> Faces {
     var result: Faces = [:]
     
-    for localX in 0..<CHUNK_SIDE {
+    for localX in 0..<chunk.lengthX {
         for globalY in chunk.minY...chunk.maxY {
-            for localZ in 0..<CHUNK_SIDE {
+            for localZ in 0..<chunk.lengthZ {
                 
                 let localPos = Int3(localX, globalY, localZ)
-                let blockID = chunk[localPos].blockID
                 
-                if blockID != AIR_ID {
+                if !chunk.isEmpty(localPos) {
                     var directions = Set<Direction>()
                     
-                    if (globalY > 0 && chunk[localPos.move(.DOWN)].blockID == AIR_ID) {
+                    if (globalY > 0 && chunk.isEmpty(localPos.move(.DOWN))) {
                         directions.insert(.DOWN)
                     }
-                    if (globalY >= CHUNK_HEIGHT - 1 || chunk[localPos.move(.UP)].blockID == AIR_ID) {
+                    if (globalY >= chunk.lengthY - 1 || chunk.isEmpty(localPos.move(.UP))) {
                         directions.insert(.UP)
                     }
-                    if (localX > 0 && chunk[localPos.move(.WEST)].blockID == AIR_ID) {
+                    if (localX > 0 && chunk.isEmpty(localPos.move(.WEST))) {
                         directions.insert(.WEST)
                     }
-                    if (localX < CHUNK_SIDE - 1 && chunk[localPos.move(.EAST)].blockID == AIR_ID) {
+                    if (localX < chunk.lengthX - 1 && chunk.isEmpty(localPos.move(.EAST))) {
                         directions.insert(.EAST)
                     }
-                    if (localZ > 0 && chunk[localPos.move(.NORTH)].blockID == AIR_ID) {
+                    if (localZ > 0 && chunk.isEmpty(localPos.move(.NORTH))) {
                         directions.insert(.NORTH)
                     }
-                    if (localZ < CHUNK_SIDE - 1 && chunk[localPos.move(.SOUTH)].blockID == AIR_ID) {
+                    if (localZ < chunk.lengthZ - 1 && chunk.isEmpty(localPos.move(.SOUTH))) {
                         directions.insert(.SOUTH)
                     }
                     if !directions.isEmpty {
@@ -53,19 +52,20 @@ func getNorthBorderBlockFaces(southChunk: Chunk, northChunk: Chunk) -> (Faces, F
     
     let minY = min(southChunk.minY, northChunk.minY)
     let maxY = max(southChunk.maxY, northChunk.maxY)
+    let southWallZ = northChunk.lengthZ - 1
     
-    for localX in 0..<CHUNK_SIDE {
+    for localX in 0..<southChunk.lengthX {
         for globalY in minY...maxY {
             let southChunkBlockPos = Int3(localX, globalY, 0)
-            let northChunkBlockPos = Int3(localX, globalY, CHUNK_SIDE - 1)
+            let northChunkBlockPos = Int3(localX, globalY, southWallZ)
             
-            let southChunkBlockID = southChunk[southChunkBlockPos].blockID
-            let northChunkBlockID = northChunk[northChunkBlockPos].blockID
+            let southEmpty = southChunk.isEmpty(southChunkBlockPos)
+            let northEmpty = northChunk.isEmpty(northChunkBlockPos)
             
-            if southChunkBlockID == AIR_ID && northChunkBlockID != AIR_ID {
+            if southEmpty && !northEmpty {
                 northChunkFaces[northChunkBlockPos] = [.SOUTH]
             } 
-            else if southChunkBlockID != AIR_ID && northChunkBlockID == AIR_ID {
+            else if !southEmpty && northEmpty {
                 southChunkFaces[southChunkBlockPos] = [.NORTH]
             }
         }
@@ -80,19 +80,20 @@ func getWestBorderBlockFaces(eastChunk: Chunk, westChunk: Chunk) -> (Faces, Face
     
     let minY = min(eastChunk.minY, westChunk.minY)
     let maxY = max(eastChunk.maxY, westChunk.maxY)
+    let eastWallX = westChunk.lengthX - 1
     
     for localZ in 0..<CHUNK_SIDE {
         for globalY in minY...maxY {
             let eastChunkBlockPos = Int3(0, globalY, localZ)
-            let westChunkBlockPos = Int3(CHUNK_SIDE - 1, globalY, localZ)
+            let westChunkBlockPos = Int3(eastWallX, globalY, localZ)
             
-            let eastChunkBlockID = eastChunk[eastChunkBlockPos].blockID
-            let westChunkBlockID = westChunk[westChunkBlockPos].blockID
+            let eastEmpty = eastChunk.isEmpty(eastChunkBlockPos)
+            let westEmpty = westChunk.isEmpty(westChunkBlockPos)
             
-            if eastChunkBlockID == AIR_ID && westChunkBlockID != AIR_ID{
+            if eastEmpty && !westEmpty {
                 westChunkFaces[westChunkBlockPos] = [.EAST]
             }
-            else if eastChunkBlockID != AIR_ID && westChunkBlockID == AIR_ID {
+            else if !eastEmpty && westEmpty {
                 eastChunkFaces[eastChunkBlockPos] = [.WEST]
             }
         }
