@@ -18,21 +18,15 @@ class ExampleWorld: WorldGenerator {
         blocks = [
             Block(topTextureID: texID("dirt"),
                   sideTextureID: texID("dirt"),
-                  bottomTextureID: texID("dirt"),
-                  topTexRotation: .FULL,
-                  sideTexRotation: .FULL),
+                  bottomTextureID: texID("dirt")),
             
             Block(topTextureID: texID("grass"),
                   sideTextureID: texID("dirt_grass"),
-                  bottomTextureID: texID("dirt"),
-                  topTexRotation: .FULL,
-                  sideTexRotation: .HORIZONTAL),
+                  bottomTextureID: texID("dirt")),
             
             Block(topTextureID: texID("stone"),
                   sideTextureID: texID("stone"),
-                  bottomTextureID: texID("stone"),
-                  topTexRotation: .FULL,
-                  sideTexRotation: .FULL)
+                  bottomTextureID: texID("stone"))
         ]
     }
     
