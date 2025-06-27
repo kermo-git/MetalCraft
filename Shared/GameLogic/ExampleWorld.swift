@@ -1,4 +1,11 @@
 class ExampleWorld: WorldGenerator {
+    let plains = TerrainNoise(
+        generator: SimplexNoise(),
+        unitSquareBlocks: 50,
+        minTerrainHeight: 60,
+        heightRange: 10
+    )
+    let dirtLayerHeight = 5
     let textureNames: [String]
     let blocks: [Block]
     
@@ -30,7 +37,7 @@ class ExampleWorld: WorldGenerator {
         ]
     }
     
-    let SAND = 0
+    let DIRT = 0
     let GRASS = 1
     let STONE = 2
 
@@ -42,67 +49,19 @@ class ExampleWorld: WorldGenerator {
                 let localPos = Int3(i, 0, j)
                 let globalPos = getGlobalBlockPos(chunkPos: pos, localBlockPos: localPos)
                 
-                let probability = terrainType.noise(globalPos)
-                var terrainHeight = 0
+                let terrainHeight = plains.terrainHeight(globalPos)
                 
-                var block = SAND
-                var topBlock = GRASS
-            
-                if (probability < transitionStart) {
-                    terrainHeight = mountains.terrainHeight(globalPos)
-                } else if (probability < transitionEnd) {
-                    let mountainsHeight = Float(mountains.terrainHeight(globalPos))
-                    let plainsHeight = Float(plains.terrainHeight(globalPos))
-                    
-                    let blendFactor = fade(
-                        (probability - transitionStart) / transitionWidth
-                    )
-                    
-                    terrainHeight = Int(
-                        (1 - blendFactor) * mountainsHeight + blendFactor * plainsHeight
-                    )
-                    block = STONE
-                    topBlock = STONE
-                } else {
-                    terrainHeight = plains.terrainHeight(globalPos)
+                for k in 0..<(terrainHeight - dirtLayerHeight) {
+                    chunk.set(Int3(i, k, j), STONE)
                 }
-                
-                for k in 0..<(terrainHeight - 1) {
-                    chunk.set(Int3(i, k, j), block)
+                for k in (terrainHeight - dirtLayerHeight)...(terrainHeight - 2) {
+                    chunk.set(Int3(i, k, j), DIRT)
                 }
-                chunk.set(Int3(i, terrainHeight - 1, j), topBlock)
+                chunk.set(Int3(i, terrainHeight - 1, j), GRASS)
             }
         }
+        chunk.determineYBoundaries()
         
         return chunk
     }
-}
-
-let plains = TerrainNoise(
-    generator: SimplexNoise(),
-    unitSquareBlocks: 50,
-    minTerrainHeight: 10,
-    heightRange: 10
-)
-let mountains = TerrainNoise(
-    generator: FractalNoise(
-        octaves: 4, persistence: 0.4
-    ),
-    unitSquareBlocks: 100,
-    minTerrainHeight: 30,
-    heightRange: 40
-)
-let terrainType = TerrainNoise(
-    generator: SimplexNoise(),
-    unitSquareBlocks: 200,
-    minTerrainHeight: 10,
-    heightRange: 10
-)
-let mountainsProbability: Float = 0.7
-let transitionWidth: Float = 0.1
-let transitionStart = mountainsProbability - transitionWidth / 2
-let transitionEnd = mountainsProbability + transitionWidth / 2
-
-func fade(_ t: Float) -> Float {
-    t * t * t * (t * (t * 6 - 15) + 10)
 }
