@@ -90,12 +90,21 @@ class WorldScene: MetalScene {
 
         encoder.setVertexBytes(&vertexConstants, length: VertexConstants.memorySize(), index: 1)
         
+        let cameraViewX = -sin(camera.rotationY)
+        let cameraViewZ = -cos(camera.rotationY)
+        
         for (_, chunk) in await loader.renderedChunks {
+            let chunkPos = await chunk.chunkPos
             let buffer = await chunk.vertexBuffer
             let vertexCount = await chunk.vertexCount
             
-            encoder.setVertexBuffer(buffer, offset: 0, index: 0)
-            encoder.drawPrimitives(type: .triangle, vertexStart: 0, vertexCount: vertexCount)
+            let cameraToChunkX = Float(chunkPos.x - cameraChunkPos.x)
+            let cameraToChunkZ = Float(chunkPos.y - cameraChunkPos.y)
+            
+            if (cameraToChunkX * cameraViewX + cameraToChunkZ * cameraViewZ >= 0) {
+                encoder.setVertexBuffer(buffer, offset: 0, index: 0)
+                encoder.drawPrimitives(type: .triangle, vertexStart: 0, vertexCount: vertexCount)
+            }
         }
     }
 }
