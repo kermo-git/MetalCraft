@@ -1,4 +1,5 @@
 import simd
+import Dispatch
 
 // https://docs.swift.org/swift-book/documentation/the-swift-programming-language/concurrency
 // https://swiftbysundell.com/articles/swift-actors/
@@ -66,9 +67,19 @@ actor ChunkLoader {
             }
         }
     }
+    // https://medium.com/@jaredcassoutt/how-to-define-your-own-if-flags-in-swift-and-why-you-should-797508c243a2
+    // Build Settings -> Swift Compiler — Custom Flags
+    // -> Other Swift Flags -> add or remove -DMEASURE_TIME
+    #if MEASURE_TIME
+    var n_chunks_generated = 0
+    var total_chunk_generation_ms: Float = 0
+    #endif
     
     private func addChunk(pos: Int2) {
         Task {
+            #if MEASURE_TIME
+            let start = DispatchTime.now()
+            #endif
             let newChunk = generator.generateChunk(pos)
             
             async let topFaces = getBlockFaces(chunk: newChunk)
@@ -83,6 +94,13 @@ actor ChunkLoader {
             }
             let newLoadedChunk = RenderableChunk(blocks: generator.blocks, chunkPos: pos,
                                                  data: newChunk, faces: faces)
+            #if MEASURE_TIME
+            let end = DispatchTime.now()
+            total_chunk_generation_ms += Float(end.uptimeNanoseconds - start.uptimeNanoseconds)/1_000_000
+            n_chunks_generated += 1
+            print("Average generation time for \(n_chunks_generated) chunks: \(total_chunk_generation_ms/Float(n_chunks_generated)) ms")
+            #endif
+            
             memoryChunks[pos] = newLoadedChunk
             renderedChunks[pos] = newLoadedChunk
         }
