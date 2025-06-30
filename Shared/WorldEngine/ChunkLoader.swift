@@ -4,7 +4,13 @@ import Dispatch
 // https://docs.swift.org/swift-book/documentation/the-swift-programming-language/concurrency
 // https://swiftbysundell.com/articles/swift-actors/
 
-actor ChunkLoader {
+private func distance_squared(_ chunk1: Int2, _ chunk2: Int2) -> Int {
+    let fX = chunk1.x - chunk2.x
+    let fZ = chunk1.y - chunk2.y
+    return fX * fX + fZ * fZ
+}
+
+class ChunkLoader {
     var renderedChunks: [Int2 : RenderableChunk] = [:]
     
     private var memoryChunks: [Int2 : RenderableChunk] = [:]
@@ -25,12 +31,6 @@ actor ChunkLoader {
         self.generator = generator
         renderDistanceChunksSquared = renderDistanceChunks * renderDistanceChunks
         memoryDistanceChunksSquared = memoryDistanceChunks * memoryDistanceChunks
-    }
-    
-    private func distance_squared(_ chunk1: Int2, _ chunk2: Int2) -> Int {
-        let fX = chunk1.x - chunk2.x
-        let fZ = chunk1.y - chunk2.y
-        return fX * fX + fZ * fZ
     }
     
     func update(cameraPos: Int2, posChanged: Bool) {

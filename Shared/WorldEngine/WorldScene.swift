@@ -64,7 +64,7 @@ class WorldScene: MetalScene {
                                        far: 1000)
     }
     
-    func update(deltaTime: Float) async {
+    func update(deltaTime: Float) {
         camera.update(deltaTime: deltaTime)
         vertexConstants.projectionViewMatrix = projectionMatrix * camera.viewMatrix
         
@@ -75,10 +75,8 @@ class WorldScene: MetalScene {
         
         fragmentConstants.cameraPos = camera.position
         
-        await loader.update(cameraPos: newCameraChunkPos, posChanged: posChanged)
-        await MainActor.run {
-            cameraBlockPos = getBlockPos(camera.position)
-        }
+        loader.update(cameraPos: newCameraChunkPos, posChanged: posChanged)
+        cameraBlockPos = getBlockPos(camera.position)
     }
     
     func render(_ encoder: MTLRenderCommandEncoder) async {
@@ -93,10 +91,8 @@ class WorldScene: MetalScene {
         let cameraViewX = -sin(camera.rotationY)
         let cameraViewZ = -cos(camera.rotationY)
         
-        for (_, chunk) in await loader.renderedChunks {
-            let chunkPos = await chunk.chunkPos
-            let buffer = await chunk.vertexBuffer
-            let vertexCount = await chunk.vertexCount
+        for (chunkPos, chunk) in loader.renderedChunks {
+            let (buffer, vertexCount) = await chunk.getRenderData()
             
             let cameraToChunkX = Float(chunkPos.x - cameraChunkPos.x)
             let cameraToChunkZ = Float(chunkPos.y - cameraChunkPos.y)

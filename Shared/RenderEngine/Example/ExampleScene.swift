@@ -92,7 +92,7 @@ class ExampleScene: MetalScene {
     }
     
     var time: Float = 0
-    func update(deltaTime: Float) async {
+    func update(deltaTime: Float) {
         time = max(time + deltaTime, 2 * Float.pi)
         let modelMarix = translate(0, 0, -3) * rotateAroundY(time) * rotateAroundX(toRadians(30))
         let pvm = projectionMatrix * camera.viewMatrix * modelMarix

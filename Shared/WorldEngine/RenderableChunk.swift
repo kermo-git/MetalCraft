@@ -27,6 +27,10 @@ actor RenderableChunk {
         self.vertexBuffer = vertexBuffer
         self.vertexCount = vertexCount
     }
+    
+    func getRenderData() -> (MTLBuffer, Int) {
+        return (vertexBuffer, vertexCount)
+    }
 }
 
 private func compileChunk(blocks: [Block], chunkPos: Int2,

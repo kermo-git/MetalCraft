@@ -57,8 +57,8 @@ struct MetalView {
             if let commandBuffer = Engine.commandQueue.makeCommandBuffer(),
                let encoder = commandBuffer.makeRenderCommandEncoder(descriptor: renderPassDescriptor) {
                 encoder.setDepthStencilState(Engine.depthStencil)
+                parent.scene.update(deltaTime: deltaTime)
                 Task {
-                    await parent.scene.update(deltaTime: deltaTime)
                     await parent.scene.render(encoder)
                     
                     encoder.endEncoding()

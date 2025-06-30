@@ -5,7 +5,7 @@ protocol MetalScene: ObservableObject {
     
     func setAspectRatio(_ aspectRatio: Float)
     
-    func update(deltaTime: Float) async
+    func update(deltaTime: Float)
     
     func render(_ encoder: MTLRenderCommandEncoder) async
 }
