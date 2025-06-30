@@ -1,9 +1,9 @@
 class ExampleWorld: WorldGenerator {
     let plains = TerrainNoise(
-        generator: SimplexNoise(),
-        unitSquareBlocks: 50,
+        generator: FractalNoise(startFrequency: 1/200,
+                                octaves: 3, persistence: 0.5),
         minTerrainHeight: 60,
-        heightRange: 10
+        heightRange: 30
     )
     let dirtLayerHeight = 5
     let textureNames: [String]
