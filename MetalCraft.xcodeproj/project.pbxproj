@@ -12,16 +12,38 @@
 		4F0220672A40422B000ACC7E /* ChunkFaces.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F0220662A40422A000ACC7E /* ChunkFaces.swift */; };
 		4F0220682A40422B000ACC7E /* ChunkFaces.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F0220662A40422A000ACC7E /* ChunkFaces.swift */; };
 		4F050C2D2B683409007269BB /* GameButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F050C2C2B683409007269BB /* GameButton.swift */; };
+		4F0D90582E11BEE50075F38B /* orange_bricks.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F0D90562E11BEE50075F38B /* orange_bricks.png */; };
+		4F0D90592E11BEE50075F38B /* blue_bricks.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F0D90542E11BEE50075F38B /* blue_bricks.png */; };
+		4F0D905A2E11BEE50075F38B /* lime_bricks.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F0D90552E11BEE50075F38B /* lime_bricks.png */; };
+		4F0D905B2E11BEE50075F38B /* purple_bricks.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F0D90572E11BEE50075F38B /* purple_bricks.png */; };
+		4F0D905C2E11BEE50075F38B /* orange_bricks.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F0D90562E11BEE50075F38B /* orange_bricks.png */; };
+		4F0D905D2E11BEE50075F38B /* blue_bricks.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F0D90542E11BEE50075F38B /* blue_bricks.png */; };
+		4F0D905E2E11BEE50075F38B /* lime_bricks.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F0D90552E11BEE50075F38B /* lime_bricks.png */; };
+		4F0D905F2E11BEE50075F38B /* purple_bricks.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F0D90572E11BEE50075F38B /* purple_bricks.png */; };
 		4F1288992B703B5C003860E8 /* WorldGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F1288982B703B5C003860E8 /* WorldGenerator.swift */; };
 		4F12889A2B703B5C003860E8 /* WorldGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F1288982B703B5C003860E8 /* WorldGenerator.swift */; };
+		4F2110462E10373000A447F8 /* grass_white_flowers.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F2110412E10373000A447F8 /* grass_white_flowers.png */; };
+		4F2110472E10373000A447F8 /* leaves_2_pink_flowers.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F2110442E10373000A447F8 /* leaves_2_pink_flowers.png */; };
+		4F2110482E10373000A447F8 /* grass_blue_flowers.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F21103D2E10373000A447F8 /* grass_blue_flowers.png */; };
+		4F2110492E10373000A447F8 /* grass_red_flowers.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F2110402E10373000A447F8 /* grass_red_flowers.png */; };
+		4F21104A2E10373000A447F8 /* grass_yellow_flowers.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F2110422E10373000A447F8 /* grass_yellow_flowers.png */; };
+		4F21104B2E10373000A447F8 /* leaves_2_white_flowers.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F2110452E10373000A447F8 /* leaves_2_white_flowers.png */; };
+		4F21104C2E10373000A447F8 /* grass_orange_flowers.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F21103E2E10373000A447F8 /* grass_orange_flowers.png */; };
+		4F21104D2E10373000A447F8 /* grass_pink_flowers.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F21103F2E10373000A447F8 /* grass_pink_flowers.png */; };
+		4F21104E2E10373000A447F8 /* leaves_2.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F2110432E10373000A447F8 /* leaves_2.png */; };
+		4F21104F2E10373000A447F8 /* grass_white_flowers.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F2110412E10373000A447F8 /* grass_white_flowers.png */; };
+		4F2110502E10373000A447F8 /* leaves_2_pink_flowers.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F2110442E10373000A447F8 /* leaves_2_pink_flowers.png */; };
+		4F2110512E10373000A447F8 /* grass_blue_flowers.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F21103D2E10373000A447F8 /* grass_blue_flowers.png */; };
+		4F2110522E10373000A447F8 /* grass_red_flowers.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F2110402E10373000A447F8 /* grass_red_flowers.png */; };
+		4F2110532E10373000A447F8 /* grass_yellow_flowers.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F2110422E10373000A447F8 /* grass_yellow_flowers.png */; };
+		4F2110542E10373000A447F8 /* leaves_2_white_flowers.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F2110452E10373000A447F8 /* leaves_2_white_flowers.png */; };
+		4F2110552E10373000A447F8 /* grass_orange_flowers.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F21103E2E10373000A447F8 /* grass_orange_flowers.png */; };
+		4F2110562E10373000A447F8 /* grass_pink_flowers.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F21103F2E10373000A447F8 /* grass_pink_flowers.png */; };
+		4F2110572E10373000A447F8 /* leaves_2.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F2110432E10373000A447F8 /* leaves_2.png */; };
 		4F2FD3732A78655B00AB43D0 /* App.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F2FD3722A78655B00AB43D0 /* App.swift */; };
 		4F3B74C72A408656008A508A /* MetalScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F3B74C62A408656008A508A /* MetalScene.swift */; };
 		4F3B74C82A408656008A508A /* MetalScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F3B74C62A408656008A508A /* MetalScene.swift */; };
 		4F3B74CC2A40B76B008A508A /* App.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F3B74CA2A40B76B008A508A /* App.swift */; };
-		4F56A11B2C313B04000C7465 /* white_flowers.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F56A1192C313B04000C7465 /* white_flowers.png */; };
-		4F56A11C2C313B04000C7465 /* white_flowers.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F56A1192C313B04000C7465 /* white_flowers.png */; };
-		4F56A11D2C313B04000C7465 /* yellow_flowers.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F56A11A2C313B04000C7465 /* yellow_flowers.png */; };
-		4F56A11E2C313B04000C7465 /* yellow_flowers.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F56A11A2C313B04000C7465 /* yellow_flowers.png */; };
 		4F7645A92B62B22D00E15329 /* MacOSGameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F7645A82B62B22D00E15329 /* MacOSGameView.swift */; };
 		4F8640092C28176F00C9ED85 /* FlyingCamera.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F8640082C28176F00C9ED85 /* FlyingCamera.swift */; };
 		4F86400A2C28176F00C9ED85 /* FlyingCamera.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F8640082C28176F00C9ED85 /* FlyingCamera.swift */; };
@@ -44,22 +66,14 @@
 		4FCCABB72C2B808700F51327 /* dirt.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FCCAB992C2B808600F51327 /* dirt.png */; };
 		4FCCABC02C2B808700F51327 /* grass.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FCCAB9E2C2B808600F51327 /* grass.png */; };
 		4FCCABC12C2B808700F51327 /* grass.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FCCAB9E2C2B808600F51327 /* grass.png */; };
-		4FCCABC62C2B808700F51327 /* red_flowers.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FCCABA12C2B808600F51327 /* red_flowers.png */; };
-		4FCCABC72C2B808700F51327 /* red_flowers.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FCCABA12C2B808600F51327 /* red_flowers.png */; };
 		4FCCABCC2C2B808700F51327 /* sand_grass.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FCCABA42C2B808600F51327 /* sand_grass.png */; };
 		4FCCABCD2C2B808700F51327 /* sand_grass.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FCCABA42C2B808600F51327 /* sand_grass.png */; };
-		4FCCABD02C2B808700F51327 /* blue_flowers.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FCCABA62C2B808600F51327 /* blue_flowers.png */; };
-		4FCCABD12C2B808700F51327 /* blue_flowers.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FCCABA62C2B808600F51327 /* blue_flowers.png */; };
 		4FCCABD42C2B808700F51327 /* stone_grass.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FCCABA82C2B808600F51327 /* stone_grass.png */; };
 		4FCCABD52C2B808700F51327 /* stone_grass.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FCCABA82C2B808600F51327 /* stone_grass.png */; };
 		4FCCABD62C2B808700F51327 /* granite_orange.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FCCABA92C2B808600F51327 /* granite_orange.png */; };
 		4FCCABD72C2B808700F51327 /* granite_orange.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FCCABA92C2B808600F51327 /* granite_orange.png */; };
-		4FCCABDA2C2B808700F51327 /* orange_flowers.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FCCABAB2C2B808600F51327 /* orange_flowers.png */; };
-		4FCCABDB2C2B808700F51327 /* orange_flowers.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FCCABAB2C2B808600F51327 /* orange_flowers.png */; };
 		4FCCABDC2C2B808700F51327 /* sand.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FCCABAC2C2B808600F51327 /* sand.png */; };
 		4FCCABDD2C2B808700F51327 /* sand.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FCCABAC2C2B808600F51327 /* sand.png */; };
-		4FCCABE02C2B808700F51327 /* pink_flowers.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FCCABAE2C2B808600F51327 /* pink_flowers.png */; };
-		4FCCABE12C2B808700F51327 /* pink_flowers.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FCCABAE2C2B808600F51327 /* pink_flowers.png */; };
 		4FCCABE62C2B808700F51327 /* stone.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FCCABB12C2B808600F51327 /* stone.png */; };
 		4FCCABE72C2B808700F51327 /* stone.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FCCABB12C2B808600F51327 /* stone.png */; };
 		4FCCABF12C2B80D100F51327 /* dirt_grass.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FCCABF02C2B80D100F51327 /* dirt_grass.png */; };
@@ -109,12 +123,23 @@
 		4F0220602A402E1A000ACC7E /* Block.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Block.swift; sourceTree = "<group>"; };
 		4F0220662A40422A000ACC7E /* ChunkFaces.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChunkFaces.swift; sourceTree = "<group>"; };
 		4F050C2C2B683409007269BB /* GameButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameButton.swift; sourceTree = "<group>"; };
+		4F0D90542E11BEE50075F38B /* blue_bricks.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = blue_bricks.png; sourceTree = "<group>"; };
+		4F0D90552E11BEE50075F38B /* lime_bricks.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = lime_bricks.png; sourceTree = "<group>"; };
+		4F0D90562E11BEE50075F38B /* orange_bricks.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = orange_bricks.png; sourceTree = "<group>"; };
+		4F0D90572E11BEE50075F38B /* purple_bricks.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = purple_bricks.png; sourceTree = "<group>"; };
 		4F1288982B703B5C003860E8 /* WorldGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldGenerator.swift; sourceTree = "<group>"; };
+		4F21103D2E10373000A447F8 /* grass_blue_flowers.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = grass_blue_flowers.png; sourceTree = "<group>"; };
+		4F21103E2E10373000A447F8 /* grass_orange_flowers.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = grass_orange_flowers.png; sourceTree = "<group>"; };
+		4F21103F2E10373000A447F8 /* grass_pink_flowers.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = grass_pink_flowers.png; sourceTree = "<group>"; };
+		4F2110402E10373000A447F8 /* grass_red_flowers.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = grass_red_flowers.png; sourceTree = "<group>"; };
+		4F2110412E10373000A447F8 /* grass_white_flowers.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = grass_white_flowers.png; sourceTree = "<group>"; };
+		4F2110422E10373000A447F8 /* grass_yellow_flowers.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = grass_yellow_flowers.png; sourceTree = "<group>"; };
+		4F2110432E10373000A447F8 /* leaves_2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = leaves_2.png; sourceTree = "<group>"; };
+		4F2110442E10373000A447F8 /* leaves_2_pink_flowers.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = leaves_2_pink_flowers.png; sourceTree = "<group>"; };
+		4F2110452E10373000A447F8 /* leaves_2_white_flowers.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = leaves_2_white_flowers.png; sourceTree = "<group>"; };
 		4F2FD3722A78655B00AB43D0 /* App.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = App.swift; sourceTree = "<group>"; };
 		4F3B74C62A408656008A508A /* MetalScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetalScene.swift; sourceTree = "<group>"; };
 		4F3B74CA2A40B76B008A508A /* App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = App.swift; sourceTree = "<group>"; };
-		4F56A1192C313B04000C7465 /* white_flowers.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = white_flowers.png; sourceTree = "<group>"; };
-		4F56A11A2C313B04000C7465 /* yellow_flowers.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = yellow_flowers.png; sourceTree = "<group>"; };
 		4F7645A82B62B22D00E15329 /* MacOSGameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacOSGameView.swift; sourceTree = "<group>"; };
 		4F8640082C28176F00C9ED85 /* FlyingCamera.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlyingCamera.swift; sourceTree = "<group>"; };
 		4F9E1AD62A79186F0055A782 /* ExampleScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExampleScene.swift; sourceTree = "<group>"; };
@@ -127,14 +152,10 @@
 		4FA26CE82C27576700AABCD6 /* BlockOrientation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockOrientation.swift; sourceTree = "<group>"; };
 		4FCCAB992C2B808600F51327 /* dirt.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = dirt.png; sourceTree = "<group>"; };
 		4FCCAB9E2C2B808600F51327 /* grass.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = grass.png; sourceTree = "<group>"; };
-		4FCCABA12C2B808600F51327 /* red_flowers.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = red_flowers.png; sourceTree = "<group>"; };
 		4FCCABA42C2B808600F51327 /* sand_grass.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sand_grass.png; sourceTree = "<group>"; };
-		4FCCABA62C2B808600F51327 /* blue_flowers.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = blue_flowers.png; sourceTree = "<group>"; };
 		4FCCABA82C2B808600F51327 /* stone_grass.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = stone_grass.png; sourceTree = "<group>"; };
 		4FCCABA92C2B808600F51327 /* granite_orange.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = granite_orange.png; sourceTree = "<group>"; };
-		4FCCABAB2C2B808600F51327 /* orange_flowers.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = orange_flowers.png; sourceTree = "<group>"; };
 		4FCCABAC2C2B808600F51327 /* sand.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sand.png; sourceTree = "<group>"; };
-		4FCCABAE2C2B808600F51327 /* pink_flowers.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pink_flowers.png; sourceTree = "<group>"; };
 		4FCCABB12C2B808600F51327 /* stone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = stone.png; sourceTree = "<group>"; };
 		4FCCABF02C2B80D100F51327 /* dirt_grass.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = dirt_grass.png; sourceTree = "<group>"; };
 		4FD31069286A3BCD00BB55ED /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -279,8 +300,19 @@
 		4FD310DB286A3F0100BB55ED /* Textures */ = {
 			isa = PBXGroup;
 			children = (
-				4F56A1192C313B04000C7465 /* white_flowers.png */,
-				4F56A11A2C313B04000C7465 /* yellow_flowers.png */,
+				4F0D90542E11BEE50075F38B /* blue_bricks.png */,
+				4F0D90552E11BEE50075F38B /* lime_bricks.png */,
+				4F0D90562E11BEE50075F38B /* orange_bricks.png */,
+				4F0D90572E11BEE50075F38B /* purple_bricks.png */,
+				4F21103D2E10373000A447F8 /* grass_blue_flowers.png */,
+				4F21103E2E10373000A447F8 /* grass_orange_flowers.png */,
+				4F21103F2E10373000A447F8 /* grass_pink_flowers.png */,
+				4F2110402E10373000A447F8 /* grass_red_flowers.png */,
+				4F2110412E10373000A447F8 /* grass_white_flowers.png */,
+				4F2110422E10373000A447F8 /* grass_yellow_flowers.png */,
+				4F2110432E10373000A447F8 /* leaves_2.png */,
+				4F2110442E10373000A447F8 /* leaves_2_pink_flowers.png */,
+				4F2110452E10373000A447F8 /* leaves_2_white_flowers.png */,
 				4FF83A702C2C752E00FCAB2A /* leaves_purple_flowers.png */,
 				4FF83A6F2C2C752E00FCAB2A /* leaves_white_flowers.png */,
 				4FF83A712C2C752E00FCAB2A /* leaves_yellow_flowers.png */,
@@ -288,13 +320,9 @@
 				4FF83A732C2C752E00FCAB2A /* wood_bark.png */,
 				4FF83A742C2C752E00FCAB2A /* wood_cut.png */,
 				4FCCABF02C2B80D100F51327 /* dirt_grass.png */,
-				4FCCABA62C2B808600F51327 /* blue_flowers.png */,
 				4FCCAB992C2B808600F51327 /* dirt.png */,
 				4FCCABA92C2B808600F51327 /* granite_orange.png */,
 				4FCCAB9E2C2B808600F51327 /* grass.png */,
-				4FCCABAB2C2B808600F51327 /* orange_flowers.png */,
-				4FCCABAE2C2B808600F51327 /* pink_flowers.png */,
-				4FCCABA12C2B808600F51327 /* red_flowers.png */,
 				4FCCABAC2C2B808600F51327 /* sand.png */,
 				4FCCABA42C2B808600F51327 /* sand_grass.png */,
 				4FCCABB12C2B808600F51327 /* stone.png */,
@@ -413,14 +441,23 @@
 			files = (
 				4FCCABD42C2B808700F51327 /* stone_grass.png in Resources */,
 				4FCCABCC2C2B808700F51327 /* sand_grass.png in Resources */,
-				4F56A11D2C313B04000C7465 /* yellow_flowers.png in Resources */,
-				4FCCABDA2C2B808700F51327 /* orange_flowers.png in Resources */,
 				4FD3107B286A3BCD00BB55ED /* Assets.xcassets in Resources */,
 				4FCCABC02C2B808700F51327 /* grass.png in Resources */,
 				4FF83A7D2C2C752E00FCAB2A /* wood_bark.png in Resources */,
-				4F56A11B2C313B04000C7465 /* white_flowers.png in Resources */,
-				4FCCABE02C2B808700F51327 /* pink_flowers.png in Resources */,
 				4FF83A7B2C2C752E00FCAB2A /* leaves.png in Resources */,
+				4F21104F2E10373000A447F8 /* grass_white_flowers.png in Resources */,
+				4F2110502E10373000A447F8 /* leaves_2_pink_flowers.png in Resources */,
+				4F2110512E10373000A447F8 /* grass_blue_flowers.png in Resources */,
+				4F2110522E10373000A447F8 /* grass_red_flowers.png in Resources */,
+				4F0D905C2E11BEE50075F38B /* orange_bricks.png in Resources */,
+				4F0D905D2E11BEE50075F38B /* blue_bricks.png in Resources */,
+				4F0D905E2E11BEE50075F38B /* lime_bricks.png in Resources */,
+				4F0D905F2E11BEE50075F38B /* purple_bricks.png in Resources */,
+				4F2110532E10373000A447F8 /* grass_yellow_flowers.png in Resources */,
+				4F2110542E10373000A447F8 /* leaves_2_white_flowers.png in Resources */,
+				4F2110552E10373000A447F8 /* grass_orange_flowers.png in Resources */,
+				4F2110562E10373000A447F8 /* grass_pink_flowers.png in Resources */,
+				4F2110572E10373000A447F8 /* leaves_2.png in Resources */,
 				4FF83A772C2C752E00FCAB2A /* leaves_purple_flowers.png in Resources */,
 				4FCCABB62C2B808700F51327 /* dirt.png in Resources */,
 				4FF83A752C2C752E00FCAB2A /* leaves_white_flowers.png in Resources */,
@@ -428,8 +465,6 @@
 				4FCCABD62C2B808700F51327 /* granite_orange.png in Resources */,
 				4FCCABF12C2B80D100F51327 /* dirt_grass.png in Resources */,
 				4FCCABDC2C2B808700F51327 /* sand.png in Resources */,
-				4FCCABC62C2B808700F51327 /* red_flowers.png in Resources */,
-				4FCCABD02C2B808700F51327 /* blue_flowers.png in Resources */,
 				4FCCABE62C2B808700F51327 /* stone.png in Resources */,
 				4FF83A7F2C2C752E00FCAB2A /* wood_cut.png in Resources */,
 			);
@@ -441,14 +476,23 @@
 			files = (
 				4FCCABD52C2B808700F51327 /* stone_grass.png in Resources */,
 				4FCCABCD2C2B808700F51327 /* sand_grass.png in Resources */,
-				4F56A11E2C313B04000C7465 /* yellow_flowers.png in Resources */,
-				4FCCABDB2C2B808700F51327 /* orange_flowers.png in Resources */,
 				4FD3107C286A3BCD00BB55ED /* Assets.xcassets in Resources */,
 				4FCCABC12C2B808700F51327 /* grass.png in Resources */,
 				4FF83A7E2C2C752E00FCAB2A /* wood_bark.png in Resources */,
-				4F56A11C2C313B04000C7465 /* white_flowers.png in Resources */,
-				4FCCABE12C2B808700F51327 /* pink_flowers.png in Resources */,
 				4FF83A7C2C2C752E00FCAB2A /* leaves.png in Resources */,
+				4F2110462E10373000A447F8 /* grass_white_flowers.png in Resources */,
+				4F2110472E10373000A447F8 /* leaves_2_pink_flowers.png in Resources */,
+				4F2110482E10373000A447F8 /* grass_blue_flowers.png in Resources */,
+				4F2110492E10373000A447F8 /* grass_red_flowers.png in Resources */,
+				4F0D90582E11BEE50075F38B /* orange_bricks.png in Resources */,
+				4F0D90592E11BEE50075F38B /* blue_bricks.png in Resources */,
+				4F0D905A2E11BEE50075F38B /* lime_bricks.png in Resources */,
+				4F0D905B2E11BEE50075F38B /* purple_bricks.png in Resources */,
+				4F21104A2E10373000A447F8 /* grass_yellow_flowers.png in Resources */,
+				4F21104B2E10373000A447F8 /* leaves_2_white_flowers.png in Resources */,
+				4F21104C2E10373000A447F8 /* grass_orange_flowers.png in Resources */,
+				4F21104D2E10373000A447F8 /* grass_pink_flowers.png in Resources */,
+				4F21104E2E10373000A447F8 /* leaves_2.png in Resources */,
 				4FF83A782C2C752E00FCAB2A /* leaves_purple_flowers.png in Resources */,
 				4FCCABB72C2B808700F51327 /* dirt.png in Resources */,
 				4FF83A762C2C752E00FCAB2A /* leaves_white_flowers.png in Resources */,
@@ -456,8 +500,6 @@
 				4FCCABD72C2B808700F51327 /* granite_orange.png in Resources */,
 				4FCCABF22C2B80D100F51327 /* dirt_grass.png in Resources */,
 				4FCCABDD2C2B808700F51327 /* sand.png in Resources */,
-				4FCCABC72C2B808700F51327 /* red_flowers.png in Resources */,
-				4FCCABD12C2B808700F51327 /* blue_flowers.png in Resources */,
 				4FCCABE72C2B808700F51327 /* stone.png in Resources */,
 				4FF83A802C2C752E00FCAB2A /* wood_cut.png in Resources */,
 			);
