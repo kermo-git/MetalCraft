@@ -42,7 +42,7 @@ class ExampleWorld: WorldGenerator {
     let STONE = 2
 
     func generateChunk(_ pos: Int2) -> Chunk {
-        var chunk = Chunk()
+        let chunk = Chunk()
         
         for i in 0..<CHUNK_SIDE {
             for j in 0..<CHUNK_SIDE {

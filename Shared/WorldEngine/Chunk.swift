@@ -3,11 +3,11 @@ let N_CHUNK_BLOCKS = CHUNK_SIDE * CHUNK_SIDE * CHUNK_HEIGHT
 
 let AIR_ID = -1
 
-private func getIndex(_ pos: Int3) -> Int {
-    return CHUNK_SIDE * (pos.x * CHUNK_HEIGHT + pos.y) + pos.z
+private func getBlockArrayIndex(_ pos: Int3) -> Int {
+    return CHUNK_SIDE * (pos.y * CHUNK_SIDE + pos.z) + pos.x
 }
 
-struct Chunk {
+class Chunk {
     private var blockID: [Int]
     private var orientation: [BlockOrientation]
     private(set) var numLayerAirBlocks: [Int]
@@ -24,13 +24,13 @@ struct Chunk {
     }
     
     func get(_ pos: Int3) -> (Int, BlockOrientation) {
-        let index = getIndex(pos)
+        let index = getBlockArrayIndex(pos)
         return (blockID[index], orientation[index])
     }
     
-    mutating func set(_ pos: Int3, _ blockID: Int, 
-                      _ orientation: BlockOrientation = .NONE) {
-        let index = getIndex(pos)
+    func set(_ pos: Int3, _ blockID: Int,
+             _ orientation: BlockOrientation = .NONE) {
+        let index = getBlockArrayIndex(pos)
         self.blockID[index] = blockID
         self.orientation[index] = orientation
         
@@ -42,15 +42,15 @@ struct Chunk {
     }
     
     func isEmpty(_ pos: Int3) -> Bool {
-        blockID[getIndex(pos)] == AIR_ID
+        blockID[getBlockArrayIndex(pos)] == AIR_ID
     }
     
     func getBlockID(_ pos: Int3) -> Int {
-        blockID[getIndex(pos)]
+        blockID[getBlockArrayIndex(pos)]
     }
     
-    mutating func setBlockID(_ pos: Int3, _ blockID: Int) {
-        self.blockID[getIndex(pos)] = blockID
+    func setBlockID(_ pos: Int3, _ blockID: Int) {
+        self.blockID[getBlockArrayIndex(pos)] = blockID
         if blockID != AIR_ID {
             numLayerAirBlocks[pos.y] -= 1
         } else {
@@ -59,14 +59,14 @@ struct Chunk {
     }
     
     func getOrientation(_ pos: Int3) -> BlockOrientation {
-        orientation[getIndex(pos)]
+        orientation[getBlockArrayIndex(pos)]
     }
     
-    mutating func setOrientation(_ pos: Int3, _ orientation: BlockOrientation) {
-        self.orientation[getIndex(pos)] = orientation
+    func setOrientation(_ pos: Int3, _ orientation: BlockOrientation) {
+        self.orientation[getBlockArrayIndex(pos)] = orientation
     }
     
-    mutating func determineYBoundaries() {
+    func determineYBoundaries() {
         var n_air = numLayerAirBlocks[0]
         var prev_empty = n_air == N_CHUNK_LAYER_BLOCKS
         var prev_full = n_air == 0
