@@ -137,6 +137,12 @@ extension Int2 {
     }
 }
 
+let CHUNK_SIDE = 16
+let CHUNK_HEIGHT = 256
+
+let CHUNK_SIDE_MASK = 15
+let CHUNK_SIDE_SHIFT = 4
+
 func getBlockPos(_ pointPos: Float3) -> Int3 {
     return Int3(x: Int(floor(pointPos.x)),
                 y: Int(floor(pointPos.y)),
@@ -144,17 +150,19 @@ func getBlockPos(_ pointPos: Float3) -> Int3 {
 }
 
 func getChunkPos(_ blockPos: Int3) -> Int2 {
-    func toChunkCoordinate(_ blockCoordinate: Int) -> Int {
-        return (blockCoordinate >= 0) ?
-            blockCoordinate / CHUNK_SIDE :
-            ((blockCoordinate + 1) / CHUNK_SIDE) - 1
-    }
-    return Int2(x: toChunkCoordinate(blockPos.x),
-                y: toChunkCoordinate(blockPos.z))
+    return Int2(x: blockPos.x >> CHUNK_SIDE_SHIFT,
+                y: blockPos.z >> CHUNK_SIDE_SHIFT)
 }
 
 func getChunkPos(_ pointPos: Float3) -> Int2 {
-    return getChunkPos(getBlockPos(pointPos))
+    return Int2(x: Int(floor(pointPos.x)) >> CHUNK_SIDE_SHIFT,
+                y: Int(floor(pointPos.z)) >> CHUNK_SIDE_SHIFT)
+}
+
+func getLocalBlockPos(_ globalBlockPos: Int3) -> Int3 {
+    return Int3(x: globalBlockPos.x & CHUNK_SIDE_MASK,
+                y: globalBlockPos.y,
+                z: globalBlockPos.z & CHUNK_SIDE_MASK)
 }
 
 func getGlobalBlockPos(chunkPos: Int2, localBlockPos: Int3) -> Int3 {

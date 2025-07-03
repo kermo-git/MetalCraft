@@ -1,7 +1,6 @@
-let CHUNK_SIDE = 16
-let CHUNK_HEIGHT = 256
 let N_CHUNK_LAYER_BLOCKS = CHUNK_SIDE * CHUNK_SIDE
 let N_CHUNK_BLOCKS = CHUNK_SIDE * CHUNK_SIDE * CHUNK_HEIGHT
+
 let AIR_ID = -1
 
 private func getIndex(_ pos: Int3) -> Int {
