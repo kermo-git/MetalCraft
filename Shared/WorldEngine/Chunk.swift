@@ -122,4 +122,48 @@ class Chunk {
             prev_half_full = current_half_full
         }
     }
+    
+    func placeStructure(chunk_pos: Int2, struct_NW_corner: Int3, structure: Structure) {
+        let chunk_NW_corner = getGlobalBlockPos(chunkPos: chunk_pos,
+                                                localBlockPos: Int3(0, struct_NW_corner.y, 0))
+        
+        let chunk_SE_corner = getGlobalBlockPos(chunkPos: chunk_pos,
+                                                localBlockPos: Int3(CHUNK_SIDE-1, 0, CHUNK_SIDE-1))
+        
+        let struct_SE_corner = Int3(x: struct_NW_corner.x + structure.lengthX - 1,
+                                    y: struct_NW_corner.y,
+                                    z: struct_NW_corner.z + structure.lengthZ - 1)
+        
+        let west_x = max(struct_NW_corner.x, chunk_NW_corner.x)
+        let east_x = min(struct_SE_corner.x, chunk_SE_corner.x)
+        
+        let north_z = max(struct_NW_corner.z, chunk_NW_corner.z)
+        let south_z = min(struct_SE_corner.z, chunk_SE_corner.z)
+        
+        let bottom_y = struct_NW_corner.y
+        let top_y = struct_NW_corner.y + structure.lengthY - 1
+        
+        if west_x <= east_x && north_z <= south_z {
+            
+            for x in west_x...east_x {
+                let chunk_x = x - chunk_NW_corner.x
+                let struct_x = x - struct_NW_corner.x
+                
+                for z in north_z...south_z {
+                    let chunk_z = z - chunk_NW_corner.z
+                    let struct_z = z - struct_NW_corner.z
+                    
+                    for y in bottom_y...top_y {
+                        let chunk_block_pos = Int3(chunk_x, y, chunk_z)
+                        let struct_block_pos = Int3(struct_x, y - bottom_y, struct_z)
+                        
+                        if !structure.isEmpty(struct_block_pos) {
+                            let (blockID, orientation) = structure.get(struct_block_pos)
+                            self.set(chunk_block_pos, blockID, orientation)
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
