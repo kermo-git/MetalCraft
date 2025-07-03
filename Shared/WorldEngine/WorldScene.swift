@@ -24,7 +24,7 @@ class WorldScene: MetalScene {
          cameraPos: Float3) {
         
         let sunColor = Float4(x: 1, y: 1, z: 1, w: 1)
-        let skyColor = Float4(x: 0.93, y: 1, z: 0.64, w: 1)
+        let skyColor = Float4(x: 65.0/255, y: 166.0/255, z: 224/255, w: 1)
         clearColor = MTLClearColor(red: Double(skyColor.x),
                                    green: Double(skyColor.y),
                                    blue: Double(skyColor.z),

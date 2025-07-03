@@ -20,14 +20,23 @@ class ExampleWorld: WorldGenerator {
     init() {
         tree = buildTree(wood_id: WOOD, leaves_id: LEAVES)
         
+        let temp = "warm"
+        let ground_cover_tex = "\(temp)_grass"
+        let leaves_tex = "\(temp)_leaves"
+        let dirt_side_tex = "\(ground_cover_tex)_dirt"
+        
+        let wood_type = "gray"
+        let wood_bark_tex = "\(wood_type)_wood_bark"
+        let wood_cut_tex = "\(wood_type)_wood_cut"
+        
         let textureNames = [
             "stone",
             "dirt",
-            "dirt_grass",
-            "grass",
-            "wood_bark",
-            "wood_cut",
-            "leaves"
+            dirt_side_tex,
+            ground_cover_tex,
+            wood_bark_tex,
+            wood_cut_tex,
+            leaves_tex
         ]
         self.textureNames = textureNames
         
@@ -44,17 +53,17 @@ class ExampleWorld: WorldGenerator {
                   sideTextureID: texID("dirt"),
                   bottomTextureID: texID("dirt")),
             
-            Block(topTextureID: texID("grass"),
-                  sideTextureID: texID("dirt_grass"),
+            Block(topTextureID: texID(ground_cover_tex),
+                  sideTextureID: texID(dirt_side_tex),
                   bottomTextureID: texID("dirt")),
             
-            Block(topTextureID: texID("wood_cut"),
-                  sideTextureID: texID("wood_bark"),
-                  bottomTextureID: texID("wood_cut")),
+            Block(topTextureID: texID(wood_cut_tex),
+                  sideTextureID: texID(wood_bark_tex),
+                  bottomTextureID: texID(wood_cut_tex)),
             
-            Block(topTextureID: texID("leaves"),
-                  sideTextureID: texID("leaves"),
-                  bottomTextureID: texID("leaves"))
+            Block(topTextureID: texID(leaves_tex),
+                  sideTextureID: texID(leaves_tex),
+                  bottomTextureID: texID(leaves_tex))
         ]
     }
 
