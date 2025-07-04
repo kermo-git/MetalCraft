@@ -28,7 +28,13 @@ struct FractalNoise: NoiseGenerator {
     let startFrequency: Float
     let octaves: Int
     let persistence: Float
-    let generator: NoiseGenerator = SimplexNoise()
+    let generator = SimplexNoise()
+    
+    init(startFrequency: Float, octaves: Int = 1, persistence: Float = 0.5) {
+        self.startFrequency = startFrequency
+        self.octaves = octaves
+        self.persistence = persistence
+    }
     
     func signedNoise2D(_ x: Float, _ y: Float) -> Float {
         var total: Float = 0;

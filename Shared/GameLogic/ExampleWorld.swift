@@ -1,70 +1,137 @@
+enum Biome {
+    case AUTUMN_FOREST
+    case LUSH_FOREST
+    case SPRUCE_FOREST
+    case SNOWY_FOREST
+}
 class ExampleWorld: WorldGenerator {
+    let textureNames: [String]
+    let blocks: [Block]
+    let blockID: [String: Int]
+    
     let terrain = TerrainNoise(
         generator: FractalNoise(startFrequency: 1/200,
                                 octaves: 3, persistence: 0.5),
         minTerrainHeight: 60,
         heightRange: 30
     )
-    let treeGenerator = StructureGenerator(gridCellSize: 8)
-    let tree: Structure
+    let treeGenerator = StructureGenerator(gridCellSize: 8, variantCount: 3)
+    let trees: [Biome: [Structure]]
     let dirtLayerHeight = 5
-    let textureNames: [String]
-    let blocks: [Block]
-    
-    let STONE = 0
-    let DIRT = 1
-    let GRASS = 2
-    let WOOD = 3
-    let LEAVES = 4
     
     init() {
-        tree = buildTree(wood_id: WOOD, leaves_id: LEAVES)
-        
-        let temp = "warm"
-        let ground_cover_tex = "\(temp)_grass"
-        let leaves_tex = "\(temp)_leaves"
-        let dirt_side_tex = "\(ground_cover_tex)_dirt"
-        
-        let wood_type = "gray"
-        let wood_bark_tex = "\(wood_type)_wood_bark"
-        let wood_cut_tex = "\(wood_type)_wood_cut"
-        
-        let textureNames = [
-            "stone",
-            "dirt",
-            dirt_side_tex,
-            ground_cover_tex,
-            wood_bark_tex,
-            wood_cut_tex,
-            leaves_tex
+        let block_info = [
+            "stone": BlockInfo(topTexture: "stone"),
+            "dirt": BlockInfo(topTexture: "dirt"),
+            "sand": BlockInfo(topTexture: "sand"),
+            
+            "dry_grass": BlockInfo(topTexture: "dry_grass",
+                                   sideTexture: "dry_grass_dirt",
+                                   bottomTexture: "dirt"),
+            "dry_grass_flowers_1": BlockInfo(topTexture: "dry_grass_flowers_1",
+                                             sideTexture: "dry_grass_dirt",
+                                             bottomTexture: "dirt"),
+            "dry_grass_flowers_2": BlockInfo(topTexture: "dry_grass_flowers_2",
+                                             sideTexture: "dry_grass_dirt",
+                                             bottomTexture: "dirt"),
+            "dry_grass_flowers_3": BlockInfo(topTexture: "dry_grass_flowers_3",
+                                             sideTexture: "dry_grass_dirt",
+                                             bottomTexture: "dirt"),
+            
+            "warm_grass": BlockInfo(topTexture: "warm_grass",
+                                    sideTexture: "warm_grass_dirt",
+                                    bottomTexture: "dirt"),
+            "warm_grass_flowers_1": BlockInfo(topTexture: "warm_grass_flowers_1",
+                                              sideTexture: "warm_grass_dirt",
+                                              bottomTexture: "dirt"),
+            "warm_grass_flowers_2": BlockInfo(topTexture: "warm_grass_flowers_2",
+                                              sideTexture: "warm_grass_dirt",
+                                              bottomTexture: "dirt"),
+            "warm_grass_flowers_3": BlockInfo(topTexture: "warm_grass_flowers_3",
+                                              sideTexture: "warm_grass_dirt",
+                                              bottomTexture: "dirt"),
+            
+            "cold_grass": BlockInfo(topTexture: "cold_grass",
+                                    sideTexture: "cold_grass_dirt",
+                                    bottomTexture: "dirt"),
+            "cold_grass_flowers_1": BlockInfo(topTexture: "cold_grass_flowers_1",
+                                              sideTexture: "cold_grass_dirt",
+                                              bottomTexture: "dirt"),
+            "cold_grass_flowers_2": BlockInfo(topTexture: "cold_grass_flowers_2",
+                                              sideTexture: "cold_grass_dirt",
+                                              bottomTexture: "dirt"),
+            "cold_grass_flowers_3": BlockInfo(topTexture: "cold_grass_flowers_3",
+                                              sideTexture: "cold_grass_dirt",
+                                              bottomTexture: "dirt"),
+            
+            "snow_dirt": BlockInfo(topTexture: "snow",
+                                   sideTexture: "snow_dirt",
+                                   bottomTexture: "dirt"),
+            
+            "autumn_green_leaves": BlockInfo(topTexture: "autumn_green_leaves"),
+            "autumn_yellow_leaves": BlockInfo(topTexture: "autumn_yellow_leaves"),
+            "autumn_orange_leaves": BlockInfo(topTexture: "autumn_orange_leaves"),
+            "warm_leaves": BlockInfo(topTexture: "warm_leaves"),
+            "cold_leaves": BlockInfo(topTexture: "cold_leaves"),
+            "snow_leaves": BlockInfo(topTexture: "snow_leaves"),
+            
+            "brown_wood": BlockInfo(topTexture: "brown_wood_cut",
+                                    sideTexture: "brown_wood_bark"),
+            "gray_wood": BlockInfo(topTexture: "gray_wood_cut",
+                                    sideTexture: "gray_wood_bark")
         ]
+        
+        let (blockID, textureNames, blocks) = compileBlocks(block_info)
+        
         self.textureNames = textureNames
+        self.blocks = blocks
+        self.blockID = blockID
         
-        func texID(_ textureName: String) -> Int {
-            return textureNames.firstIndex(of: textureName) ?? 0
-        }
-        
-        blocks = [
-            Block(topTextureID: texID("stone"),
-                  sideTextureID: texID("stone"),
-                  bottomTextureID: texID("stone")),
-            
-            Block(topTextureID: texID("dirt"),
-                  sideTextureID: texID("dirt"),
-                  bottomTextureID: texID("dirt")),
-            
-            Block(topTextureID: texID(ground_cover_tex),
-                  sideTextureID: texID(dirt_side_tex),
-                  bottomTextureID: texID("dirt")),
-            
-            Block(topTextureID: texID(wood_cut_tex),
-                  sideTextureID: texID(wood_bark_tex),
-                  bottomTextureID: texID(wood_cut_tex)),
-            
-            Block(topTextureID: texID(leaves_tex),
-                  sideTextureID: texID(leaves_tex),
-                  bottomTextureID: texID(leaves_tex))
+        trees = [
+            .AUTUMN_FOREST: [
+                buildTree(trunk_height: 2,
+                          wood_id: blockID["gray_wood"]!,
+                          leaves_id: blockID["autumn_green_leaves"]!),
+                buildTree(trunk_height: 3,
+                          wood_id: blockID["gray_wood"]!,
+                          leaves_id: blockID["autumn_yellow_leaves"]!),
+                buildTree(trunk_height: 4,
+                          wood_id: blockID["gray_wood"]!,
+                          leaves_id: blockID["autumn_orange_leaves"]!)
+            ],
+            .LUSH_FOREST: (2...4).map() {
+                trunk_height in buildTree(trunk_height: trunk_height,
+                                          wood_id: blockID["brown_wood"]!,
+                                          leaves_id: blockID["warm_leaves"]!)
+            },
+            .SPRUCE_FOREST: (2...4).map() {
+                trunk_height in buildTree(trunk_height: trunk_height,
+                                          wood_id: blockID["brown_wood"]!,
+                                          leaves_id: blockID["cold_leaves"]!)
+            },
+            .SNOWY_FOREST: (2...4).map() {
+                trunk_height in buildTree(trunk_height: trunk_height,
+                                          wood_id: blockID["brown_wood"]!,
+                                          leaves_id: blockID["snow_leaves"]!)
+            },
         ]
+    }
+    let rotations: [BlockOrientation] = [.NONE, .Y90, .YNEG90, .Y180]
+    
+    let biomes = FractalNoise(startFrequency: 1/200)
+    
+    func findBiome(_ pos: Int3) -> Biome {
+        let biome = biomes.signedNoise2D(Float(pos.x), Float(pos.z))
+        
+        if (biome < -0.6) {
+            return .AUTUMN_FOREST
+        } else if (biome < 0) {
+            return .LUSH_FOREST
+        } else if (biome < 0.6) {
+            return .SPRUCE_FOREST
+        } else {
+            return .SNOWY_FOREST
+        }
     }
 
     func generateChunk(_ pos: Int2) -> Chunk {
@@ -72,13 +139,16 @@ class ExampleWorld: WorldGenerator {
         
         for tree_cell_x in (2*pos.x - 1)...(2*pos.x + 2) {
             for tree_cell_z in (2*pos.y - 1)...(2*pos.y + 2) {
-                var (treePos, _) = treeGenerator.findStructure(tree_cell_x, tree_cell_z)
+                let (trunkPos, variantID) = treeGenerator.findStructure(tree_cell_x, tree_cell_z)
                 
-                treePos.y = terrain.terrainHeight(treePos)
-                treePos.x -= 2
-                treePos.z -= 2
-                
-                chunk.placeStructure(chunk_pos: pos, struct_NW_corner: treePos, structure: tree)
+                let tree_nw_corner = Int3(
+                    x: trunkPos.x - 2,
+                    y: terrain.terrainHeight(trunkPos),
+                    z: trunkPos.z - 2
+                )
+                chunk.placeStructure(chunk_pos: pos,
+                                     struct_NW_corner: tree_nw_corner,
+                                     structure: trees[findBiome(trunkPos)]![variantID])
             }
         }
         for i in 0..<CHUNK_SIDE {
@@ -87,14 +157,52 @@ class ExampleWorld: WorldGenerator {
                 let globalPos = getGlobalBlockPos(chunkPos: pos, localBlockPos: localPos)
                 
                 let terrainHeight = terrain.terrainHeight(globalPos)
+                let ground_block_id: Int
+                
+                switch findBiome(globalPos) {
+                case .AUTUMN_FOREST:
+                    if Float.random(in: 0...1) > 0.2 {
+                        ground_block_id = blockID["dry_grass"]!
+                    } else {
+                        ground_block_id = blockID[[
+                            "dry_grass_flowers_1",
+                            "dry_grass_flowers_2",
+                            "dry_grass_flowers_3"
+                        ].randomElement()!]!
+                    }
+                case .LUSH_FOREST:
+                    if Float.random(in: 0...1) > 0.2 {
+                        ground_block_id = blockID["warm_grass"]!
+                    } else {
+                        ground_block_id = blockID[[
+                            "warm_grass_flowers_1",
+                            "warm_grass_flowers_2",
+                            "warm_grass_flowers_3"
+                        ].randomElement()!]!
+                    }
+                case .SPRUCE_FOREST:
+                    if Float.random(in: 0...1) > 0.2 {
+                        ground_block_id = blockID["cold_grass"]!
+                    } else {
+                        ground_block_id = blockID[[
+                            "cold_grass_flowers_1",
+                            "cold_grass_flowers_2",
+                            "cold_grass_flowers_3"
+                        ].randomElement()!]!
+                    }
+                case .SNOWY_FOREST:
+                    ground_block_id = blockID["snow_dirt"]!
+                }
                 
                 for k in 0..<(terrainHeight - dirtLayerHeight) {
-                    chunk.set(Int3(i, k, j), STONE)
+                    chunk.set(Int3(i, k, j), blockID["stone"]!)
                 }
                 for k in (terrainHeight - dirtLayerHeight)...(terrainHeight - 2) {
-                    chunk.set(Int3(i, k, j), DIRT)
+                    chunk.set(Int3(i, k, j), blockID["dirt"]!)
                 }
-                chunk.set(Int3(i, terrainHeight - 1, j), GRASS)
+                chunk.set(Int3(i, terrainHeight - 1, j),
+                          ground_block_id,
+                          rotations.randomElement()!)
             }
         }
         chunk.determineYBoundaries()
@@ -103,39 +211,46 @@ class ExampleWorld: WorldGenerator {
     }
 }
 
-func buildTree(wood_id: Int, leaves_id: Int) -> Structure {
+func buildTree(trunk_height: Int, wood_id: Int, leaves_id: Int) -> Structure {
     let A = AIR_ID
     let W = wood_id
     let L = leaves_id
-
-    let trunk_layer = [[A, A, A, A, A],
-                       [A, A, A, A, A],
-                       [A, A, W, A, A],
-                       [A, A, A, A, A],
-                       [A, A, A, A, A]]
     
-    let canopy_base = [[A, L, L, L, A],
-                       [L, L, L, L, L],
-                       [L, L, W, L, L],
-                       [L, L, L, L, L],
-                       [A, L, L, L, A]]
+    var layers: [[[Int]]] = []
     
-    let canopy_middle = [[A, A, A, A, A],
-                         [A, L, L, L, A],
-                         [A, L, W, L, A],
-                         [A, L, L, L, A],
-                         [A, A, A, A, A]]
-    
-    let canopy_top = [[A, A, A, A, A],
-                      [A, A, L, A, A],
-                      [A, L, L, L, A],
-                      [A, A, L, A, A],
-                      [A, A, A, A, A]]
-    
-    return Structure(blocks: [
-        trunk_layer, trunk_layer, trunk_layer,
-        canopy_base, canopy_base, canopy_base,
-        canopy_middle, canopy_middle,
-        canopy_top
-    ])
+    for _ in 0..<trunk_height {
+        layers.append(
+            [[A, A, A, A, A],
+             [A, A, A, A, A],
+             [A, A, W, A, A],
+             [A, A, A, A, A],
+             [A, A, A, A, A]]
+        )
+    }
+    for _ in 0..<3 {
+        layers.append(
+            [[A, L, L, L, A],
+             [L, L, L, L, L],
+             [L, L, W, L, L],
+             [L, L, L, L, L],
+             [A, L, L, L, A]]
+        )
+    }
+    for _ in 0..<2 {
+        layers.append(
+            [[A, A, A, A, A],
+             [A, L, L, L, A],
+             [A, L, W, L, A],
+             [A, L, L, L, A],
+             [A, A, A, A, A]]
+        )
+    }
+    layers.append(
+        [[A, A, A, A, A],
+         [A, A, L, A, A],
+         [A, L, L, L, A],
+         [A, A, L, A, A],
+         [A, A, A, A, A]]
+    )
+    return Structure(blocks: layers)
 }

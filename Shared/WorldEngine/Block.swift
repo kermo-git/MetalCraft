@@ -1,5 +1,53 @@
 import Metal
 
+struct BlockInfo {
+    let topTexture: String
+    let sideTexture: String
+    let bottomTexture: String
+    
+    init(topTexture: String, sideTexture: String = "", bottomTexture: String = "") {
+        self.topTexture = topTexture
+        
+        if sideTexture == "" {
+            self.sideTexture = topTexture
+        } else {
+            self.sideTexture = sideTexture
+        }
+        if bottomTexture == "" {
+            self.bottomTexture = topTexture
+        } else {
+            self.bottomTexture = bottomTexture
+        }
+    }
+}
+
+func compileBlocks(_ info: [String:BlockInfo]) -> ([String:Int], [String], [Block]) {
+    var texture_set: Set<String> = []
+    
+    for (_, block_info) in info {
+        texture_set.insert(block_info.topTexture)
+        texture_set.insert(block_info.sideTexture)
+        texture_set.insert(block_info.bottomTexture)
+    }
+    var block_name_to_id: [String:Int] = [:]
+    let texture_names = Array(texture_set)
+    var blocks: [Block] = []
+    
+    for (block_id, (block_name, block_info)) in info.enumerated() {
+        let topTexture = block_info.topTexture
+        let sideTexture = block_info.sideTexture
+        let bottomTexture = block_info.bottomTexture
+        
+        let block = Block(topTextureID: texture_names.firstIndex(of: topTexture)!,
+                          sideTextureID: texture_names.firstIndex(of: sideTexture)!,
+                          bottomTextureID: texture_names.firstIndex(of: bottomTexture)!)
+        
+        block_name_to_id[block_name] = block_id
+        blocks.append(block)
+    }
+    return (block_name_to_id, texture_names, blocks)
+}
+
 struct Block {
     let topTextureID: Int
     let sideTextureID: Int
