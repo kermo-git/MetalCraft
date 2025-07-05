@@ -1,9 +1,3 @@
-enum Biome {
-    case AUTUMN_FOREST
-    case LUSH_FOREST
-    case SPRUCE_FOREST
-    case SNOWY_FOREST
-}
 class ExampleWorld: WorldGenerator {
     let textureNames: [String]
     let blocks: [Block]
@@ -15,7 +9,7 @@ class ExampleWorld: WorldGenerator {
         minTerrainHeight: 60,
         heightRange: 30
     )
-    let treeGenerator = StructureGenerator(gridCellSize: 8, variantCount: 3)
+    let treeGenerator: StructureGenerator
     let trees: [Biome: [Structure]]
     let dirtLayerHeight = 5
     
@@ -115,6 +109,15 @@ class ExampleWorld: WorldGenerator {
                                           leaves_id: blockID["snow_leaves"]!)
             },
         ]
+        treeGenerator = StructureGenerator()
+        treeGenerator.registerStructures(biome: .AUTUMN_FOREST,
+                                         n_variants: trees[.AUTUMN_FOREST]!.count)
+        treeGenerator.registerStructures(biome: .LUSH_FOREST,
+                                         n_variants: trees[.LUSH_FOREST]!.count)
+        treeGenerator.registerStructures(biome: .SPRUCE_FOREST,
+                                         n_variants: trees[.SPRUCE_FOREST]!.count)
+        treeGenerator.registerStructures(biome: .SNOWY_FOREST,
+                                         n_variants: trees[.SNOWY_FOREST]!.count)
     }
     let rotations: [BlockOrientation] = [.NONE, .Y90, .YNEG90, .Y180]
     
@@ -139,16 +142,19 @@ class ExampleWorld: WorldGenerator {
         
         for tree_cell_x in (2*pos.x - 1)...(2*pos.x + 2) {
             for tree_cell_z in (2*pos.y - 1)...(2*pos.y + 2) {
-                let (trunkPos, variantID) = treeGenerator.findStructure(tree_cell_x, tree_cell_z)
+                let (trunkPos, hash) = treeGenerator.findStructure(tree_cell_x, tree_cell_z)
+                let biome = findBiome(trunkPos)
+                let variantID = treeGenerator.getStructureVariant(biome, hash)
+                let structure = trees[biome]![variantID]
                 
                 let tree_nw_corner = Int3(
-                    x: trunkPos.x - 2,
+                    x: trunkPos.x - structure.lengthX/2,
                     y: terrain.terrainHeight(trunkPos),
-                    z: trunkPos.z - 2
+                    z: trunkPos.z - structure.lengthZ/2
                 )
                 chunk.placeStructure(chunk_pos: pos,
                                      struct_NW_corner: tree_nw_corner,
-                                     structure: trees[findBiome(trunkPos)]![variantID])
+                                     structure: structure)
             }
         }
         for i in 0..<CHUNK_SIDE {
