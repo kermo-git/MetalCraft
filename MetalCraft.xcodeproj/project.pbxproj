@@ -92,6 +92,10 @@
 		4F9EAA1E2B69BD960080B613 /* PositionLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F9EAA1C2B69BCA00080B613 /* PositionLabel.swift */; };
 		4FA26CE92C27576700AABCD6 /* BlockOrientation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FA26CE82C27576700AABCD6 /* BlockOrientation.swift */; };
 		4FA26CEA2C27576700AABCD6 /* BlockOrientation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FA26CE82C27576700AABCD6 /* BlockOrientation.swift */; };
+		4FADDE8D2E1961DA00F59698 /* spruce_leaves.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FADDE8C2E1961DA00F59698 /* spruce_leaves.png */; };
+		4FADDE8E2E1961DA00F59698 /* spruce_leaves.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FADDE8C2E1961DA00F59698 /* spruce_leaves.png */; };
+		4FADDE902E19658000F59698 /* snow_spruce_leaves.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FADDE8F2E19658000F59698 /* snow_spruce_leaves.png */; };
+		4FADDE912E19658000F59698 /* snow_spruce_leaves.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FADDE8F2E19658000F59698 /* snow_spruce_leaves.png */; };
 		4FCCABB62C2B808700F51327 /* dirt.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FCCAB992C2B808600F51327 /* dirt.png */; };
 		4FCCABB72C2B808700F51327 /* dirt.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FCCAB992C2B808600F51327 /* dirt.png */; };
 		4FCCABD62C2B808700F51327 /* granite_orange.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FCCABA92C2B808600F51327 /* granite_orange.png */; };
@@ -197,6 +201,8 @@
 		4F9EAA192B69BC340080B613 /* iOSGameView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = iOSGameView.swift; sourceTree = "<group>"; };
 		4F9EAA1C2B69BCA00080B613 /* PositionLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PositionLabel.swift; sourceTree = "<group>"; };
 		4FA26CE82C27576700AABCD6 /* BlockOrientation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockOrientation.swift; sourceTree = "<group>"; };
+		4FADDE8C2E1961DA00F59698 /* spruce_leaves.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = spruce_leaves.png; sourceTree = "<group>"; };
+		4FADDE8F2E19658000F59698 /* snow_spruce_leaves.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = snow_spruce_leaves.png; sourceTree = "<group>"; };
 		4FCCAB992C2B808600F51327 /* dirt.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = dirt.png; sourceTree = "<group>"; };
 		4FCCABA92C2B808600F51327 /* granite_orange.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = granite_orange.png; sourceTree = "<group>"; };
 		4FCCABAC2C2B808600F51327 /* sand.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sand.png; sourceTree = "<group>"; };
@@ -349,6 +355,8 @@
 		4FD310DB286A3F0100BB55ED /* Textures */ = {
 			isa = PBXGroup;
 			children = (
+				4FADDE8F2E19658000F59698 /* snow_spruce_leaves.png */,
+				4FADDE8C2E1961DA00F59698 /* spruce_leaves.png */,
 				4FD81C002E187D9300D4145F /* autumn_orange_leaves.png */,
 				4FD81C012E187D9300D4145F /* autumn_yellow_leaves.png */,
 				4FD81BE52E186A4000D4145F /* cold_grass_flowers_1.png */,
@@ -529,6 +537,7 @@
 				4FD81BF22E186A4000D4145F /* dry_grass_flowers_3.png in Resources */,
 				4FD81BF32E186A4000D4145F /* cold_grass_flowers_2.png in Resources */,
 				4FD81BF42E186A4000D4145F /* cold_grass_flowers_3.png in Resources */,
+				4FADDE8E2E1961DA00F59698 /* spruce_leaves.png in Resources */,
 				4FD81BF52E186A4000D4145F /* cold_grass_flowers_1.png in Resources */,
 				4FD81BF62E186A4000D4145F /* dry_grass_flowers_1.png in Resources */,
 				4F5AA4DF2E171E5800538197 /* brown_wood_cut.png in Resources */,
@@ -542,6 +551,7 @@
 				4F0D905E2E11BEE50075F38B /* lime_bricks.png in Resources */,
 				4F0D905F2E11BEE50075F38B /* purple_bricks.png in Resources */,
 				4FCCABB62C2B808700F51327 /* dirt.png in Resources */,
+				4FADDE902E19658000F59698 /* snow_spruce_leaves.png in Resources */,
 				4FCCABD62C2B808700F51327 /* granite_orange.png in Resources */,
 				4FCCABDC2C2B808700F51327 /* sand.png in Resources */,
 				4FCCABE62C2B808700F51327 /* stone.png in Resources */,
@@ -578,6 +588,7 @@
 				4FD81BFB2E186A4000D4145F /* dry_grass_flowers_3.png in Resources */,
 				4FD81BFC2E186A4000D4145F /* cold_grass_flowers_2.png in Resources */,
 				4FD81BFD2E186A4000D4145F /* cold_grass_flowers_3.png in Resources */,
+				4FADDE8D2E1961DA00F59698 /* spruce_leaves.png in Resources */,
 				4FD81BFE2E186A4000D4145F /* cold_grass_flowers_1.png in Resources */,
 				4FD81BFF2E186A4000D4145F /* dry_grass_flowers_1.png in Resources */,
 				4F5AA4F22E171E5800538197 /* brown_wood_cut.png in Resources */,
@@ -591,6 +602,7 @@
 				4F0D905A2E11BEE50075F38B /* lime_bricks.png in Resources */,
 				4F0D905B2E11BEE50075F38B /* purple_bricks.png in Resources */,
 				4FCCABB72C2B808700F51327 /* dirt.png in Resources */,
+				4FADDE912E19658000F59698 /* snow_spruce_leaves.png in Resources */,
 				4FCCABD72C2B808700F51327 /* granite_orange.png in Resources */,
 				4FCCABDD2C2B808700F51327 /* sand.png in Resources */,
 				4FCCABE72C2B808700F51327 /* stone.png in Resources */,
