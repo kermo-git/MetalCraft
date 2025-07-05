@@ -22,13 +22,13 @@ class ExampleWorld: WorldGenerator {
             "dry_grass": BlockInfo(topTexture: "dry_grass",
                                    sideTexture: "dry_grass_dirt",
                                    bottomTexture: "dirt"),
-            "dry_grass_flowers_1": BlockInfo(topTexture: "dry_grass_flowers_1",
+            "dry_grass_leaves_1": BlockInfo(topTexture: "dry_grass_leaves_1",
                                              sideTexture: "dry_grass_dirt",
                                              bottomTexture: "dirt"),
-            "dry_grass_flowers_2": BlockInfo(topTexture: "dry_grass_flowers_2",
+            "dry_grass_leaves_2": BlockInfo(topTexture: "dry_grass_leaves_2",
                                              sideTexture: "dry_grass_dirt",
                                              bottomTexture: "dirt"),
-            "dry_grass_flowers_3": BlockInfo(topTexture: "dry_grass_flowers_3",
+            "dry_grass_leaves_3": BlockInfo(topTexture: "dry_grass_leaves_3",
                                              sideTexture: "dry_grass_dirt",
                                              bottomTexture: "dirt"),
             
@@ -176,13 +176,13 @@ class ExampleWorld: WorldGenerator {
                 
                 switch findBiome(globalPos) {
                 case .AUTUMN_FOREST:
-                    if Float.random(in: 0...1) > 0.2 {
+                    if Float.random(in: 0...1) > 0.4 {
                         ground_block_id = blockID["dry_grass"]!
                     } else {
                         ground_block_id = blockID[[
-                            "dry_grass_flowers_1",
-                            "dry_grass_flowers_2",
-                            "dry_grass_flowers_3"
+                            "dry_grass_leaves_1",
+                            "dry_grass_leaves_2",
+                            "dry_grass_leaves_3"
                         ].randomElement()!]!
                     }
                 case .LUSH_FOREST:
