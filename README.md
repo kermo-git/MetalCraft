@@ -4,7 +4,7 @@ This is my hobby project to create a MineCraft-like game for Apple devices. The 
 * **macOS** devices (MacBook and iMac). These must have Apple silicon (e.g M1, M2 or M3), not Intel processors.
 * **iOS** devices (iPhone and iPad)
 
-The name comes from the fact that it uses [Metal](https://developer.apple.com/metal/) API to render 3D graphics. User interface is created using [SwiftUI](https://developer.apple.com/xcode/swiftui/).
+The name comes from the fact that it uses [Metal](https://developer.apple.com/metal/) API to render 3D graphics. User interface is created using [SwiftUI](https://developer.apple.com/swiftui/).
 
 ## Setup instructions
 
