@@ -1,10 +1,3 @@
-enum Biome {
-    case AUTUMN_FOREST
-    case LUSH_FOREST
-    case SPRUCE_FOREST
-    case SNOWY_FOREST
-}
-
 private let MASK = 255
 
 func createRandomVariants(_ n_variants: Int) -> [Int] {
@@ -36,7 +29,7 @@ func createWeightedVariants(_ probabilities: [Float]) -> [Int] {
     return result
 }
 
-class StructureGenerator {
+class StructureGenerator<Biome: Hashable> {
     private var hashTable: [Int] = []
     private var structures: [Biome:[Int]] = [:]
     

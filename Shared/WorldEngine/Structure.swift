@@ -1,3 +1,8 @@
+struct StructureVariant<T: Hashable> {
+    let type: T
+    let blockID: [Int]
+    let units: [(Int, Int, Int)] // (y_start, y_end, repeats)
+}
 
 struct Structure {
     let lengthX: Int

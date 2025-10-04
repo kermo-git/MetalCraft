@@ -123,7 +123,7 @@ class Chunk {
         }
     }
     
-    func placeStructure(chunk_pos: Int2, struct_NW_corner: Int3, structure: Structure) {
+    func placeStructure<T: Hashable>(chunk_pos: Int2, struct_NW_corner: Int3, structure: Structure, variant: StructureVariant<T>) {
         let chunk_NW_corner = getGlobalBlockPos(chunkPos: chunk_pos,
                                                 localBlockPos: Int3(0, struct_NW_corner.y, 0))
         
@@ -141,7 +141,6 @@ class Chunk {
         let south_z = min(struct_SE_corner.z, chunk_SE_corner.z)
         
         let bottom_y = struct_NW_corner.y
-        let top_y = struct_NW_corner.y + structure.lengthY - 1
         
         if west_x <= east_x && north_z <= south_z {
             
@@ -153,13 +152,20 @@ class Chunk {
                     let chunk_z = z - chunk_NW_corner.z
                     let struct_z = z - struct_NW_corner.z
                     
-                    for y in bottom_y...top_y {
-                        let chunk_block_pos = Int3(chunk_x, y, chunk_z)
-                        let struct_block_pos = Int3(struct_x, y - bottom_y, struct_z)
-                        
-                        if !structure.isEmpty(struct_block_pos) {
-                            let (blockID, orientation) = structure.get(struct_block_pos)
-                            self.set(chunk_block_pos, blockID, orientation)
+                    var chunk_y = bottom_y
+                    
+                    for (unit_y_start, unit_y_end, repeats) in variant.units {
+                        for _ in 1...repeats {
+                            for struct_y in unit_y_start...unit_y_end {
+                                let chunk_block_pos = Int3(chunk_x, chunk_y, chunk_z)
+                                let struct_block_pos = Int3(struct_x, struct_y, struct_z)
+                                
+                                if !structure.isEmpty(struct_block_pos) {
+                                    let (blockID, orientation) = structure.get(struct_block_pos)
+                                    self.set(chunk_block_pos, variant.blockID[blockID], orientation)
+                                }
+                                chunk_y += 1
+                            }
                         }
                     }
                 }

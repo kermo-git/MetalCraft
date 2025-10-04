@@ -1,3 +1,15 @@
+enum Biome {
+    case AUTUMN_FOREST
+    case LUSH_FOREST
+    case SPRUCE_FOREST
+    case SNOWY_FOREST
+}
+
+enum StructureType {
+    case TREE
+    case SPRUCE_TREE
+}
+
 class ExampleWorld: WorldGenerator {
     let textureNames: [String]
     let blocks: [Block]
@@ -9,8 +21,12 @@ class ExampleWorld: WorldGenerator {
         minTerrainHeight: 60,
         heightRange: 30
     )
-    let treeGenerator: StructureGenerator
-    let trees: [Biome: [Structure]]
+    let structureTypes: [StructureType: Structure] = [
+        StructureType.TREE: buildTree(),
+        StructureType.SPRUCE_TREE: buildSpruceTree()
+    ]
+    let trees: [Biome: [StructureVariant<StructureType>]]
+    let treeGenerator: StructureGenerator<Biome>
     let dirtLayerHeight = 5
     
     init() {
@@ -84,38 +100,49 @@ class ExampleWorld: WorldGenerator {
         self.blockID = blockID
         
         var autumn_trees = (2...4).map() {
-            trunk_height in buildTree(trunk_height: trunk_height,
-                                      wood_id: blockID["gray_wood"]!,
-                                      leaves_id: blockID["autumn_green_leaves"]!)
+            trunk_height in StructureVariant(
+                type: StructureType.TREE,
+                blockID: [blockID["gray_wood"]!, blockID["autumn_green_leaves"]!],
+                units: [(0, 0, trunk_height), (1, 6, 1)]
+            )
         }
         autumn_trees.append(contentsOf: (2...4).map() {
-            trunk_height in buildTree(trunk_height: trunk_height,
-                                      wood_id: blockID["gray_wood"]!,
-                                      leaves_id: blockID["autumn_yellow_leaves"]!)
+            trunk_height in StructureVariant(
+                type: StructureType.TREE,
+                blockID: [blockID["gray_wood"]!, blockID["autumn_yellow_leaves"]!],
+                units: [(0, 0, trunk_height), (1, 6, 1)]
+            )
         })
         autumn_trees.append(contentsOf: (2...4).map() {
-            trunk_height in buildTree(trunk_height: trunk_height,
-                                      wood_id: blockID["gray_wood"]!,
-                                      leaves_id: blockID["autumn_orange_leaves"]!)
+            trunk_height in StructureVariant(
+                type: StructureType.TREE,
+                blockID: [blockID["gray_wood"]!, blockID["autumn_orange_leaves"]!],
+                units: [(0, 0, trunk_height), (1, 6, 1)]
+            )
         })
         
         trees = [
             .AUTUMN_FOREST: autumn_trees,
             .LUSH_FOREST: (2...4).map() {
-                trunk_height in buildTree(trunk_height: trunk_height,
-                                          wood_id: blockID["brown_wood"]!,
-                                          leaves_id: blockID["warm_leaves"]!)
+                trunk_height in StructureVariant(
+                    type: StructureType.TREE,
+                    blockID: [blockID["brown_wood"]!, blockID["warm_leaves"]!],
+                    units: [(0, 0, trunk_height), (1, 6, 1)]
+                )
             },
             .SPRUCE_FOREST: (2...4).map() {
-                trunk_height in buildSpruceTree(trunk_height: trunk_height,
-                                                wood_id: blockID["brown_wood"]!,
-                                                leaves_id: blockID["spruce_leaves"]!)
+                trunk_height in StructureVariant(
+                    type: StructureType.SPRUCE_TREE,
+                    blockID: [blockID["brown_wood"]!, blockID["spruce_leaves"]!, blockID["spruce_leaves"]!],
+                    units: [(0, 0, trunk_height), (1, 8, 1)]
+                )
             },
             .SNOWY_FOREST: (2...4).map() {
-                trunk_height in buildSpruceTree(trunk_height: trunk_height,
-                                                wood_id: blockID["brown_wood"]!,
-                                                leaves_id: blockID["spruce_leaves"]!,
-                                                top_layer_leaves_id: blockID["snow_spruce_leaves"]!)
+                trunk_height in StructureVariant(
+                    type: StructureType.SPRUCE_TREE,
+                    blockID: [blockID["brown_wood"]!, blockID["spruce_leaves"]!, blockID["snow_spruce_leaves"]!],
+                    units: [(0, 0, trunk_height), (1, 8, 1)]
+                )
             },
         ]
         treeGenerator = StructureGenerator()
@@ -154,7 +181,8 @@ class ExampleWorld: WorldGenerator {
                 let (trunkPos, hash) = treeGenerator.findStructure(tree_cell_x, tree_cell_z)
                 let biome = findBiome(trunkPos)
                 let variantID = treeGenerator.getStructureVariant(biome, hash)
-                let structure = trees[biome]![variantID]
+                let structureVariant = trees[biome]![variantID]
+                let structure = structureTypes[structureVariant.type]!
                 
                 let tree_nw_corner = Int3(
                     x: trunkPos.x - structure.lengthX/2,
@@ -163,7 +191,8 @@ class ExampleWorld: WorldGenerator {
                 )
                 chunk.placeStructure(chunk_pos: pos,
                                      struct_NW_corner: tree_nw_corner,
-                                     structure: structure)
+                                     structure: structure,
+                                     variant: structureVariant)
             }
         }
         for i in 0..<CHUNK_SIDE {
@@ -226,22 +255,20 @@ class ExampleWorld: WorldGenerator {
     }
 }
 
-func buildTree(trunk_height: Int, wood_id: Int, leaves_id: Int) -> Structure {
+func buildTree() -> Structure {
     let A = AIR_ID
-    let W = wood_id
-    let L = leaves_id
+    let W = 0
+    let L = 1
     
     var layers: [[[Int]]] = []
     
-    for _ in 0..<trunk_height {
-        layers.append(
-            [[A, A, A, A, A],
-             [A, A, A, A, A],
-             [A, A, W, A, A],
-             [A, A, A, A, A],
-             [A, A, A, A, A]]
-        )
-    }
+    layers.append(
+        [[A, A, A, A, A],
+         [A, A, A, A, A],
+         [A, A, W, A, A],
+         [A, A, A, A, A],
+         [A, A, A, A, A]]
+    )
     for _ in 0..<3 {
         layers.append(
             [[A, L, L, L, A],
@@ -270,30 +297,23 @@ func buildTree(trunk_height: Int, wood_id: Int, leaves_id: Int) -> Structure {
     return Structure(blocks: layers)
 }
 
-func buildSpruceTree(trunk_height: Int, wood_id: Int,
-                     leaves_id: Int, top_layer_leaves_id: Int = -1) -> Structure {
+func buildSpruceTree() -> Structure {
     let A = AIR_ID
-    let W = wood_id
-    let L = leaves_id
-    let T = if top_layer_leaves_id == -1 {
-        leaves_id
-    } else {
-        top_layer_leaves_id
-    }
+    let W = 0
+    let L = 1
+    let T = 2
     
     var layers: [[[Int]]] = []
     
-    for _ in 0..<trunk_height {
-        layers.append(
-            [[A, A, A, A, A, A, A],
-             [A, A, A, A, A, A, A],
-             [A, A, A, A, A, A, A],
-             [A, A, A, W, A, A, A],
-             [A, A, A, A, A, A, A],
-             [A, A, A, A, A, A, A],
-             [A, A, A, A, A, A, A]]
-        )
-    }
+    layers.append(
+        [[A, A, A, A, A, A, A],
+         [A, A, A, A, A, A, A],
+         [A, A, A, A, A, A, A],
+         [A, A, A, W, A, A, A],
+         [A, A, A, A, A, A, A],
+         [A, A, A, A, A, A, A],
+         [A, A, A, A, A, A, A]]
+    )
     layers.append(
         [[A, A, T, L, T, A, A],
          [A, L, L, L, L, L, A],
