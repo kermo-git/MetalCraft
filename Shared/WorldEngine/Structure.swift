@@ -1,26 +1,16 @@
 struct StructureVariant<T: Hashable> {
     let type: T
     let blockID: [Int]
-    let units: [(Int, Int, Int)] // (y_start, y_end, repeats)
+    let layerIndexes: [Int]
 }
 
-struct Structure {
+class Structure {
     let lengthX: Int
     let lengthY: Int
     let lengthZ: Int
     
     private var blockID: [Int]
     private var orientation: [BlockOrientation]
-    
-    init(lengthX: Int, lengthY: Int, lengthZ: Int) {
-        self.lengthX = lengthX
-        self.lengthY = lengthY
-        self.lengthZ = lengthZ
-        
-        let n_blocks = lengthX*lengthY*lengthZ
-        self.blockID = Array(repeating: AIR_ID, count: n_blocks)
-        orientation = Array(repeating: .NONE, count: n_blocks)
-    }
     
     init(blocks: [[[Int]]], orientations: [[[BlockOrientation]]] = []) {
         self.lengthX = blocks[0][0].count
@@ -58,7 +48,7 @@ struct Structure {
         return (blockID[index], orientation[index])
     }
     
-    mutating func set(_ pos: Int3, _ blockID: Int,
+    func set(_ pos: Int3, _ blockID: Int,
                       _ orientation: BlockOrientation = .NONE) {
         let index = getIndex(pos)
         self.blockID[index] = blockID
@@ -73,7 +63,7 @@ struct Structure {
         blockID[getIndex(pos)]
     }
     
-    mutating func setBlockID(_ pos: Int3, _ blockID: Int) {
+    func setBlockID(_ pos: Int3, _ blockID: Int) {
         self.blockID[getIndex(pos)] = blockID
     }
     
@@ -81,7 +71,7 @@ struct Structure {
         orientation[getIndex(pos)]
     }
     
-    mutating func setOrientation(_ pos: Int3, _ orientation: BlockOrientation) {
+    func setOrientation(_ pos: Int3, _ orientation: BlockOrientation) {
         self.orientation[getIndex(pos)] = orientation
     }
 }

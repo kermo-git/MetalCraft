@@ -90,7 +90,9 @@ class ExampleWorld: WorldGenerator {
             "brown_wood": BlockInfo(topTexture: "brown_wood_cut",
                                     sideTexture: "brown_wood_bark"),
             "gray_wood": BlockInfo(topTexture: "gray_wood_cut",
-                                    sideTexture: "gray_wood_bark")
+                                    sideTexture: "gray_wood_bark"),
+            "birch_wood": BlockInfo(topTexture: "birch_wood_cut",
+                                    sideTexture: "birch_wood_bark"),
         ]
         
         let (blockID, textureNames, blocks) = compileBlocks(block_info)
@@ -99,51 +101,64 @@ class ExampleWorld: WorldGenerator {
         self.blocks = blocks
         self.blockID = blockID
         
-        var autumn_trees = (2...4).map() {
-            trunk_height in StructureVariant(
-                type: StructureType.TREE,
-                blockID: [blockID["gray_wood"]!, blockID["autumn_green_leaves"]!],
-                units: [(0, 0, trunk_height), (1, 6, 1)]
-            )
+        var autumn_trees: [StructureVariant<StructureType>] = []
+        var lush_trees: [StructureVariant<StructureType>] = []
+        
+        for trunk_blocks in (2...4) {
+            for canopy_bottom_blocks in (1...2) {
+                for canopy_middle_blocks in (2...4) {
+                    let layer_indexes = treeLayerRepeats(
+                        trunk_blocks,
+                        canopy_bottom_blocks,
+                        canopy_middle_blocks
+                    )
+                    for wood_type in ["brown_wood", "birch_wood"] {
+                        lush_trees.append(StructureVariant(
+                            type: StructureType.TREE,
+                            blockID: [blockID[wood_type]!, blockID["warm_leaves"]!],
+                            layerIndexes: layer_indexes
+                        ))
+                    }
+                    for wood_type in ["gray_wood", "birch_wood"] {
+                        for leaf_color in ["green", "yellow", "orange"] {
+                            autumn_trees.append(StructureVariant(
+                                type: StructureType.TREE,
+                                blockID: [blockID[wood_type]!, blockID["autumn_\(leaf_color)_leaves"]!],
+                                layerIndexes: layer_indexes
+                            ))
+                        }
+                    }
+                }
+            }
         }
-        autumn_trees.append(contentsOf: (2...4).map() {
-            trunk_height in StructureVariant(
-                type: StructureType.TREE,
-                blockID: [blockID["gray_wood"]!, blockID["autumn_yellow_leaves"]!],
-                units: [(0, 0, trunk_height), (1, 6, 1)]
-            )
-        })
-        autumn_trees.append(contentsOf: (2...4).map() {
-            trunk_height in StructureVariant(
-                type: StructureType.TREE,
-                blockID: [blockID["gray_wood"]!, blockID["autumn_orange_leaves"]!],
-                units: [(0, 0, trunk_height), (1, 6, 1)]
-            )
-        })
+        
+        var spruce_trees: [StructureVariant<StructureType>] = []
+        var snowy_spruce_trees: [StructureVariant<StructureType>] = []
+        
+        for trunk_blocks in (2...4) {
+            for is_large in [false, true] {
+                for is_tall in [false, true] {
+                    let layer_indexes = spruceLayerRepeats(trunkBlocks: trunk_blocks, isLarge: is_large, isTall: is_tall)
+                    
+                    spruce_trees.append(StructureVariant(
+                        type: StructureType.SPRUCE_TREE,
+                        blockID: [blockID["brown_wood"]!, blockID["spruce_leaves"]!, blockID["spruce_leaves"]!],
+                        layerIndexes: layer_indexes
+                    ))
+                    snowy_spruce_trees.append(StructureVariant(
+                        type: StructureType.SPRUCE_TREE,
+                        blockID: [blockID["brown_wood"]!, blockID["spruce_leaves"]!, blockID["snow_spruce_leaves"]!],
+                        layerIndexes: layer_indexes
+                    ))
+                }
+            }
+        }
         
         trees = [
             .AUTUMN_FOREST: autumn_trees,
-            .LUSH_FOREST: (2...4).map() {
-                trunk_height in StructureVariant(
-                    type: StructureType.TREE,
-                    blockID: [blockID["brown_wood"]!, blockID["warm_leaves"]!],
-                    units: [(0, 0, trunk_height), (1, 6, 1)]
-                )
-            },
-            .SPRUCE_FOREST: (2...4).map() {
-                trunk_height in StructureVariant(
-                    type: StructureType.SPRUCE_TREE,
-                    blockID: [blockID["brown_wood"]!, blockID["spruce_leaves"]!, blockID["spruce_leaves"]!],
-                    units: [(0, 0, trunk_height), (1, 8, 1)]
-                )
-            },
-            .SNOWY_FOREST: (2...4).map() {
-                trunk_height in StructureVariant(
-                    type: StructureType.SPRUCE_TREE,
-                    blockID: [blockID["brown_wood"]!, blockID["spruce_leaves"]!, blockID["snow_spruce_leaves"]!],
-                    units: [(0, 0, trunk_height), (1, 8, 1)]
-                )
-            },
+            .LUSH_FOREST: lush_trees,
+            .SPRUCE_FOREST: spruce_trees,
+            .SNOWY_FOREST: snowy_spruce_trees,
         ]
         treeGenerator = StructureGenerator()
         treeGenerator.registerStructures(biome: .AUTUMN_FOREST,
@@ -253,138 +268,4 @@ class ExampleWorld: WorldGenerator {
         
         return chunk
     }
-}
-
-func buildTree() -> Structure {
-    let A = AIR_ID
-    let W = 0
-    let L = 1
-    
-    var layers: [[[Int]]] = []
-    
-    layers.append(
-        [[A, A, A, A, A],
-         [A, A, A, A, A],
-         [A, A, W, A, A],
-         [A, A, A, A, A],
-         [A, A, A, A, A]]
-    )
-    for _ in 0..<3 {
-        layers.append(
-            [[A, L, L, L, A],
-             [L, L, L, L, L],
-             [L, L, W, L, L],
-             [L, L, L, L, L],
-             [A, L, L, L, A]]
-        )
-    }
-    for _ in 0..<2 {
-        layers.append(
-            [[A, A, A, A, A],
-             [A, L, L, L, A],
-             [A, L, W, L, A],
-             [A, L, L, L, A],
-             [A, A, A, A, A]]
-        )
-    }
-    layers.append(
-        [[A, A, A, A, A],
-         [A, A, L, A, A],
-         [A, L, L, L, A],
-         [A, A, L, A, A],
-         [A, A, A, A, A]]
-    )
-    return Structure(blocks: layers)
-}
-
-func buildSpruceTree() -> Structure {
-    let A = AIR_ID
-    let W = 0
-    let L = 1
-    let T = 2
-    
-    var layers: [[[Int]]] = []
-    
-    layers.append(
-        [[A, A, A, A, A, A, A],
-         [A, A, A, A, A, A, A],
-         [A, A, A, A, A, A, A],
-         [A, A, A, W, A, A, A],
-         [A, A, A, A, A, A, A],
-         [A, A, A, A, A, A, A],
-         [A, A, A, A, A, A, A]]
-    )
-    layers.append(
-        [[A, A, T, L, T, A, A],
-         [A, L, L, L, L, L, A],
-         [T, L, L, L, L, L, T],
-         [L, L, L, W, L, L, L],
-         [T, L, L, L, L, L, T],
-         [A, L, L, L, L, L, A],
-         [A, A, T, L, T, A, A]]
-    )
-    layers.append(
-        [[A, A, A, T, A, A, A],
-         [A, T, L, L, L, T, A],
-         [A, L, L, L, L, L, A],
-         [T, L, L, W, L, L, T],
-         [A, L, L, L, L, L, A],
-         [A, T, L, L, L, T, A],
-         [A, A, A, T, A, A, A]]
-    )
-    layers.append(
-        [[A, A, A, A, A, A, A],
-         [A, A, T, L, T, A, A],
-         [A, T, L, L, L, T, A],
-         [A, L, L, W, L, L, A],
-         [A, T, L, L, L, T, A],
-         [A, A, T, L, T, A, A],
-         [A, A, A, A, A, A, A]]
-    )
-    layers.append(
-        [[A, A, A, A, A, A, A],
-         [A, A, A, T, A, A, A],
-         [A, A, L, L, L, A, A],
-         [A, T, L, W, L, T, A],
-         [A, A, L, L, L, A, A],
-         [A, A, A, T, A, A, A],
-         [A, A, A, A, A, A, A]]
-    )
-    layers.append(
-        [[A, A, A, A, A, A, A],
-         [A, A, A, A, A, A, A],
-         [A, A, T, L, T, A, A],
-         [A, A, L, W, L, A, A],
-         [A, A, T, L, T, A, A],
-         [A, A, A, A, A, A, A],
-         [A, A, A, A, A, A, A]]
-    )
-    layers.append(
-        [[A, A, A, A, A, A, A],
-         [A, A, A, A, A, A, A],
-         [A, A, A, T, A, A, A],
-         [A, A, T, W, T, A, A],
-         [A, A, A, T, A, A, A],
-         [A, A, A, A, A, A, A],
-         [A, A, A, A, A, A, A]]
-    )
-    layers.append(
-        [[A, A, A, A, A, A, A],
-         [A, A, A, A, A, A, A],
-         [A, A, A, A, A, A, A],
-         [A, A, A, L, A, A, A],
-         [A, A, A, A, A, A, A],
-         [A, A, A, A, A, A, A],
-         [A, A, A, A, A, A, A]]
-    )
-    layers.append(
-        [[A, A, A, A, A, A, A],
-         [A, A, A, A, A, A, A],
-         [A, A, A, A, A, A, A],
-         [A, A, A, T, A, A, A],
-         [A, A, A, A, A, A, A],
-         [A, A, A, A, A, A, A],
-         [A, A, A, A, A, A, A]]
-    )
-    return Structure(blocks: layers)
 }

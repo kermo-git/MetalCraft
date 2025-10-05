@@ -74,6 +74,10 @@
 		4F5AA5082E17275000538197 /* cold_grass_stone.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F5AA5022E17275000538197 /* cold_grass_stone.png */; };
 		4F5AA5092E17275000538197 /* dry_grass_stone.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F5AA5032E17275000538197 /* dry_grass_stone.png */; };
 		4F5AA50A2E17275000538197 /* warm_grass_stone.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F5AA5042E17275000538197 /* warm_grass_stone.png */; };
+		4F68D9492E92F86B002B114B /* birch_wood_bark.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F68D9482E92F86B002B114B /* birch_wood_bark.png */; };
+		4F68D94A2E92F86B002B114B /* birch_wood_bark.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F68D9482E92F86B002B114B /* birch_wood_bark.png */; };
+		4F68D94C2E92F9F8002B114B /* birch_wood_cut.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F68D94B2E92F9F8002B114B /* birch_wood_cut.png */; };
+		4F68D94D2E92F9F8002B114B /* birch_wood_cut.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F68D94B2E92F9F8002B114B /* birch_wood_cut.png */; };
 		4F7645A92B62B22D00E15329 /* MacOSGameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F7645A82B62B22D00E15329 /* MacOSGameView.swift */; };
 		4F8640092C28176F00C9ED85 /* FlyingCamera.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F8640082C28176F00C9ED85 /* FlyingCamera.swift */; };
 		4F86400A2C28176F00C9ED85 /* FlyingCamera.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F8640082C28176F00C9ED85 /* FlyingCamera.swift */; };
@@ -153,6 +157,8 @@
 		4FD81C032E187D9300D4145F /* autumn_orange_leaves.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FD81C002E187D9300D4145F /* autumn_orange_leaves.png */; };
 		4FD81C042E187D9300D4145F /* autumn_yellow_leaves.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FD81C012E187D9300D4145F /* autumn_yellow_leaves.png */; };
 		4FD81C052E187D9300D4145F /* autumn_orange_leaves.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FD81C002E187D9300D4145F /* autumn_orange_leaves.png */; };
+		4FDCCA3C2E92808500752C35 /* Trees.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FDCCA3B2E92808500752C35 /* Trees.swift */; };
+		4FDCCA3D2E92808500752C35 /* Trees.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FDCCA3B2E92808500752C35 /* Trees.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -191,6 +197,8 @@
 		4F5AA5022E17275000538197 /* cold_grass_stone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cold_grass_stone.png; sourceTree = "<group>"; };
 		4F5AA5032E17275000538197 /* dry_grass_stone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = dry_grass_stone.png; sourceTree = "<group>"; };
 		4F5AA5042E17275000538197 /* warm_grass_stone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = warm_grass_stone.png; sourceTree = "<group>"; };
+		4F68D9482E92F86B002B114B /* birch_wood_bark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = birch_wood_bark.png; sourceTree = "<group>"; };
+		4F68D94B2E92F9F8002B114B /* birch_wood_cut.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = birch_wood_cut.png; sourceTree = "<group>"; };
 		4F7645A82B62B22D00E15329 /* MacOSGameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacOSGameView.swift; sourceTree = "<group>"; };
 		4F8640082C28176F00C9ED85 /* FlyingCamera.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlyingCamera.swift; sourceTree = "<group>"; };
 		4F9E1AD62A79186F0055A782 /* ExampleScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExampleScene.swift; sourceTree = "<group>"; };
@@ -236,6 +244,7 @@
 		4FD81BED2E186A4000D4145F /* warm_grass_flowers_3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = warm_grass_flowers_3.png; sourceTree = "<group>"; };
 		4FD81C002E187D9300D4145F /* autumn_orange_leaves.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = autumn_orange_leaves.png; sourceTree = "<group>"; };
 		4FD81C012E187D9300D4145F /* autumn_yellow_leaves.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = autumn_yellow_leaves.png; sourceTree = "<group>"; };
+		4FDCCA3B2E92808500752C35 /* Trees.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Trees.swift; sourceTree = "<group>"; };
 		4FFA2A9D2C1DC1550015ADAB /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -355,6 +364,8 @@
 		4FD310DB286A3F0100BB55ED /* Textures */ = {
 			isa = PBXGroup;
 			children = (
+				4F68D94B2E92F9F8002B114B /* birch_wood_cut.png */,
+				4F68D9482E92F86B002B114B /* birch_wood_bark.png */,
 				4FADDE922E1990D200F59698 /* dry_grass_leaves_1.png */,
 				4FADDE932E1990D200F59698 /* dry_grass_leaves_2.png */,
 				4FADDE942E1990D200F59698 /* dry_grass_leaves_3.png */,
@@ -405,9 +416,10 @@
 		4FD31128286A3F0C00BB55ED /* GameLogic */ = {
 			isa = PBXGroup;
 			children = (
+				4FD31148286A3F1F00BB55ED /* ExampleWorld.swift */,
+				4FDCCA3B2E92808500752C35 /* Trees.swift */,
 				4FD31149286A3F1F00BB55ED /* Noise */,
 				4FD310DB286A3F0100BB55ED /* Textures */,
-				4FD31148286A3F1F00BB55ED /* ExampleWorld.swift */,
 			);
 			path = GameLogic;
 			sourceTree = "<group>";
@@ -477,7 +489,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1340;
-				LastUpgradeCheck = 1540;
+				LastUpgradeCheck = 1640;
 				TargetAttributes = {
 					4FD3106D286A3BCD00BB55ED = {
 						CreatedOnToolsVersion = 13.4.1;
@@ -521,6 +533,7 @@
 				4F5AA4D82E171E5800538197 /* warm_grass_dirt.png in Resources */,
 				4F5AA4D92E171E5800538197 /* cold_grass_sand.png in Resources */,
 				4F5AA4DA2E171E5800538197 /* gray_wood_cut.png in Resources */,
+				4F68D94D2E92F9F8002B114B /* birch_wood_cut.png in Resources */,
 				4F5AA4DB2E171E5800538197 /* snow_dirt.png in Resources */,
 				4F5AA4DC2E171E5800538197 /* autumn_green_leaves.png in Resources */,
 				4F5AA4DD2E171E5800538197 /* cold_grass.png in Resources */,
@@ -553,6 +566,7 @@
 				4FADDE952E1990D200F59698 /* dry_grass_leaves_2.png in Resources */,
 				4FADDE962E1990D200F59698 /* dry_grass_leaves_3.png in Resources */,
 				4FADDE972E1990D200F59698 /* dry_grass_leaves_1.png in Resources */,
+				4F68D94A2E92F86B002B114B /* birch_wood_bark.png in Resources */,
 				4FCCABDC2C2B808700F51327 /* sand.png in Resources */,
 				4FCCABE62C2B808700F51327 /* stone.png in Resources */,
 			);
@@ -572,6 +586,7 @@
 				4F5AA4EB2E171E5800538197 /* warm_grass_dirt.png in Resources */,
 				4F5AA4EC2E171E5800538197 /* cold_grass_sand.png in Resources */,
 				4F5AA4ED2E171E5800538197 /* gray_wood_cut.png in Resources */,
+				4F68D94C2E92F9F8002B114B /* birch_wood_cut.png in Resources */,
 				4F5AA4EE2E171E5800538197 /* snow_dirt.png in Resources */,
 				4F5AA4EF2E171E5800538197 /* autumn_green_leaves.png in Resources */,
 				4F5AA4F02E171E5800538197 /* cold_grass.png in Resources */,
@@ -604,6 +619,7 @@
 				4FADDE982E1990D200F59698 /* dry_grass_leaves_2.png in Resources */,
 				4FADDE992E1990D200F59698 /* dry_grass_leaves_3.png in Resources */,
 				4FADDE9A2E1990D200F59698 /* dry_grass_leaves_1.png in Resources */,
+				4F68D9492E92F86B002B114B /* birch_wood_bark.png in Resources */,
 				4FCCABDD2C2B808700F51327 /* sand.png in Resources */,
 				4FCCABE72C2B808700F51327 /* stone.png in Resources */,
 			);
@@ -619,6 +635,7 @@
 				4F050C2D2B683409007269BB /* GameButton.swift in Sources */,
 				4FD31138286A3F0C00BB55ED /* Camera.swift in Sources */,
 				4F1288992B703B5C003860E8 /* WorldGenerator.swift in Sources */,
+				4FDCCA3C2E92808500752C35 /* Trees.swift in Sources */,
 				4F0220672A40422B000ACC7E /* ChunkFaces.swift in Sources */,
 				4F8640092C28176F00C9ED85 /* FlyingCamera.swift in Sources */,
 				4FD31150286A3F1F00BB55ED /* ExampleWorld.swift in Sources */,
@@ -655,6 +672,7 @@
 				4FD31155286A3F1F00BB55ED /* SimplexNoise.swift in Sources */,
 				4FD31127286A3F0100BB55ED /* Types.swift in Sources */,
 				4F12889A2B703B5C003860E8 /* WorldGenerator.swift in Sources */,
+				4FDCCA3D2E92808500752C35 /* Trees.swift in Sources */,
 				4F9E1ADA2A791DE40055A782 /* ExampleScene.swift in Sources */,
 				4F86400A2C28176F00C9ED85 /* FlyingCamera.swift in Sources */,
 				4FD3115C286A3F6C00BB55ED /* MetalView.swift in Sources */,
@@ -723,6 +741,7 @@
 				COPY_PHASE_STRIP = NO;
 				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = 98589R7VQ2;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
@@ -746,6 +765,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = "";
 			};
 			name = Debug;
 		};
@@ -785,6 +805,7 @@
 				COPY_PHASE_STRIP = NO;
 				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = 98589R7VQ2;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
@@ -801,6 +822,7 @@
 				MTL_FAST_MATH = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = "";
 			};
 			name = Release;
 		};
@@ -811,7 +833,6 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 98589R7VQ2;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -841,7 +862,6 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 98589R7VQ2;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -876,7 +896,6 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = YES;
-				DEVELOPMENT_TEAM = 98589R7VQ2;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -906,7 +925,6 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = YES;
-				DEVELOPMENT_TEAM = 98589R7VQ2;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
