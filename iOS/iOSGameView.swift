@@ -117,6 +117,6 @@ struct EmptyGridCell: View {
     iOSGameView()
         .environmentObject(
             WorldScene(generator: ExampleWorld(),
-                       cameraPos: Float3(0, 70, 0))
+                       cameraPos: Float3(0, 90, 0))
         )
 }
