@@ -170,3 +170,9 @@ func getGlobalBlockPos(chunkPos: Int2, localBlockPos: Int3) -> Int3 {
                 y: localBlockPos.y,
                 z: chunkPos.y * CHUNK_SIDE + localBlockPos.z)
 }
+
+func distanceSquared(_ chunk1: Int2, _ chunk2: Int2) -> Int {
+    let fX = chunk1.x - chunk2.x
+    let fZ = chunk1.y - chunk2.y
+    return fX * fX + fZ * fZ
+}

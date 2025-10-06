@@ -4,7 +4,7 @@ struct StructureVariant<T: Hashable> {
     let layerIndexes: [Int]
 }
 
-class Structure {
+struct Structure {
     let lengthX: Int
     let lengthY: Int
     let lengthZ: Int
@@ -48,7 +48,7 @@ class Structure {
         return (blockID[index], orientation[index])
     }
     
-    func set(_ pos: Int3, _ blockID: Int,
+    mutating func set(_ pos: Int3, _ blockID: Int,
                       _ orientation: BlockOrientation = .NONE) {
         let index = getIndex(pos)
         self.blockID[index] = blockID
@@ -63,7 +63,7 @@ class Structure {
         blockID[getIndex(pos)]
     }
     
-    func setBlockID(_ pos: Int3, _ blockID: Int) {
+    mutating func setBlockID(_ pos: Int3, _ blockID: Int) {
         self.blockID[getIndex(pos)] = blockID
     }
     
@@ -71,7 +71,7 @@ class Structure {
         orientation[getIndex(pos)]
     }
     
-    func setOrientation(_ pos: Int3, _ orientation: BlockOrientation) {
+    mutating func setOrientation(_ pos: Int3, _ orientation: BlockOrientation) {
         self.orientation[getIndex(pos)] = orientation
     }
 }

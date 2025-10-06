@@ -7,7 +7,7 @@ private func getBlockArrayIndex(_ pos: Int3) -> Int {
     return CHUNK_SIDE * (pos.y * CHUNK_SIDE + pos.z) + pos.x
 }
 
-class Chunk {
+struct Chunk {
     private var blockID: [Int]
     private var orientation: [BlockOrientation]
     private(set) var numLayerAirBlocks: [Int]
@@ -28,7 +28,7 @@ class Chunk {
         return (blockID[index], orientation[index])
     }
     
-    func set(_ pos: Int3, _ blockID: Int,
+    mutating func set(_ pos: Int3, _ blockID: Int,
              _ orientation: BlockOrientation = .NONE) {
         let index = getBlockArrayIndex(pos)
         self.blockID[index] = blockID
@@ -49,7 +49,7 @@ class Chunk {
         blockID[getBlockArrayIndex(pos)]
     }
     
-    func setBlockID(_ pos: Int3, _ blockID: Int) {
+    mutating func setBlockID(_ pos: Int3, _ blockID: Int) {
         self.blockID[getBlockArrayIndex(pos)] = blockID
         if blockID != AIR_ID {
             numLayerAirBlocks[pos.y] -= 1
@@ -62,11 +62,11 @@ class Chunk {
         orientation[getBlockArrayIndex(pos)]
     }
     
-    func setOrientation(_ pos: Int3, _ orientation: BlockOrientation) {
+    mutating func setOrientation(_ pos: Int3, _ orientation: BlockOrientation) {
         self.orientation[getBlockArrayIndex(pos)] = orientation
     }
     
-    func determineYBoundaries() {
+    mutating func determineYBoundaries() {
         var n_air = numLayerAirBlocks[0]
         var prev_empty = n_air == N_CHUNK_LAYER_BLOCKS
         var prev_full = n_air == 0
@@ -123,7 +123,7 @@ class Chunk {
         }
     }
     
-    func placeStructure<T: Hashable>(chunk_pos: Int2, struct_NW_corner: Int3, structure: Structure, variant: StructureVariant<T>) {
+    mutating func placeStructure<T: Hashable>(chunk_pos: Int2, struct_NW_corner: Int3, structure: Structure, variant: StructureVariant<T>) {
         let chunk_NW_corner = getGlobalBlockPos(chunkPos: chunk_pos,
                                                 localBlockPos: Int3(0, struct_NW_corner.y, 0))
         

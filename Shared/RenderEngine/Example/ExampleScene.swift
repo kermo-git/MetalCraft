@@ -5,7 +5,10 @@ class ExampleScene: MetalScene {
     var clearColor = MTLClearColor(red: 0, green: 0,
                                    blue: 0, alpha: 0)
     
+    var engine = Engine()
+    
     private var renderPipeline: MTLRenderPipelineState
+    private var depthStencilState: MTLDepthStencilState
     
     struct Vertex: Sizeable {
         let position: Float3
@@ -53,11 +56,11 @@ class ExampleScene: MetalScene {
             6, 3, 7
         ]
         indexCount = indices.count
-        indexBuffer = Engine.device.makeBuffer(bytes: indices,
+        indexBuffer = engine.device.makeBuffer(bytes: indices,
                                                length: indices.memorySize(),
                                                options: [])!
         
-        vertexBuffer = Engine.device.makeBuffer(bytes: vertices,
+        vertexBuffer = engine.device.makeBuffer(bytes: vertices,
                                                 length: vertices.memorySize(),
                                                 options: [])!
         
@@ -73,11 +76,13 @@ class ExampleScene: MetalScene {
         
         descriptor.layouts[0].stride = Vertex.memorySize()
         
-        renderPipeline = Engine.getRenderPipelineState(
+        renderPipeline = getRenderPipelineState(
+            device: engine.device,
             vertexShaderName: "exampleVertex",
             fragmentShaderName: "exampleFragment",
             vertexDescriptor: descriptor
         )!
+        depthStencilState = getDepthStencilState(engine.device)
         setAspectRatio(1)
     }
     
@@ -99,7 +104,8 @@ class ExampleScene: MetalScene {
         vertexConstants.projectionViewModelMatrix = pvm
     }
     
-    func render(_ encoder: MTLRenderCommandEncoder) async {
+    func render(_ encoder: MTLRenderCommandEncoder) {
+        encoder.setDepthStencilState(depthStencilState)
         encoder.setRenderPipelineState(renderPipeline)
         encoder.setVertexBytes(&vertexConstants, length: VertexConstants.memorySize(), index: 1)
         encoder.setVertexBuffer(vertexBuffer, offset: 0, index: 0)

@@ -3,43 +3,19 @@ import MetalKit
 // Cube mapping: https://metalbyexample.com/reflection-and-refraction/
 // Shadow mapping: https://github.com/carolight/Metal-Shadow-Map
 
+let pixelFormat = MTLPixelFormat.bgra8Unorm
+let depthPixelFormat = MTLPixelFormat.depth32Float
+
 class Engine {
-    static let device: MTLDevice = MTLCreateSystemDefaultDevice()!
-    static let commandQueue: MTLCommandQueue = device.makeCommandQueue()!
-    static let library: MTLLibrary = device.makeDefaultLibrary()!
-    static let depthStencil: MTLDepthStencilState = getDepthStencilState()
-    static let sampler: MTLSamplerState = getSamplerState()
+    let device: MTLDevice
+    let commandQueue: MTLCommandQueue
     
-    static let pixelFormat = MTLPixelFormat.bgra8Unorm
-    static let depthPixelFormat = MTLPixelFormat.depth32Float
-    
-    static func loadTexture(fileName: String, 
-                            loader: MTKTextureLoader = MTKTextureLoader(device: device),
-                            fileExtension: String = "png",
-                            origin: MTKTextureLoader.Origin = MTKTextureLoader.Origin.topLeft) -> MTLTexture {
-        
-        var result: MTLTexture!
-        
-        if let url = Bundle.main.url(forResource: fileName, withExtension: fileExtension) {
-            
-            let options: [MTKTextureLoader.Option : Any] = [
-                MTKTextureLoader.Option.origin: origin,
-                MTKTextureLoader.Option.generateMipmaps: true
-            ]
-            
-            do {
-                result = try loader.newTexture(URL: url, options: options)
-                result.label = fileName
-            } catch let error as NSError {
-                print("Error creating texture \(fileName): \(error)")
-            }
-        } else {
-            print("Texture \(fileName) does not exist!")
-        }
-        return result
+    init() {
+        device = MTLCreateSystemDefaultDevice()!
+        commandQueue = device.makeCommandQueue()!
     }
     
-    static func loadTextureArray(fileNames: [String], imageWidth: Int, imageHeight: Int) -> MTLTexture {
+    func loadTextureArray(fileNames: [String], imageWidth: Int, imageHeight: Int) -> MTLTexture {
         let descriptor = MTLTextureDescriptor()
         descriptor.textureType = .type2DArray
         descriptor.pixelFormat = pixelFormat
@@ -74,37 +50,66 @@ class Engine {
         return textureArray
     }
     
-    static func getSamplerState() -> MTLSamplerState {
-        let descriptor = MTLSamplerDescriptor()
-        descriptor.minFilter = .nearest
-        descriptor.magFilter = .nearest
-        descriptor.mipFilter = .linear
-        return device.makeSamplerState(descriptor: descriptor)!
-    }
-
-    static func getDepthStencilState() -> MTLDepthStencilState {
-        let descriptor = MTLDepthStencilDescriptor()
-        descriptor.isDepthWriteEnabled = true
-        descriptor.depthCompareFunction = .less
-        return device.makeDepthStencilState(descriptor: descriptor)!
-    }
-
-    static func getRenderPipelineState(vertexShaderName: String,
-                                       fragmentShaderName: String,
-                                       vertexDescriptor: MTLVertexDescriptor) -> MTLRenderPipelineState? {
+    func loadTexture(fileName: String,
+                     loader: MTKTextureLoader,
+                     fileExtension: String = "png",
+                     origin: MTKTextureLoader.Origin = MTKTextureLoader.Origin.topLeft) -> MTLTexture {
         
-        let descriptor = MTLRenderPipelineDescriptor()
-        descriptor.colorAttachments[0].pixelFormat = pixelFormat
-        descriptor.depthAttachmentPixelFormat = depthPixelFormat
-        descriptor.vertexFunction = library.makeFunction(name: vertexShaderName)
-        descriptor.fragmentFunction = library.makeFunction(name: fragmentShaderName)
-        descriptor.vertexDescriptor = vertexDescriptor
+        var result: MTLTexture!
         
-        do {
-            return try device.makeRenderPipelineState(descriptor: descriptor)
-        } catch {
-            print(error.localizedDescription)
+        if let url = Bundle.main.url(forResource: fileName, withExtension: fileExtension) {
+            
+            let options: [MTKTextureLoader.Option : Any] = [
+                MTKTextureLoader.Option.origin: origin,
+                MTKTextureLoader.Option.generateMipmaps: true
+            ]
+            
+            do {
+                result = try loader.newTexture(URL: url, options: options)
+                result.label = fileName
+            } catch let error as NSError {
+                print("Error creating texture \(fileName): \(error)")
+            }
+        } else {
+            print("Texture \(fileName) does not exist!")
         }
-        return nil
+        return result
     }
+}
+
+func getSamplerState(_ device: MTLDevice) -> MTLSamplerState {
+    let descriptor = MTLSamplerDescriptor()
+    descriptor.minFilter = .nearest
+    descriptor.magFilter = .nearest
+    descriptor.mipFilter = .linear
+    return device.makeSamplerState(descriptor: descriptor)!
+}
+
+func getDepthStencilState(_ device: MTLDevice) -> MTLDepthStencilState {
+    let descriptor = MTLDepthStencilDescriptor()
+    descriptor.isDepthWriteEnabled = true
+    descriptor.depthCompareFunction = .less
+    return device.makeDepthStencilState(descriptor: descriptor)!
+}
+
+func getRenderPipelineState(device: MTLDevice,
+                            vertexShaderName: String,
+                            fragmentShaderName: String,
+                            vertexDescriptor: MTLVertexDescriptor) -> MTLRenderPipelineState? {
+    
+    let descriptor = MTLRenderPipelineDescriptor()
+    descriptor.colorAttachments[0].pixelFormat = pixelFormat
+    descriptor.depthAttachmentPixelFormat = depthPixelFormat
+    
+    let library = device.makeDefaultLibrary()!
+    descriptor.vertexFunction = library.makeFunction(name: vertexShaderName)
+    descriptor.fragmentFunction = library.makeFunction(name: fragmentShaderName)
+    descriptor.vertexDescriptor = vertexDescriptor
+    
+    do {
+        return try device.makeRenderPipelineState(descriptor: descriptor)
+    } catch {
+        print(error.localizedDescription)
+    }
+    return nil
 }

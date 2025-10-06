@@ -11,7 +11,7 @@ private let simplex_3D_corner_3_unskew = -1.0 + 3.0 * simplex3D_unskew;
 
 private let MASK = 255
 
-class SimplexNoise: NoiseGenerator {
+struct SimplexNoise: NoiseGenerator {
     private var hashTable: [Int] = []
     private var grad2D: [Float2] = []
     

@@ -1,24 +1,30 @@
 import simd
 import Metal
 
+private let renderDistanceChunks = 8
+private let renderDistanceChunksSquared = renderDistanceChunks * renderDistanceChunks
+private let memoryDistanceChunks = 64
+
+@MainActor
 class WorldScene: MetalScene {
     var clearColor: MTLClearColor
+    var engine = Engine()
     
     let input = Input()
     var camera: FlyingCamera
     @Published var cameraBlockPos: Int3
     private var cameraChunkPos: Int2
-
-    private var renderPipeline = Engine.getRenderPipelineState(
-        vertexShaderName: "worldVertex",
-        fragmentShaderName: "worldFragment",
-        vertexDescriptor: createVertexDescriptor()
-    )!
+    
+    private var renderPipeline: MTLRenderPipelineState
+    private var sampler: MTLSamplerState
+    private var depthStencilState: MTLDepthStencilState
+    
     private var vertexConstants = VertexConstants()
     private var fragmentConstants: FragmentConstants
     private let textures: MTLTexture
     
     private let loader: ChunkLoader
+    private var chunkVertexBuffers: [Int2 : (MTLBuffer, Int)] = [:]
     
     init(generator: WorldGenerator,
          cameraPos: Float3) {
@@ -34,9 +40,17 @@ class WorldScene: MetalScene {
         cameraBlockPos = getBlockPos(cameraPos)
         cameraChunkPos = getChunkPos(cameraPos)
         
-        let renderDistanceChunks = 8
         let renderDistanceBlocks = Float(renderDistanceChunks * CHUNK_SIDE)
         
+        renderPipeline = getRenderPipelineState(
+            device: engine.device,
+            vertexShaderName: "worldVertex",
+            fragmentShaderName: "worldFragment",
+            vertexDescriptor: createVertexDescriptor()
+        )!
+        sampler = getSamplerState(engine.device)
+        depthStencilState = getDepthStencilState(engine.device)
+
         fragmentConstants = FragmentConstants(
             cameraPos: cameraPos,
             sunDirection: normalize(Float3(0.8, 0.9, 1.3)),
@@ -44,13 +58,13 @@ class WorldScene: MetalScene {
             fogColor: skyColor,
             sunColor: sunColor
         )
-        textures = Engine.loadTextureArray(fileNames: generator.textureNames,
+        textures = engine.loadTextureArray(fileNames: generator.textureNames,
                                            imageWidth: 16,
                                            imageHeight: 16)
         loader = ChunkLoader(
             generator: generator,
             renderDistanceChunks: renderDistanceChunks,
-            memoryDistanceChunks: 64
+            memoryDistanceChunks: memoryDistanceChunks
         )
         setAspectRatio(1)
     }
@@ -74,16 +88,29 @@ class WorldScene: MetalScene {
         cameraChunkPos = newCameraChunkPos
         
         fragmentConstants.cameraPos = camera.position
-        
-        loader.update(cameraPos: newCameraChunkPos, posChanged: posChanged)
         cameraBlockPos = getBlockPos(camera.position)
+        
+        Task {
+            let updatedChunks = await loader.update(cameraPos: newCameraChunkPos, posChanged: posChanged)
+            await MainActor.run {
+                for (pos, vertices) in updatedChunks {
+                    if vertices.isEmpty {
+                        chunkVertexBuffers.removeValue(forKey: pos)
+                    } else {
+                        let buffer = createVertexBuffer(device: engine.device, vertices: vertices)
+                        chunkVertexBuffers[pos] = (buffer, vertices.count)
+                    }
+                }
+            }
+        }
     }
     
-    func render(_ encoder: MTLRenderCommandEncoder) async {
+    func render(_ encoder: MTLRenderCommandEncoder) {
+        encoder.setDepthStencilState(depthStencilState)
         encoder.setRenderPipelineState(renderPipeline)
         
         encoder.setFragmentBytes(&fragmentConstants, length: FragmentConstants.memorySize(), index: 1)
-        encoder.setFragmentSamplerState(Engine.sampler, index: 0)
+        encoder.setFragmentSamplerState(sampler, index: 0)
         encoder.setFragmentTexture(textures, index: 0)
 
         encoder.setVertexBytes(&vertexConstants, length: VertexConstants.memorySize(), index: 1)
@@ -91,13 +118,14 @@ class WorldScene: MetalScene {
         let cameraViewX = -sin(camera.rotationY)
         let cameraViewZ = -cos(camera.rotationY)
         
-        for (chunkPos, chunk) in loader.renderedChunks {
-            let (buffer, vertexCount) = await chunk.getRenderData()
-            
+        for (chunkPos, (buffer, vertexCount)) in chunkVertexBuffers {
             let cameraToChunkX = Float(chunkPos.x - cameraChunkPos.x)
             let cameraToChunkZ = Float(chunkPos.y - cameraChunkPos.y)
             
-            if (cameraToChunkX * cameraViewX + cameraToChunkZ * cameraViewZ >= 0) {
+            let inRenderDistance = distanceSquared(cameraChunkPos, chunkPos) <= renderDistanceChunksSquared
+            let inCameraView = cameraToChunkX * cameraViewX + cameraToChunkZ * cameraViewZ >= 0
+            
+            if (inRenderDistance && inCameraView) {
                 encoder.setVertexBuffer(buffer, offset: 0, index: 0)
                 encoder.drawPrimitives(type: .triangle, vertexStart: 0, vertexCount: vertexCount)
             }

@@ -1,19 +1,13 @@
 import simd
 import Dispatch
+import Metal
 
 // https://docs.swift.org/swift-book/documentation/the-swift-programming-language/concurrency
 // https://swiftbysundell.com/articles/swift-actors/
 
-private func distance_squared(_ chunk1: Int2, _ chunk2: Int2) -> Int {
-    let fX = chunk1.x - chunk2.x
-    let fZ = chunk1.y - chunk2.y
-    return fX * fX + fZ * fZ
-}
-
-class ChunkLoader {
-    var renderedChunks: [Int2 : RenderableChunk] = [:]
+actor ChunkLoader {
+    var chunks: [Int2 : RenderableChunk] = [:]
     
-    private var memoryChunks: [Int2 : RenderableChunk] = [:]
     private var renderCircle: [Int2]
     private var generationQueue: [Int2]
     
@@ -25,7 +19,7 @@ class ChunkLoader {
          renderDistanceChunks: Int,
          memoryDistanceChunks: Int) {
         
-        renderCircle = getChunkPosCircle(radiusChunks: Int(renderDistanceChunks))
+        renderCircle = getChunkPosCircle(radiusChunks: renderDistanceChunks)
         generationQueue = renderCircle
         
         self.generator = generator
@@ -33,18 +27,24 @@ class ChunkLoader {
         memoryDistanceChunksSquared = memoryDistanceChunks * memoryDistanceChunks
     }
     
-    func update(cameraPos: Int2, posChanged: Bool) {
+    func update(cameraPos: Int2, posChanged: Bool) async -> [Int2 : [Vertex]] {
+        var updatedChunkVertices: [Int2 : [Vertex]] = [:]
+        
+        if (!generationQueue.isEmpty) {
+            let pos = generationQueue.remove(at: 0)
+            let d_sqr = distanceSquared(pos, cameraPos)
+            
+            if (d_sqr <= renderDistanceChunksSquared) {
+                updatedChunkVertices = await addChunk(pos: pos)
+            }
+        }
         if (posChanged) {
-            for (pos, chunk) in memoryChunks {
-                let d_sqr = distance_squared(pos, cameraPos)
+            for (pos, _) in chunks {
+                let d_sqr = distanceSquared(pos, cameraPos)
                 
                 if (d_sqr > memoryDistanceChunksSquared) {
-                    memoryChunks.removeValue(forKey: pos)
-                    renderedChunks.removeValue(forKey: pos)
-                } else if (d_sqr > renderDistanceChunksSquared) {
-                    renderedChunks.removeValue(forKey: pos)
-                } else {
-                    renderedChunks[pos] = chunk
+                    chunks.removeValue(forKey: pos)
+                    updatedChunkVertices[pos] = []
                 }
             }
             
@@ -54,18 +54,12 @@ class ChunkLoader {
             }
             
             for pos in globalRenderCircle {
-                if (memoryChunks[pos] == nil) {
+                if (chunks[pos] == nil) {
                     generationQueue.append(pos)
                 }
             }
-        } else if (!generationQueue.isEmpty) {
-            let pos = generationQueue.remove(at: 0)
-            let d_sqr = distance_squared(pos, cameraPos)
-            
-            if (d_sqr <= renderDistanceChunksSquared) {
-                addChunk(pos: pos)
-            }
         }
+        return updatedChunkVertices
     }
     // https://medium.com/@jaredcassoutt/how-to-define-your-own-if-flags-in-swift-and-why-you-should-797508c243a2
     // Build Settings -> Swift Compiler — Custom Flags
@@ -75,91 +69,86 @@ class ChunkLoader {
     var total_chunk_generation_ms: Float = 0
     #endif
     
-    private func addChunk(pos: Int2) {
-        Task {
-            #if MEASURE_TIME
-            let start = DispatchTime.now()
-            #endif
-            let newChunk = generator.generateChunk(pos)
-            
-            async let topFaces = getBlockFaces(chunk: newChunk)
-            async let northFaces = getNorthFaces(pos, newChunk)
-            async let southFaces = getSouthFaces(pos, newChunk)
-            async let westFaces = getWestFaces(pos, newChunk)
-            async let eastFaces = getEastFaces(pos, newChunk)
-            
-            var faces = Faces()
-            for sideFaces in await [topFaces, northFaces, southFaces, westFaces, eastFaces] {
-                faces.append(sideFaces)
-            }
-            let newLoadedChunk = RenderableChunk(blocks: generator.blocks, chunkPos: pos,
-                                                 data: newChunk, faces: faces)
-            #if MEASURE_TIME
-            let end = DispatchTime.now()
-            total_chunk_generation_ms += Float(end.uptimeNanoseconds - start.uptimeNanoseconds)/1_000_000
-            n_chunks_generated += 1
-            print("Average generation time for \(n_chunks_generated) chunks: \(total_chunk_generation_ms/Float(n_chunks_generated)) ms")
-            #endif
-            
-            memoryChunks[pos] = newLoadedChunk
-            renderedChunks[pos] = newLoadedChunk
-        }
-    }
-    
-    private func getSouthFaces(_ pos: Int2, _ newChunk: Chunk) async -> Faces {
-        let southPos = pos.move(.SOUTH)
-        if let southChunk = memoryChunks[southPos] {
-            let (southChunkFaces, newChunkFaces) = getNorthBorderBlockFaces(
-                southChunk: await southChunk.data,
-                northChunk: newChunk
-            )
-            await southChunk.addFaces(blocks: generator.blocks,
-                                      newFaces: southChunkFaces)
-            return newChunkFaces
-        }
-        return Faces()
-    }
-    
-    private func getNorthFaces(_ pos: Int2, _ newChunk: Chunk) async -> Faces {
+    private func addChunk(pos: Int2) async -> [Int2 : [Vertex]] {
+        #if MEASURE_TIME
+        let start = DispatchTime.now()
+        #endif
+        let newChunk = generator.generateChunk(pos)
+        var faces = getBlockFaces(chunk: newChunk)
+        var result: [Int2 : [Vertex]] = [:]
+        
         let northPos = pos.move(.NORTH)
-        if let northChunk = memoryChunks[northPos] {
+        if let northChunk = chunks[northPos] {
             let (newChunkFaces, northChunkFaces) = getNorthBorderBlockFaces(
                 southChunk: newChunk,
                 northChunk: await northChunk.data
             )
-            await northChunk.addFaces(blocks: generator.blocks,
-                                      newFaces: northChunkFaces)
-            return newChunkFaces
+            await northChunk.addFaces(newFaces: northChunkFaces)
+            let northChunkVertices = await northChunk.createVertices(blocks: generator.blocks, chunkPos: northPos)
+            
+            if !northChunkVertices.isEmpty {
+                result[northPos] = northChunkVertices
+            }
+            faces.append(newChunkFaces)
         }
-        return Faces()
-    }
-    
-    private func getWestFaces(_ pos: Int2, _ newChunk: Chunk) async -> Faces {
+        
+        let southPos = pos.move(.SOUTH)
+        if let southChunk = chunks[southPos] {
+            let (southChunkFaces, newChunkFaces) = getNorthBorderBlockFaces(
+                southChunk: await southChunk.data,
+                northChunk: newChunk
+            )
+            await southChunk.addFaces(newFaces: southChunkFaces)
+            let southChunkVertices = await southChunk.createVertices(blocks: generator.blocks, chunkPos: southPos)
+            
+            if !southChunkVertices.isEmpty {
+                result[southPos] = southChunkVertices
+            }
+            faces.append(newChunkFaces)
+        }
+        
         let westPos = pos.move(.WEST)
-        if let westChunk = memoryChunks[westPos] {
+        if let westChunk = chunks[westPos] {
             let (newChunkFaces, westChunkFaces) = getWestBorderBlockFaces(
                 eastChunk: newChunk,
                 westChunk: await westChunk.data
             )
-            await westChunk.addFaces(blocks: generator.blocks,
-                                     newFaces: westChunkFaces)
-            return newChunkFaces
+            await westChunk.addFaces(newFaces: westChunkFaces)
+            let westChunkVertices = await westChunk.createVertices(blocks: generator.blocks, chunkPos: westPos)
+            
+            if !westChunkVertices.isEmpty {
+                result[westPos] = westChunkVertices
+            }
+            faces.append(newChunkFaces)
         }
-        return Faces()
-    }
-    
-    private func getEastFaces(_ pos: Int2, _ newChunk: Chunk) async -> Faces {
+        
         let eastPos = pos.move(.EAST)
-        if let eastChunk = memoryChunks[eastPos] {
+        if let eastChunk = chunks[eastPos] {
             let (eastChunkFaces, newChunkFaces) = getWestBorderBlockFaces(
                 eastChunk: await eastChunk.data,
                 westChunk: newChunk
             )
-            await eastChunk.addFaces(blocks: generator.blocks,
-                                     newFaces: eastChunkFaces)
-            return newChunkFaces
+            await eastChunk.addFaces(newFaces: eastChunkFaces)
+            let eastChunkVertices = await eastChunk.createVertices(blocks: generator.blocks, chunkPos: eastPos)
+            
+            if !eastChunkVertices.isEmpty {
+                result[eastPos] = eastChunkVertices
+            }
+            faces.append(newChunkFaces)
         }
-        return Faces()
+
+        let newRenderableChunk = RenderableChunk(data: newChunk, faces: faces)
+        chunks[pos] = newRenderableChunk
+        result[pos] = await newRenderableChunk.createVertices(blocks: generator.blocks, chunkPos: pos)
+
+        #if MEASURE_TIME
+        let end = DispatchTime.now()
+        total_chunk_generation_ms += Float(end.uptimeNanoseconds - start.uptimeNanoseconds)/1_000_000
+        n_chunks_generated += 1
+        print("Average generation time for \(n_chunks_generated) chunks: \(total_chunk_generation_ms/Float(n_chunks_generated)) ms")
+        #endif
+        
+        return result
     }
 }
 

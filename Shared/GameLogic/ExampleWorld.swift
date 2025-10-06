@@ -10,7 +10,7 @@ enum StructureType {
     case SPRUCE_TREE
 }
 
-class ExampleWorld: WorldGenerator {
+struct ExampleWorld: WorldGenerator, @unchecked Sendable {
     let textureNames: [String]
     let blocks: [Block]
     let blockID: [String: Int]
@@ -189,7 +189,7 @@ class ExampleWorld: WorldGenerator {
     }
 
     func generateChunk(_ pos: Int2) -> Chunk {
-        let chunk = Chunk()
+        var chunk = Chunk()
         
         for tree_cell_x in (2*pos.x - 1)...(2*pos.x + 2) {
             for tree_cell_z in (2*pos.y - 1)...(2*pos.y + 2) {

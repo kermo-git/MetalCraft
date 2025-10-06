@@ -68,9 +68,9 @@ struct FractalNoise: NoiseGenerator {
 }
 
 struct TerrainNoise {
-    var generator: NoiseGenerator
-    var minTerrainHeight: Int
-    var heightRange: Float
+    let generator: NoiseGenerator
+    let minTerrainHeight: Int
+    let heightRange: Float
     
     init(generator: NoiseGenerator,
          minTerrainHeight: Int,

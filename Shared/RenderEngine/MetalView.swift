@@ -6,7 +6,7 @@ import MetalKit
 struct MetalView {
     let scene: any MetalScene
 
-    func makeMTKView(_ context: MetalView.Context) -> MTKView {
+    @MainActor func makeMTKView(_ context: MetalView.Context) -> MTKView {
         let mtkView = MTKView()
         
         mtkView.delegate = context.coordinator
@@ -16,10 +16,10 @@ struct MetalView {
         mtkView.enableSetNeedsDisplay = true
         mtkView.isPaused = false
         
-        mtkView.device = Engine.device
+        mtkView.device = scene.engine.device
         mtkView.clearColor = scene.clearColor
-        mtkView.colorPixelFormat = Engine.pixelFormat
-        mtkView.depthStencilPixelFormat = Engine.depthPixelFormat
+        mtkView.colorPixelFormat = pixelFormat
+        mtkView.depthStencilPixelFormat = depthPixelFormat
         
         return mtkView
     }
@@ -36,7 +36,7 @@ struct MetalView {
             super.init()
         }
         
-        func getScreenSize(view: MTKView) -> Float2 {
+        @MainActor func getScreenSize(view: MTKView) -> Float2 {
             return Float2(Float(view.bounds.width), Float(view.bounds.height))
         }
         
@@ -54,17 +54,13 @@ struct MetalView {
             }
             let deltaTime = 1 / Float(view.preferredFramesPerSecond)
             
-            if let commandBuffer = Engine.commandQueue.makeCommandBuffer(),
+            if let commandBuffer = parent.scene.engine.commandQueue.makeCommandBuffer(),
                let encoder = commandBuffer.makeRenderCommandEncoder(descriptor: renderPassDescriptor) {
-                encoder.setDepthStencilState(Engine.depthStencil)
                 parent.scene.update(deltaTime: deltaTime)
-                Task {
-                    await parent.scene.render(encoder)
-                    
-                    encoder.endEncoding()
-                    commandBuffer.present(drawable)
-                    commandBuffer.commit()
-                }
+                parent.scene.render(encoder)
+                encoder.endEncoding()
+                commandBuffer.present(drawable)
+                commandBuffer.commit()
             }
         }
     }
