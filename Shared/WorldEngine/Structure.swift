@@ -1,9 +1,3 @@
-struct StructureVariant<T: Hashable> {
-    let type: T
-    let blockID: [Int]
-    let layerIndexes: [Int]
-}
-
 struct Structure {
     let lengthX: Int
     let lengthY: Int
