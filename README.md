@@ -6,6 +6,9 @@ This is my hobby project to create a MineCraft-like game for Apple devices. The 
 
 The name comes from the fact that it uses [Metal](https://developer.apple.com/metal/) API to render 3D graphics. User interface is created using [SwiftUI](https://developer.apple.com/swiftui/).
 
+![Summer forest and autumn forest](README_images/summer_autumn_forest.jpg)
+![Spruce forest](README_images/spruce_forest.jpg)
+
 ## Setup instructions
 
 You need a macOS computer.
