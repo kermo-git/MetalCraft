@@ -209,6 +209,8 @@
 		4F9EAA192B69BC340080B613 /* iOSGameView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = iOSGameView.swift; sourceTree = "<group>"; };
 		4F9EAA1C2B69BCA00080B613 /* PositionLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PositionLabel.swift; sourceTree = "<group>"; };
 		4FA26CE82C27576700AABCD6 /* BlockOrientation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockOrientation.swift; sourceTree = "<group>"; };
+		4FA63F432E9900EE0037FD66 /* spruce_forest.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = spruce_forest.jpg; sourceTree = "<group>"; };
+		4FA63F442E9900EE0037FD66 /* summer_autumn_forest.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = summer_autumn_forest.jpg; sourceTree = "<group>"; };
 		4FADDE8C2E1961DA00F59698 /* spruce_leaves.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = spruce_leaves.png; sourceTree = "<group>"; };
 		4FADDE8F2E19658000F59698 /* snow_spruce_leaves.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = snow_spruce_leaves.png; sourceTree = "<group>"; };
 		4FADDE922E1990D200F59698 /* dry_grass_leaves_1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = dry_grass_leaves_1.png; sourceTree = "<group>"; };
@@ -303,9 +305,19 @@
 			path = Views;
 			sourceTree = "<group>";
 		};
+		4FA63F452E9900EE0037FD66 /* README_images */ = {
+			isa = PBXGroup;
+			children = (
+				4FA63F432E9900EE0037FD66 /* spruce_forest.jpg */,
+				4FA63F442E9900EE0037FD66 /* summer_autumn_forest.jpg */,
+			);
+			path = README_images;
+			sourceTree = "<group>";
+		};
 		4FD31061286A3BCC00BB55ED = {
 			isa = PBXGroup;
 			children = (
+				4FA63F452E9900EE0037FD66 /* README_images */,
 				4FFA2A9D2C1DC1550015ADAB /* README.md */,
 				4FD310D9286A3E2900BB55ED /* .gitignore */,
 				4FD31066286A3BCD00BB55ED /* Shared */,
@@ -489,7 +501,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1340;
-				LastUpgradeCheck = 1640;
+				LastUpgradeCheck = 2600;
 				TargetAttributes = {
 					4FD3106D286A3BCD00BB55ED = {
 						CreatedOnToolsVersion = 13.4.1;
@@ -896,8 +908,10 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = YES;
+				ENABLE_APP_SANDBOX = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SELECTED_FILES = readonly;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -925,8 +939,10 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = YES;
+				ENABLE_APP_SANDBOX = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SELECTED_FILES = readonly;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
