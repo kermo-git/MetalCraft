@@ -4,7 +4,7 @@ import MetalKit
 // https://gist.github.com/HugoNijmek/d5b983784cf4519c5b352f41a790c237
 
 struct MetalView {
-    let scene: any MetalScene
+    let scene: any Renderer
 
     @MainActor func makeMTKView(_ context: MetalView.Context) -> MTKView {
         let mtkView = MTKView()

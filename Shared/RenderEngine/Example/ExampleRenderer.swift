@@ -1,7 +1,7 @@
 import simd
 import Metal
 
-class ExampleScene: MetalScene {
+class ExampleRenderer: Renderer {
     var clearColor = MTLClearColor(red: 0, green: 0,
                                    blue: 0, alpha: 0)
     

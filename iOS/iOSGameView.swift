@@ -3,7 +3,7 @@ import SwiftUI
 let DRAG_SENSITIVITY: Float = 0.01
 
 struct iOSGameView: View {
-    @EnvironmentObject var scene: WorldScene
+    @EnvironmentObject var scene: WorldRenderer
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
     
     var body: some View {
@@ -116,7 +116,7 @@ struct EmptyGridCell: View {
 #Preview(traits: .landscapeRight) {
     iOSGameView()
         .environmentObject(
-            WorldScene(generator: ExampleWorld(),
+            WorldRenderer(generator: GameWorld(),
                        cameraPos: Float3(0, 90, 0))
         )
 }

@@ -10,7 +10,7 @@ enum StructureType {
     case SPRUCE_TREE
 }
 
-struct ExampleWorld: WorldGenerator, @unchecked Sendable {
+struct GameWorld: WorldGenerator, @unchecked Sendable {
     let textureNames: [String]
     let blocks: [Block]
     let blockID: [String: Int]

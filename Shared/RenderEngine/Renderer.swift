@@ -1,7 +1,7 @@
 import Metal
 
 @MainActor
-protocol MetalScene: ObservableObject {
+protocol Renderer: ObservableObject {
     var engine: Engine { get }
     
     var clearColor: MTLClearColor { get }

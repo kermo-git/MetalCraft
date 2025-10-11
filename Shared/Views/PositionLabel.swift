@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct PositionLabel: View {
-    @EnvironmentObject var scene: WorldScene
+    @EnvironmentObject var scene: WorldRenderer
     
     func getPositionLabel() -> String {
         let pos = scene.cameraBlockPos
@@ -23,7 +23,7 @@ struct PositionLabel: View {
         
         PositionLabel()
             .environmentObject(
-                WorldScene(generator: ExampleWorld(),
+                WorldRenderer(generator: GameWorld(),
                            cameraPos: Float3(0, 70, 0))
             )
     }

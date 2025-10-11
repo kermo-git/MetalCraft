@@ -6,7 +6,7 @@ private let renderDistanceChunksSquared = renderDistanceChunks * renderDistanceC
 private let memoryDistanceChunks = 64
 
 @MainActor
-class WorldScene: MetalScene {
+class WorldRenderer: Renderer {
     var clearColor: MTLClearColor
     var engine = Engine()
     

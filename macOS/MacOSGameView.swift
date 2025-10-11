@@ -5,7 +5,7 @@ let DRAG_SENSITIVITY: Float = 0.3
 struct MacOSGameView: View {
     @FocusState private var focused: Bool
     
-    @EnvironmentObject var scene: WorldScene
+    @EnvironmentObject var scene: WorldRenderer
     
     var body: some View {
         ZStack {
@@ -58,7 +58,7 @@ struct MacOSGameView: View {
 #Preview {
     MacOSGameView()
         .environmentObject(
-            WorldScene(generator: ExampleWorld(),
+            WorldRenderer(generator: GameWorld(),
                        cameraPos: Float3(0, 90, 0))
         )
 }
