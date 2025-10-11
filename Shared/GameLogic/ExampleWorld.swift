@@ -176,13 +176,12 @@ struct ExampleWorld: WorldGenerator, @unchecked Sendable {
             let biome = findBiome(trunkPos)
             let (structure, structureVariant) = treeGenerator.getStructureVariant(biome, hash)
             
-            let tree_nw_corner = Int3(
-                x: trunkPos.x - structure.lengthX/2,
-                y: terrain.terrainHeight(trunkPos),
-                z: trunkPos.z - structure.lengthZ/2
-            )
-            chunk.placeStructure(chunk_pos: pos,
-                                 struct_NW_corner: tree_nw_corner,
+            chunk.placeStructure(chunkPos: pos,
+                                 anchorBlock: Int3(
+                                    x: trunkPos.x,
+                                    y: terrain.terrainHeight(trunkPos),
+                                    z: trunkPos.z
+                                 ),
                                  structure: structure,
                                  layerIndexes: structureVariant.layerIndexes,
                                  blockID: structureVariant.blockID)

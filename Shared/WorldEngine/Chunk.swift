@@ -124,38 +124,39 @@ struct Chunk {
     }
     
     mutating func placeStructure(
-        chunk_pos: Int2, struct_NW_corner: Int3, structure: Structure,
+        chunkPos: Int2, anchorBlock: Int3, structure: Structure,
         layerIndexes: [Int], blockID: [Int]
     ) {
-        let chunk_NW_corner = getGlobalBlockPos(chunkPos: chunk_pos,
-                                                localBlockPos: Int3(0, 0, 0))
+        let chunk_NW_x = chunkPos.x * CHUNK_SIDE
+        let chunk_NW_z = chunkPos.y * CHUNK_SIDE
         
-        let chunk_SE_corner = getGlobalBlockPos(chunkPos: chunk_pos,
-                                                localBlockPos: Int3(CHUNK_SIDE-1, 0, CHUNK_SIDE-1))
+        let chunk_SE_x = chunk_NW_x + CHUNK_SIDE - 1
+        let chunk_SE_z = chunk_NW_z + CHUNK_SIDE - 1
         
-        let struct_SE_x = struct_NW_corner.x + structure.lengthX - 1
-        let struct_SE_z = struct_NW_corner.z + structure.lengthZ - 1
+        let struct_NW_x = anchorBlock.x - structure.anchorBlock.x
+        let struct_NW_z = anchorBlock.z - structure.anchorBlock.z
         
-        let west_x = max(struct_NW_corner.x, chunk_NW_corner.x)
-        let east_x = min(struct_SE_x, chunk_SE_corner.x)
+        let struct_SE_x = struct_NW_x + structure.lengthX - 1
+        let struct_SE_z = struct_NW_z + structure.lengthZ - 1
         
-        let north_z = max(struct_NW_corner.z, chunk_NW_corner.z)
-        let south_z = min(struct_SE_z, chunk_SE_corner.z)
+        let west_x = max(struct_NW_x, chunk_NW_x)
+        let east_x = min(struct_SE_x, chunk_SE_x)
         
-        let bottom_y = struct_NW_corner.y
+        let north_z = max(struct_NW_z, chunk_NW_z)
+        let south_z = min(struct_SE_z, chunk_SE_z)
         
         if west_x <= east_x && north_z <= south_z {
             
-            var chunk_y = bottom_y
+            var chunk_y = anchorBlock.y
             
             for struct_y in layerIndexes {
                 for x in west_x...east_x {
-                    let chunk_x = x - chunk_NW_corner.x
-                    let struct_x = x - struct_NW_corner.x
+                    let chunk_x = x - chunk_NW_x
+                    let struct_x = x - struct_NW_x
                     
                     for z in north_z...south_z {
-                        let chunk_z = z - chunk_NW_corner.z
-                        let struct_z = z - struct_NW_corner.z
+                        let chunk_z = z - chunk_NW_z
+                        let struct_z = z - struct_NW_z
                         
                         let chunk_block_pos = Int3(chunk_x, chunk_y, chunk_z)
                         let struct_block_pos = Int3(struct_x, struct_y, struct_z)

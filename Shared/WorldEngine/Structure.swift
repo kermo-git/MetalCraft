@@ -2,14 +2,16 @@ struct Structure {
     let lengthX: Int
     let lengthY: Int
     let lengthZ: Int
+    let anchorBlock: Int3
     
     private var blockID: [Int]
     private var orientation: [BlockOrientation]
     
-    init(blocks: [[[Int]]], orientations: [[[BlockOrientation]]] = []) {
+    init(blocks: [[[Int]]], anchorBlock: Int3, orientations: [[[BlockOrientation]]] = []) {
         self.lengthX = blocks[0][0].count
         self.lengthY = blocks.count
         self.lengthZ = blocks[0].count
+        self.anchorBlock = anchorBlock
         
         let n_blocks = lengthX*lengthY*lengthZ
         self.blockID = Array(repeating: AIR_ID, count: n_blocks)

@@ -1,4 +1,4 @@
-private let mask = 255
+private let MASK = 255
 
 struct StructureVariant<T: Hashable> {
     let type: T
@@ -15,12 +15,12 @@ class StructureGenerator<B: Hashable, S: Hashable> {
     private var structure_variant_index: [B : [Int]] = [:]
     
     init() {
-        for i in 0...mask {
+        for i in 0...MASK {
             hash_table.append(i)
         }
         hash_table.shuffle()
         
-        for i in 0...mask {
+        for i in 0...MASK {
             hash_table.append(hash_table[i])
         }
     }
@@ -68,7 +68,7 @@ class StructureGenerator<B: Hashable, S: Hashable> {
         
         for gridCellX in (2*chunkPos.x - 1)...(2*chunkPos.x + 2) {
             for gridCellZ in (2*chunkPos.y - 1)...(2*chunkPos.y + 2) {
-                let hash = hash_table[hash_table[gridCellX & mask] + gridCellZ & mask]
+                let hash = hash_table[hash_table[gridCellX & MASK] + gridCellZ & MASK]
                 let x = 8 * gridCellX + hash & 7
                 let z = 8 * gridCellZ + (hash >> 3) & 7
                 result.append((Int3(x, 0, z), hash))
@@ -85,8 +85,8 @@ class StructureGenerator<B: Hashable, S: Hashable> {
 }
 
 private func createRandomVariants(_ n_variants: Int) -> [Int] {
-    var result = Array(repeating: 0, count: mask + 1)
-    for i in 0...mask {
+    var result = Array(repeating: 0, count: MASK + 1)
+    for i in 0...MASK {
         result[i] = Int.random(in: 0..<n_variants)
     }
     return result
@@ -99,8 +99,8 @@ private func createWeightedVariants(_ probabilities: [Float]) -> [Int] {
             min(1, probability + cumulativeProbabilities.last!)
         )
     }
-    var result = Array(repeating: 0, count: mask + 1)
-    for i in 0...mask {
+    var result = Array(repeating: 0, count: MASK + 1)
+    for i in 0...MASK {
         let variantChoice = Float.random(in: 0...1)
         
         for (v, probability) in cumulativeProbabilities.enumerated() {

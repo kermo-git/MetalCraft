@@ -36,7 +36,7 @@ func buildTree() -> Structure {
          [A, L, L, L, A],
          [A, A, L, A, A],
          [A, A, A, A, A]]
-    ])
+    ], anchorBlock: Int3(2, 0, 2))
 }
 
 func treeLayerRepeats(_ trunkBlocks: Int, _ canopyBottomBlocks: Int, _ canopyMiddleBlocks: Int) -> [Int] {
@@ -155,7 +155,7 @@ func buildSpruceTree() -> Structure {
          [A, A, A, A, A, A, A],
          [A, A, A, A, A, A, A],
          [A, A, A, A, A, A, A]]
-    ])
+    ], anchorBlock: Int3(3, 0, 3))
 }
 
 func spruceLayerRepeats(trunkBlocks: Int, isLarge: Bool, isTall: Bool) -> [Int] {
