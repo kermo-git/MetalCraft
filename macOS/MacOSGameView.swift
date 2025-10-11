@@ -5,11 +5,11 @@ let DRAG_SENSITIVITY: Float = 0.3
 struct MacOSGameView: View {
     @FocusState private var focused: Bool
     
-    @EnvironmentObject var scene: WorldRenderer
+    @EnvironmentObject var renderer: WorldRenderer
     
     var body: some View {
         ZStack {
-            MetalView(scene: scene)
+            MetalView(renderer: renderer)
                 .focusable()
                 .focused($focused)
                 .onKeyPress(phases: .all, action: { press in
@@ -17,19 +17,19 @@ struct MacOSGameView: View {
                     
                     switch press.characters {
                     case "w":
-                        scene.input.moveForward = isMoving
+                        renderer.input.moveForward = isMoving
                     case "a":
-                        scene.input.moveLeft = isMoving
+                        renderer.input.moveLeft = isMoving
                     case "s":
-                        scene.input.moveBackward = isMoving
+                        renderer.input.moveBackward = isMoving
                     case "d":
-                        scene.input.moveRight = isMoving
+                        renderer.input.moveRight = isMoving
                     default:
                         switch press.key {
                         case .space:
-                            scene.input.moveUp = isMoving
+                            renderer.input.moveUp = isMoving
                         case .tab:
-                            scene.input.moveDown = isMoving
+                            renderer.input.moveDown = isMoving
                         default:
                             break
                         }
@@ -38,7 +38,7 @@ struct MacOSGameView: View {
                 })
                 .background(MouseHandler(onMouseMove: {
                     deltaX, deltaY in
-                        scene.input.setRotationInput(
+                        renderer.input.setRotationInput(
                             deltaX * DRAG_SENSITIVITY,
                             deltaY * DRAG_SENSITIVITY
                         )
@@ -59,6 +59,6 @@ struct MacOSGameView: View {
     MacOSGameView()
         .environmentObject(
             WorldRenderer(generator: GameWorld(),
-                       cameraPos: Float3(0, 90, 0))
+                          cameraPos: Float3(0, 90, 0))
         )
 }

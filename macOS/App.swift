@@ -2,7 +2,7 @@ import SwiftUI
 
 @main
 struct MetalCraftApp: App {
-    @StateObject var scene = WorldRenderer(
+    @StateObject var renderer = WorldRenderer(
         generator: GameWorld(),
         cameraPos: Float3(0, 90, 0)
     )
@@ -10,7 +10,7 @@ struct MetalCraftApp: App {
     var body: some Scene {
         WindowGroup {
             MacOSGameView()
-                .environmentObject(scene)
+                .environmentObject(renderer)
         }
     }
 }

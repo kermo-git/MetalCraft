@@ -4,7 +4,7 @@ import MetalKit
 // https://gist.github.com/HugoNijmek/d5b983784cf4519c5b352f41a790c237
 
 struct MetalView {
-    let scene: any Renderer
+    let renderer: any Renderer
 
     @MainActor func makeMTKView(_ context: MetalView.Context) -> MTKView {
         let mtkView = MTKView()
@@ -16,8 +16,8 @@ struct MetalView {
         mtkView.enableSetNeedsDisplay = true
         mtkView.isPaused = false
         
-        mtkView.device = scene.engine.device
-        mtkView.clearColor = scene.clearColor
+        mtkView.device = renderer.engine.device
+        mtkView.clearColor = renderer.clearColor
         mtkView.colorPixelFormat = pixelFormat
         mtkView.depthStencilPixelFormat = depthPixelFormat
         
@@ -42,7 +42,7 @@ struct MetalView {
         
         func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {
             let screenSize = getScreenSize(view: view)
-            parent.scene.setAspectRatio(screenSize.x / screenSize.y)
+            parent.renderer.setAspectRatio(screenSize.x / screenSize.y)
         }
         
         func draw(in view: MTKView) {
@@ -54,10 +54,10 @@ struct MetalView {
             }
             let deltaTime = 1 / Float(view.preferredFramesPerSecond)
             
-            if let commandBuffer = parent.scene.engine.commandQueue.makeCommandBuffer(),
+            if let commandBuffer = parent.renderer.engine.commandQueue.makeCommandBuffer(),
                let encoder = commandBuffer.makeRenderCommandEncoder(descriptor: renderPassDescriptor) {
-                parent.scene.update(deltaTime: deltaTime)
-                parent.scene.render(encoder)
+                parent.renderer.update(deltaTime: deltaTime)
+                parent.renderer.render(encoder)
                 encoder.endEncoding()
                 commandBuffer.present(drawable)
                 commandBuffer.commit()
@@ -85,3 +85,7 @@ extension MetalView : UIViewRepresentable {
     func updateUIView(_ nsView: MTKView, context: Context) {}
 }
 #endif
+
+#Preview {
+    MetalView(renderer: ExampleRenderer())
+}

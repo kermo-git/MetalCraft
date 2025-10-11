@@ -3,7 +3,7 @@ import SwiftUI
 let DRAG_SENSITIVITY: Float = 0.01
 
 struct iOSGameView: View {
-    @EnvironmentObject var scene: WorldRenderer
+    @EnvironmentObject var renderer: WorldRenderer
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
     
     var body: some View {
@@ -20,10 +20,10 @@ struct iOSGameView: View {
                         GameButton(
                             systemName: "arrowshape.up.fill",
                             onTouchStart: {
-                                scene.input.moveForward = true
+                                renderer.input.moveForward = true
                             },
                             onTouchEnd: {
-                                scene.input.moveForward = false
+                                renderer.input.moveForward = false
                             })
                         EmptyGridCell()
                     }
@@ -31,10 +31,10 @@ struct iOSGameView: View {
                         GameButton(
                             systemName: "arrowshape.left.fill",
                             onTouchStart: {
-                                scene.input.moveLeft = true
+                                renderer.input.moveLeft = true
                             },
                             onTouchEnd: {
-                                scene.input.moveLeft = false
+                                renderer.input.moveLeft = false
                             })
                         
                         EmptyGridCell()
@@ -42,10 +42,10 @@ struct iOSGameView: View {
                         GameButton(
                             systemName: "arrowshape.right.fill",
                             onTouchStart: {
-                                scene.input.moveRight = true
+                                renderer.input.moveRight = true
                             },
                             onTouchEnd: {
-                                scene.input.moveRight = false
+                                renderer.input.moveRight = false
                             })
                     }
                     GridRow {
@@ -53,10 +53,10 @@ struct iOSGameView: View {
                         GameButton(
                             systemName: "arrowshape.down.fill",
                             onTouchStart: {
-                                scene.input.moveBackward = true
+                                renderer.input.moveBackward = true
                             },
                             onTouchEnd: {
-                                scene.input.moveBackward = false
+                                renderer.input.moveBackward = false
                             })
                         EmptyGridCell()
                     }
@@ -66,32 +66,32 @@ struct iOSGameView: View {
                     GameButton(
                         systemName: "square.and.arrow.up",
                         onTouchStart: {
-                            scene.input.moveUp = true
+                            renderer.input.moveUp = true
                         },
                         onTouchEnd: {
-                            scene.input.moveUp = false
+                            renderer.input.moveUp = false
                         })
                     GameButton(
                         systemName: "square.and.arrow.down",
                         onTouchStart: {
-                            scene.input.moveDown = true
+                            renderer.input.moveDown = true
                         },
                         onTouchEnd: {
-                            scene.input.moveDown = false
+                            renderer.input.moveDown = false
                         })
                 }
             }
         }
         
         ZStack {
-            MetalView(scene: scene)
+            MetalView(renderer: renderer)
                 .edgesIgnoringSafeArea(.all)
                 .gesture(
                     DragGesture()
                         .onChanged { value in
                             let width = Float(value.translation.width)
                             let height = Float(value.translation.height)
-                            scene.input.setRotationInput(
+                            renderer.input.setRotationInput(
                                 width * DRAG_SENSITIVITY,
                                 height * DRAG_SENSITIVITY
                             )
@@ -117,6 +117,6 @@ struct EmptyGridCell: View {
     iOSGameView()
         .environmentObject(
             WorldRenderer(generator: GameWorld(),
-                       cameraPos: Float3(0, 90, 0))
+                          cameraPos: Float3(0, 90, 0))
         )
 }
