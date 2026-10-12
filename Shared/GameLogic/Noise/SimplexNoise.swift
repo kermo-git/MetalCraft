@@ -11,7 +11,7 @@ private let simplex_3D_corner_3_unskew = -1.0 + 3.0 * simplex3D_unskew;
 
 private let MASK = 255
 
-struct SimplexNoise: NoiseGenerator {
+struct Simplex2D: Noise2D {
     private var hashTable: [Int] = []
     private var grad2D: [Float2] = []
     
@@ -34,7 +34,7 @@ struct SimplexNoise: NoiseGenerator {
         }
     }
     
-    func signedNoise2D(_ x: Float, _ y: Float) -> Float {
+    func signedNoise(_ x: Float, _ y: Float) -> Float {
         var s = (x + y) * simplex2D_skew
         let fi = floor(x + s)
         let fj = floor(y + s)
@@ -84,8 +84,23 @@ struct SimplexNoise: NoiseGenerator {
         }
         return 70 * (n0 + n1 + n2)
     }
+}
+
+struct Simplex3D: Noise3D {
+    private var hashTable: [Int] = []
     
-    func signedNoise3D(_ x: Float, _ y: Float, _ z: Float) -> Float {
+    init() {
+        for i in 0...MASK {
+            hashTable.append(i)
+        }
+        hashTable.shuffle()
+        
+        for i in 0...MASK {
+            hashTable.append(hashTable[i])
+        }
+    }
+    
+    func signedNoise(_ x: Float, _ y: Float, _ z: Float) -> Float {
         var s = (x + y + z) * simplex3D_skew;
         let fi = floor(x + s);
         let fj = floor(y + s);
@@ -145,58 +160,58 @@ struct SimplexNoise: NoiseGenerator {
         var n0: Float = 0.0
         var t = 0.6 - (u0 * u0 + v0 * v0 + w0 * w0)
         if (t >= 0) {
-            let h = hash3D(i, j, k)
-            n0 = t * t * t * t * grad3D(h, u0, v0, w0)
+            let h = hash(i, j, k)
+            n0 = t * t * t * t * grad(h, u0, v0, w0)
         }
         
         var n1: Float = 0.0
         t = 0.6 - (u1 * u1 + v1 * v1 + w1 * w1)
         if (t >= 0) {
-            let h = hash3D(i + i1, j + j1, k + k1)
-            n1 = t * t * t * t * grad3D(h, u1, v1, w1)
+            let h = hash(i + i1, j + j1, k + k1)
+            n1 = t * t * t * t * grad(h, u1, v1, w1)
         }
         
         var n2: Float = 0.0
         t = 0.6 - (u2 * u2 + v2 * v2 + w2 * w2)
         if (t >= 0) {
-            let h = hash3D(i + i2, j + j2, k + k2)
-            n2 = t * t * t * t * grad3D(h, u2, v2, w2)
+            let h = hash(i + i2, j + j2, k + k2)
+            n2 = t * t * t * t * grad(h, u2, v2, w2)
         }
         
         var n3: Float = 0.0
         t = 0.6 - (u3 * u3 + v3 * v3 + w3 * w3)
         if (t >= 0) {
-            let h = hash3D(i + 1, j + 1, k + 1)
-            n3 = t * t * t * t * grad3D(h, u3, v3, w3)
+            let h = hash(i + 1, j + 1, k + 1)
+            n3 = t * t * t * t * grad(h, u3, v3, w3)
         }
         
         return 32 * (n0 + n1 + n2 + n3)
     }
     
-    private func hash3D(_ x: Int, _ y: Int, _ z: Int) -> Int {
+    private func hash(_ x: Int, _ y: Int, _ z: Int) -> Int {
         return hashTable[hashTable[x] + y] + z
     }
-}
-
-private func grad3D(_ hash: Int, _ x: Float, _ y: Float, _ z: Float) -> Float {
-    switch (hash & 15) {
-        case 0:  return  x + y
-        case 1:  return -x + y
-        case 2:  return  x - y
-        case 3:  return -x - y
-        case 4:  return  x + z
-        case 5:  return -x + z
-        case 6:  return  x - z
-        case 7:  return -x - z
-        case 8:  return  y + z
-        case 9:  return -y + z
-        case 10: return  y - z
-        case 11: return -y - z
-        case 12: return  x + y
-        case 13: return -x + y
-        case 14: return -y + z
-        case 15: return -y - z
-    default:
-        return 0
+    
+    private func grad(_ hash: Int, _ x: Float, _ y: Float, _ z: Float) -> Float {
+        switch (hash & 15) {
+            case 0:  return  x + y
+            case 1:  return -x + y
+            case 2:  return  x - y
+            case 3:  return -x - y
+            case 4:  return  x + z
+            case 5:  return -x + z
+            case 6:  return  x - z
+            case 7:  return -x - z
+            case 8:  return  y + z
+            case 9:  return -y + z
+            case 10: return  y - z
+            case 11: return -y - z
+            case 12: return  x + y
+            case 13: return -x + y
+            case 14: return -y + z
+            case 15: return -y - z
+        default:
+            return 0
+        }
     }
 }

@@ -16,8 +16,11 @@ struct GameWorld: WorldGenerator, @unchecked Sendable {
     let blockID: [String: Int]
     
     let terrain = TerrainNoise(
-        generator: FractalNoise(startFrequency: 1/200,
-                                octaves: 3, persistence: 0.5),
+        noise: FractalNoise2D(
+            startFrequency: 1/200,
+            octaves: 3,
+            persistence: 0.5
+        ),
         minTerrainHeight: 60,
         heightRange: 30
     )
@@ -153,10 +156,10 @@ struct GameWorld: WorldGenerator, @unchecked Sendable {
     }
     let rotations: [BlockOrientation] = [.NONE, .Y90, .YNEG90, .Y180]
     
-    let biomes = FractalNoise(startFrequency: 1/200)
+    let biomes = FractalNoise2D(startFrequency: 1/200)
     
     func findBiome(_ pos: Int3) -> Biome {
-        let biome = biomes.signedNoise2D(Float(pos.x), Float(pos.z))
+        let biome = biomes.signedNoise(Float(pos.x), Float(pos.z))
         
         if (biome < -0.6) {
             return .AUTUMN_FOREST

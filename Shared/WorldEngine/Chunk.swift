@@ -66,6 +66,10 @@ struct Chunk {
         self.orientation[getBlockArrayIndex(pos)] = orientation
     }
     
+    // Determine the Y-coordinate levels that might be visible
+    // These blog posts could also be helpful:
+    // https://tomcc.github.io/2014/08/31/visibility-1.html
+    // https://tomcc.github.io/2014/08/31/visibility-2.html
     mutating func determineYBoundaries() {
         var n_air = numLayerAirBlocks[0]
         var prev_empty = n_air == N_CHUNK_LAYER_BLOCKS
