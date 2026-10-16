@@ -1,52 +1,51 @@
 
 protocol Noise2D {
-    func signedNoise(_ x: Float, _ y: Float) -> Float
+    func signedNoise(_ pos: Float2) -> Float
 }
 
 extension Noise2D {
-    func noise(_ x: Float, _ y: Float) -> Float {
-        return 0.5 * signedNoise(x, y) + 0.5
+    func noise(_ pos: Float2) -> Float {
+        return 0.5 * signedNoise(pos) + 0.5
     }
     
-    func turbulence(_ x: Float, _ y: Float) -> Float {
-        return abs(signedNoise(x, y))
+    func turbulence(_ pos: Float2) -> Float {
+        return abs(signedNoise(pos))
     }
 }
 
 protocol Noise3D {
-    func signedNoise(_ x: Float, _ y: Float, _ z: Float) -> Float
+    func signedNoise(_ pos: Float3) -> Float
 }
 
 extension Noise3D {
-    func noise(_ x: Float, _ y: Float, _ z: Float) -> Float {
-        return 0.5 * signedNoise(x, y, z) + 0.5
+    func noise(_ pos: Float3) -> Float {
+        return 0.5 * signedNoise(pos) + 0.5
     }
     
-    func turbulence(_ x: Float, _ y: Float, _ z: Float) -> Float {
-        return abs(signedNoise(x, y, z))
+    func turbulence(_ pos: Float3) -> Float {
+        return abs(signedNoise(pos))
     }
 }
 
 struct FractalNoise2D: Noise2D {
-    let startFrequency: Float
-    let octaves: Int
+    let seed: UInt64
+    let octaves: UInt64
     let persistence: Float
-    let noise: Noise2D = Simplex2D()
     
-    init(startFrequency: Float, octaves: Int = 1, persistence: Float = 0.5) {
-        self.startFrequency = startFrequency
+    init(seed: UInt64 = 0, octaves: UInt64 = 1, persistence: Float = 0.5) {
+        self.seed = seed
         self.octaves = octaves
         self.persistence = persistence
     }
     
-    func signedNoise(_ x: Float, _ y: Float) -> Float {
+    func signedNoise(_ pos: Float2) -> Float {
         var total: Float = 0;
-        var frequency: Float = startFrequency;
+        var frequency: Float = 1;
         var amplitude: Float = 1;
         var max_value: Float = 0;
 
-        for _ in 0..<octaves {
-            total += amplitude * noise.signedNoise(frequency * x, frequency * y);
+        for i in 0..<octaves {
+            total += amplitude * simplex2D(seed + i, frequency * pos);
             max_value += amplitude
             amplitude *= persistence
             frequency *= 2
@@ -56,25 +55,24 @@ struct FractalNoise2D: Noise2D {
 }
 
 struct FractalNoise3D: Noise3D {
-    let startFrequency: Float
-    let octaves: Int
+    let seed: UInt64
+    let octaves: UInt64
     let persistence: Float
-    let noise: Noise3D = Simplex3D()
     
-    init(startFrequency: Float, octaves: Int = 1, persistence: Float = 0.5) {
-        self.startFrequency = startFrequency
+    init(seed: UInt64 = 0, octaves: UInt64 = 1, persistence: Float = 0.5) {
+        self.seed = seed
         self.octaves = octaves
         self.persistence = persistence
     }
     
-    func signedNoise(_ x: Float, _ y: Float, _ z: Float) -> Float {
+    func signedNoise(_ pos: Float3) -> Float {
         var total: Float = 0;
-        var frequency: Float = startFrequency;
+        var frequency: Float = 1;
         var amplitude: Float = 1;
         var max_value: Float = 0;
 
-        for _ in 0..<octaves {
-            total += amplitude * noise.signedNoise(frequency * x, frequency * y, frequency * z);
+        for i in 0..<octaves {
+            total += amplitude * simplex3D(seed + i, frequency * pos);
             max_value += amplitude
             amplitude *= persistence
             frequency *= 2
@@ -85,22 +83,23 @@ struct FractalNoise3D: Noise3D {
 
 struct TerrainNoise {
     let noise: Noise2D
+    let multiplier: Float
     let minTerrainHeight: Int
     let heightRange: Float
     
     init(noise: Noise2D,
+         unitBlocks: Int,
          minTerrainHeight: Int,
          heightRange: Int) {
         
         self.noise = noise
+        self.multiplier = 1 / Float(unitBlocks)
         self.minTerrainHeight = minTerrainHeight
         self.heightRange = Float(heightRange)
     }
     
     func terrainHeight(_ pos: Int3) -> Int {
-        let x = Float(pos.x)
-        let z = Float(pos.z)
-        
-        return minTerrainHeight + Int(noise.noise(x, z) * heightRange)
+        let noise_pos = Float2(Float(pos.x), Float(pos.z)) * multiplier
+        return minTerrainHeight + Int(noise.noise(noise_pos) * heightRange)
     }
 }

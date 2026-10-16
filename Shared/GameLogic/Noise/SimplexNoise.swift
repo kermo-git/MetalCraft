@@ -9,209 +9,147 @@ private let simplex3D_unskew: Float = 1.0 / 6.0
 private let simplex_3D_corner_2_unskew = 2.0 * simplex3D_unskew;
 private let simplex_3D_corner_3_unskew = -1.0 + 3.0 * simplex3D_unskew;
 
-private let MASK = 255
-
-struct Simplex2D: Noise2D {
-    private var hashTable: [Int] = []
-    private var grad2D: [Float2] = []
-    
-    init() {
-        for i in 0...MASK {
-            hashTable.append(i)
-        }
-        hashTable.shuffle()
-        
-        for i in 0...MASK {
-            hashTable.append(hashTable[i])
-        }
-        let n_grad2D = 8
-        for i in 0..<n_grad2D {
-            let frac = Float(i)/Float(n_grad2D)
-            let phi = 2 * Float.pi * frac
-            grad2D.append(
-                Float2(cos(phi), sin(phi))
-            )
-        }
-    }
-    
-    func signedNoise(_ x: Float, _ y: Float) -> Float {
-        var s = (x + y) * simplex2D_skew
-        let fi = floor(x + s)
-        let fj = floor(y + s)
-        
-        s = (fi + fj) * simplex2D_unskew
-        let u0 = x - fi + s
-        let v0 = y - fj + s
-        
-        let i = Int(fi) & MASK
-        let j = Int(fj)
-        
-        var i1: Int, j1: Int
-        
-        if (u0 >= v0) {
-            i1 = 1; j1 = 0
-        } else {
-            i1 = 0; j1 = 1
-        }
-        let u1 = u0 - Float(i1) + simplex2D_unskew
-        let v1 = v0 - Float(j1) + simplex2D_unskew
-        
-        let u2 = u0 + simplex_2D_corner_2_unskew
-        let v2 = v0 + simplex_2D_corner_2_unskew
-        
-        var n0: Float = 0.0
-        var t = 0.5 - (u0 * u0 + v0 * v0)
-        if (t >= 0) {
-            let h = (hashTable[i] + j) & 7
-            let grad = grad2D[h]
-            n0 = t * t * t * t * (u0 * grad.x + v0 * grad.y)
-        }
-        
-        var n1: Float = 0.0
-        t = 0.5 - (u1 * u1 + v1 * v1)
-        if (t >= 0) {
-            let h = (hashTable[i + i1] + j + j1) & 7
-            let grad = grad2D[h]
-            n1 = t * t * t * t * (u1 * grad.x + v1 * grad.y)
-        }
-        
-        var n2: Float = 0.0
-        t = 0.5 - (u2 * u2 + v2 * v2)
-        if (t >= 0) {
-            let h = (hashTable[i + 1] + j + 1) & 7
-            let grad = grad2D[h]
-            n2 = t * t * t * t * (u2 * grad.x + v2 * grad.y)
-        }
-        return 70 * (n0 + n1 + n2)
-    }
+private let grad2D: [Float2] = (0..<8).map {
+    let frac = Float($0)/Float(8)
+    let phi = 2 * Float.pi * frac
+    return Float2(cos(phi), sin(phi))
 }
 
-struct Simplex3D: Noise3D {
-    private var hashTable: [Int] = []
+func simplex2D(_ seed: UInt64, _ pos: Float2) -> Float {
+    var s = (pos.x + pos.y) * simplex2D_skew
+    let f_skew_c0 = floor(pos + s)
     
-    init() {
-        for i in 0...MASK {
-            hashTable.append(i)
-        }
-        hashTable.shuffle()
-        
-        for i in 0...MASK {
-            hashTable.append(hashTable[i])
-        }
+    s = (f_skew_c0.x + f_skew_c0.y) * simplex2D_unskew
+    let c0 = pos - f_skew_c0 + s
+    
+    let skew_c0 = Int2(f_skew_c0)
+    var skew_c0_c1: Int2
+    
+    if (c0.x >= c0.y) {
+        skew_c0_c1 = Int2(1, 0)
+    } else {
+        skew_c0_c1 = Int2(0, 1)
+    }
+    let c1 = c0 - Float2(skew_c0_c1) + simplex2D_unskew
+    let c2 = c0 + simplex_2D_corner_2_unskew
+    
+    var n0: Float = 0.0
+    var t = 0.5 - dot(c0, c0)
+    if (t >= 0) {
+        let h = hash2D(seed, skew_c0, 7)
+        let grad = grad2D[h]
+        n0 = t * t * t * t * dot(c0, grad)
     }
     
-    func signedNoise(_ x: Float, _ y: Float, _ z: Float) -> Float {
-        var s = (x + y + z) * simplex3D_skew;
-        let fi = floor(x + s);
-        let fj = floor(y + s);
-        let fk = floor(z + s);
-        
-        s = (fi + fj + fk) * simplex3D_unskew;
-        let u0 = x - fi + s;
-        let v0 = y - fj + s;
-        let w0 = z - fk + s;
-        
-        let i = Int(fi) & MASK;
-        let j = Int(fj) & MASK;
-        let k = Int(fk);
-        
-        var i1: Int,
-            j1: Int,
-            k1: Int,
-            i2: Int,
-            j2: Int,
-            k2: Int
+    var n1: Float = 0.0
+    t = 0.5 - dot(c1, c1)
+    if (t >= 0) {
+        let h = hash2D(seed, skew_c0 &+ skew_c0_c1, 7)
+        let grad = grad2D[h]
+        n1 = t * t * t * t * dot(c1, grad)
+    }
+    
+    var n2: Float = 0.0
+    t = 0.5 - dot(c2, c2)
+    if (t >= 0) {
+        let h = hash2D(seed, skew_c0 &+ 1, 7)
+        let grad = grad2D[h]
+        n2 = t * t * t * t * dot(c2, grad)
+    }
+    return 70 * (n0 + n1 + n2)
+}
 
-        if (u0 > v0) {
-            if (v0 > w0) {
-                i1 = 1; j1 = 0; k1 = 0;
-                i2 = 1; j2 = 1; k2 = 0;
-            } else if (w0 > u0) {
-                i1 = 0; j1 = 0; k1 = 1;
-                i2 = 1; j2 = 0; k2 = 1;
-            } else {
-                i1 = 1; j1 = 0; k1 = 0;
-                i2 = 1; j2 = 0; k2 = 1;
-            }
+func simplex3D(_ seed: UInt64, _ pos: Float3) -> Float {
+    var s = (pos.x + pos.y + pos.z) * simplex3D_skew
+    let f_skew_c0 = floor(pos + s)
+    
+    s = (f_skew_c0.x + f_skew_c0.y + f_skew_c0.z) * simplex3D_unskew
+    let c0 = pos - f_skew_c0 + s
+    
+    let skew_c0 = Int3(f_skew_c0)
+    var skew_c0_c1, skew_c0_c2: Int3
+
+    if (c0.x >= c0.y) {
+        if (c0.y >= c0.z) {
+            skew_c0_c1 = Int3(1, 0, 0)
+            skew_c0_c2 = Int3(1, 1, 0)
+        } else if (c0.z > c0.x) {
+            skew_c0_c1 = Int3(0, 0, 1)
+            skew_c0_c2 = Int3(1, 0, 1)
         } else {
-            if (w0 < u0) {
-                i1 = 0; j1 = 1; k1 = 0;
-                i2 = 1; j2 = 1; k2 = 0;
-            } else if (w0 > v0) {
-                i1 = 0; j1 = 0; k1 = 1;
-                i2 = 0; j2 = 1; k2 = 1;
-            } else {
-                i1 = 0; j1 = 1; k1 = 0;
-                i2 = 0; j2 = 1; k2 = 1;
-            }
+            skew_c0_c1 = Int3(1, 0, 0)
+            skew_c0_c2 = Int3(1, 0, 1)
         }
-        let u1 = u0 - Float(i1) + simplex3D_unskew;
-        let v1 = v0 - Float(j1) + simplex3D_unskew;
-        let w1 = w0 - Float(k1) + simplex3D_unskew;
-        
-        let u2 = u0 - Float(i2) + simplex_3D_corner_2_unskew
-        let v2 = v0 - Float(j2) + simplex_3D_corner_2_unskew
-        let w2 = w0 - Float(k2) + simplex_3D_corner_2_unskew
-        
-        let u3 = u0 + simplex_3D_corner_3_unskew
-        let v3 = v0 + simplex_3D_corner_3_unskew
-        let w3 = w0 + simplex_3D_corner_3_unskew
-        
-        var n0: Float = 0.0
-        var t = 0.6 - (u0 * u0 + v0 * v0 + w0 * w0)
-        if (t >= 0) {
-            let h = hash(i, j, k)
-            n0 = t * t * t * t * grad(h, u0, v0, w0)
+    } else {
+        if (c0.z < c0.x) {
+            skew_c0_c1 = Int3(0, 1, 0)
+            skew_c0_c2 = Int3(1, 1, 0)
+        } else if (c0.z > c0.y) {
+            skew_c0_c1 = Int3(0, 0, 1)
+            skew_c0_c2 = Int3(0, 1, 1)
+        } else {
+            skew_c0_c1 = Int3(0, 1, 0)
+            skew_c0_c2 = Int3(0, 1, 1)
         }
-        
-        var n1: Float = 0.0
-        t = 0.6 - (u1 * u1 + v1 * v1 + w1 * w1)
-        if (t >= 0) {
-            let h = hash(i + i1, j + j1, k + k1)
-            n1 = t * t * t * t * grad(h, u1, v1, w1)
-        }
-        
-        var n2: Float = 0.0
-        t = 0.6 - (u2 * u2 + v2 * v2 + w2 * w2)
-        if (t >= 0) {
-            let h = hash(i + i2, j + j2, k + k2)
-            n2 = t * t * t * t * grad(h, u2, v2, w2)
-        }
-        
-        var n3: Float = 0.0
-        t = 0.6 - (u3 * u3 + v3 * v3 + w3 * w3)
-        if (t >= 0) {
-            let h = hash(i + 1, j + 1, k + 1)
-            n3 = t * t * t * t * grad(h, u3, v3, w3)
-        }
-        
-        return 32 * (n0 + n1 + n2 + n3)
+    }
+    let c1 = c0 - Float3(skew_c0_c1) + simplex3D_unskew
+    let c2 = c0 - Float3(skew_c0_c2) + simplex_3D_corner_2_unskew
+    let c3 = c0 + simplex_3D_corner_3_unskew
+    
+    var n0: Float = 0.0
+    var t = 0.6 - dot(c0, c0)
+    if (t >= 0) {
+        let h = hash3D(seed, skew_c0, 15)
+        n0 = t * t * t * t * grad3D(h, c0)
     }
     
-    private func hash(_ x: Int, _ y: Int, _ z: Int) -> Int {
-        return hashTable[hashTable[x] + y] + z
+    var n1: Float = 0.0
+    t = 0.6 - dot(c1, c1)
+    if (t >= 0) {
+        let h = hash3D(seed, skew_c0 &+ skew_c0_c1, 15)
+        n1 = t * t * t * t * grad3D(h, c1)
     }
     
-    private func grad(_ hash: Int, _ x: Float, _ y: Float, _ z: Float) -> Float {
-        switch (hash & 15) {
-            case 0:  return  x + y
-            case 1:  return -x + y
-            case 2:  return  x - y
-            case 3:  return -x - y
-            case 4:  return  x + z
-            case 5:  return -x + z
-            case 6:  return  x - z
-            case 7:  return -x - z
-            case 8:  return  y + z
-            case 9:  return -y + z
-            case 10: return  y - z
-            case 11: return -y - z
-            case 12: return  x + y
-            case 13: return -x + y
-            case 14: return -y + z
-            case 15: return -y - z
-        default:
-            return 0
-        }
+    var n2: Float = 0.0
+    t = 0.6 - dot(c2, c2)
+    if (t >= 0) {
+        let h = hash3D(seed, skew_c0 &+ skew_c0_c2, 15)
+        n2 = t * t * t * t * grad3D(h, c2)
+    }
+    
+    var n3: Float = 0.0
+    t = 0.6 - dot(c3, c3)
+    if (t >= 0) {
+        let h = hash3D(seed, skew_c0 &+ 1, 15)
+        n3 = t * t * t * t * grad3D(h, c3)
+    }
+    
+    return 32 * (n0 + n1 + n2 + n3)
+}
+
+private func grad3D(_ hash: Int, _ corner: Float3) -> Float {
+    let x = corner.x
+    let y = corner.y
+    let z = corner.z
+    
+    switch (hash) {
+        case 0:  return  x + y
+        case 1:  return -x + y
+        case 2:  return  x - y
+        case 3:  return -x - y
+        case 4:  return  x + z
+        case 5:  return -x + z
+        case 6:  return  x - z
+        case 7:  return -x - z
+        case 8:  return  y + z
+        case 9:  return -y + z
+        case 10: return  y - z
+        case 11: return -y - z
+        case 12: return  x + y
+        case 13: return -x + y
+        case 14: return -y + z
+        case 15: return -y - z
+    default:
+        return 0
     }
 }
