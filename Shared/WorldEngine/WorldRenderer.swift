@@ -64,7 +64,8 @@ class WorldRenderer: Renderer {
         loader = ChunkLoader(
             generator: generator,
             renderDistanceChunks: renderDistanceChunks,
-            memoryDistanceChunks: memoryDistanceChunks
+            memoryDistanceChunks: memoryDistanceChunks,
+            cameraPos: cameraChunkPos
         )
         setAspectRatio(1)
     }

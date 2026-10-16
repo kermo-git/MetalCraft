@@ -17,10 +17,14 @@ actor ChunkLoader {
     
     init(generator: WorldGenerator,
          renderDistanceChunks: Int,
-         memoryDistanceChunks: Int) {
+         memoryDistanceChunks: Int,
+         cameraPos: Int2) {
         
         renderCircle = getChunkPosCircle(radiusChunks: renderDistanceChunks)
-        generationQueue = renderCircle
+        generationQueue = renderCircle.map {
+            Int2(x: cameraPos.x + $0.x,
+                 y: cameraPos.y + $0.y)
+        }
         
         self.generator = generator
         renderDistanceChunksSquared = renderDistanceChunks * renderDistanceChunks
