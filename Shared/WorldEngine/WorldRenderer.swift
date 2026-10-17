@@ -1,9 +1,9 @@
 import simd
 import Metal
 
-private let renderDistanceChunks = 8
+private let renderDistanceChunks: Int32 = 8
 private let renderDistanceChunksSquared = renderDistanceChunks * renderDistanceChunks
-private let memoryDistanceChunks = 64
+private let memoryDistanceChunks: Int32 = 64
 
 @MainActor
 class WorldRenderer: Renderer {
@@ -29,8 +29,8 @@ class WorldRenderer: Renderer {
     init(generator: WorldGenerator,
          cameraPos: Float3) {
         
-        let sunColor = Float4(x: 1, y: 1, z: 1, w: 1)
-        let skyColor = Float4(x: 65.0/255, y: 166.0/255, z: 224/255, w: 1)
+        let sunColor = Half4(x: 1, y: 1, z: 1, w: 1)
+        let skyColor = Half4(x: 65.0/255, y: 166.0/255, z: 224/255, w: 1)
         clearColor = MTLClearColor(red: Double(skyColor.x),
                                    green: Double(skyColor.y),
                                    blue: Double(skyColor.z),
@@ -53,7 +53,7 @@ class WorldRenderer: Renderer {
 
         fragmentConstants = FragmentConstants(
             cameraPos: cameraPos,
-            sunDirection: normalize(Float3(0.8, 0.9, 1.3)),
+            sunDirection: Half3(normalize(Float3(0.8, 0.9, 1.3))),
             fogDistanceSquared: pow(renderDistanceBlocks, 2),
             fogColor: skyColor,
             sunColor: sunColor

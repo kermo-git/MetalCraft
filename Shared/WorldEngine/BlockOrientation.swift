@@ -4,16 +4,16 @@ enum BlockOrientation {
     case X90, X90_Y90, X90_YNEG90, X90_Y180
 }
 
-func orientVector(_ vec: Float3, _ orientation: BlockOrientation) -> Float3 {
+func orientVector<Scalar: FloatingPoint>(_ vec: SIMD3<Scalar>, _ orientation: BlockOrientation) -> SIMD3<Scalar> {
     switch orientation {
     case .NONE:       vec
-    case .Y90:        Float3( vec.z,  vec.y, -vec.x)
-    case .YNEG90:     Float3(-vec.z,  vec.y,  vec.x)
-    case .Y180:       Float3(-vec.x,  vec.y, -vec.z)
-    case .X90:        Float3( vec.x, -vec.z,  vec.y)
-    case .X90_Y90:    Float3( vec.y, -vec.z, -vec.x)
-    case .X90_YNEG90: Float3(-vec.y, -vec.z,  vec.x)
-    case .X90_Y180:   Float3(-vec.x, -vec.z, -vec.y)
+    case .Y90:        SIMD3<Scalar>( vec.z,  vec.y, -vec.x)
+    case .YNEG90:     SIMD3<Scalar>(-vec.z,  vec.y,  vec.x)
+    case .Y180:       SIMD3<Scalar>(-vec.x,  vec.y, -vec.z)
+    case .X90:        SIMD3<Scalar>( vec.x, -vec.z,  vec.y)
+    case .X90_Y90:    SIMD3<Scalar>( vec.y, -vec.z, -vec.x)
+    case .X90_YNEG90: SIMD3<Scalar>(-vec.y, -vec.z,  vec.x)
+    case .X90_Y180:   SIMD3<Scalar>(-vec.x, -vec.z, -vec.y)
     }
 }
 

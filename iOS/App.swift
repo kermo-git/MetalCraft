@@ -3,7 +3,7 @@ import SwiftUI
 @main
 struct MetalCraftApp: App {
     @StateObject var renderer = WorldRenderer(
-        generator: GameWorld(),
+        generator: GameWorld(seed: UInt32.random(in: 0...0xFFFFFFFF)),
         cameraPos: Float3(0, 90, 0)
     )
     

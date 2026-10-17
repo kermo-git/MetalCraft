@@ -1,43 +1,43 @@
 let N_CHUNK_LAYER_BLOCKS = CHUNK_SIDE * CHUNK_SIDE
 let N_CHUNK_BLOCKS = CHUNK_SIDE * CHUNK_SIDE * CHUNK_HEIGHT
 
-let AIR_ID = -1
+let AIR_ID: UInt16 = 0xFFFF
 
 private func getBlockArrayIndex(_ pos: Int3) -> Int {
-    return CHUNK_SIDE * (pos.y * CHUNK_SIDE + pos.z) + pos.x
+    return Int(CHUNK_SIDE * (pos.y * CHUNK_SIDE + pos.z) + pos.x)
 }
 
 struct Chunk {
-    private var blockID: [Int]
+    private var blockID: [UInt16]
     private var orientation: [BlockOrientation]
-    private(set) var numLayerAirBlocks: [Int]
+    private(set) var numLayerAirBlocks: [UInt16]
     
-    private(set) var minRenderY: Int = 0
-    private(set) var maxRenderY: Int = CHUNK_HEIGHT-1
-    private(set) var minBlockY: Int = 0
-    private(set) var maxBlockY: Int = CHUNK_HEIGHT-1
+    private(set) var minRenderY: Int32 = 0
+    private(set) var maxRenderY: Int32 = CHUNK_HEIGHT-1
+    private(set) var minBlockY: Int32 = 0
+    private(set) var maxBlockY: Int32 = CHUNK_HEIGHT-1
     
     init() {
-        numLayerAirBlocks = Array(repeating: N_CHUNK_LAYER_BLOCKS, count: CHUNK_HEIGHT)
-        blockID = Array(repeating: AIR_ID, count: N_CHUNK_BLOCKS)
-        orientation = Array(repeating: .NONE, count: N_CHUNK_BLOCKS)
+        numLayerAirBlocks = Array(repeating: UInt16(N_CHUNK_LAYER_BLOCKS), count: Int(CHUNK_HEIGHT))
+        blockID = Array(repeating: AIR_ID, count: Int(N_CHUNK_BLOCKS))
+        orientation = Array(repeating: .NONE, count: Int(N_CHUNK_BLOCKS))
     }
     
-    func get(_ pos: Int3) -> (Int, BlockOrientation) {
+    func get(_ pos: Int3) -> (UInt16, BlockOrientation) {
         let index = getBlockArrayIndex(pos)
         return (blockID[index], orientation[index])
     }
     
-    mutating func set(_ pos: Int3, _ blockID: Int,
+    mutating func set(_ pos: Int3, _ blockID: UInt16,
              _ orientation: BlockOrientation = .NONE) {
         let index = getBlockArrayIndex(pos)
         self.blockID[index] = blockID
         self.orientation[index] = orientation
         
         if blockID != AIR_ID {
-            numLayerAirBlocks[pos.y] -= 1
+            numLayerAirBlocks[Int(pos.y)] -= 1
         } else {
-            numLayerAirBlocks[pos.y] += 1
+            numLayerAirBlocks[Int(pos.y)] += 1
         }
     }
     
@@ -45,16 +45,16 @@ struct Chunk {
         blockID[getBlockArrayIndex(pos)] == AIR_ID
     }
     
-    func getBlockID(_ pos: Int3) -> Int {
+    func getBlockID(_ pos: Int3) -> UInt16 {
         blockID[getBlockArrayIndex(pos)]
     }
     
-    mutating func setBlockID(_ pos: Int3, _ blockID: Int) {
+    mutating func setBlockID(_ pos: Int3, _ blockID: UInt16) {
         self.blockID[getBlockArrayIndex(pos)] = blockID
         if blockID != AIR_ID {
-            numLayerAirBlocks[pos.y] -= 1
+            numLayerAirBlocks[Int(pos.y)] -= 1
         } else {
-            numLayerAirBlocks[pos.y] += 1
+            numLayerAirBlocks[Int(pos.y)] += 1
         }
     }
     
@@ -78,7 +78,7 @@ struct Chunk {
         minBlockY = if !prev_empty {0} else {-1}
         
         for y in 1..<CHUNK_HEIGHT {
-            n_air = numLayerAirBlocks[y]
+            n_air = numLayerAirBlocks[Int(y)]
             let current_empty = n_air == N_CHUNK_LAYER_BLOCKS
             let current_full = n_air == 0
             let current_half_full = !current_empty && !current_full
@@ -98,14 +98,14 @@ struct Chunk {
             prev_full = current_full
             prev_half_full = current_half_full
         }
-        n_air = numLayerAirBlocks[CHUNK_HEIGHT-1]
+        n_air = numLayerAirBlocks[Int(CHUNK_HEIGHT-1)]
         prev_empty = n_air == N_CHUNK_LAYER_BLOCKS
         prev_full = n_air == 0
         prev_half_full = !prev_empty && !prev_full
         maxBlockY = if !prev_empty {CHUNK_HEIGHT-1} else {-1}
         
         for y in stride(from: CHUNK_HEIGHT-2, through: minRenderY, by: -1) {
-            n_air = numLayerAirBlocks[y]
+            n_air = numLayerAirBlocks[Int(y)]
             let current_empty = n_air == N_CHUNK_LAYER_BLOCKS
             let current_full = n_air == 0
             let current_half_full = !current_empty && !current_full
@@ -129,7 +129,7 @@ struct Chunk {
     
     mutating func placeStructure(
         chunkPos: Int2, anchorBlock: Int3, structure: Structure,
-        layerIndexes: [Int], blockID: [Int]
+        layerIndexes: [Int32], blockID: [UInt16]
     ) {
         let chunk_NW_x = chunkPos.x * CHUNK_SIDE
         let chunk_NW_z = chunkPos.y * CHUNK_SIDE
@@ -167,7 +167,7 @@ struct Chunk {
                         
                         if !structure.isEmpty(struct_block_pos) {
                             let (local_blockID, orientation) = structure.get(struct_block_pos)
-                            self.set(chunk_block_pos, blockID[local_blockID], orientation)
+                            self.set(chunk_block_pos, blockID[Int(local_blockID)], orientation)
                         }
                     }
                 }

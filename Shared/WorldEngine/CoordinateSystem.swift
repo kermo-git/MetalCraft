@@ -1,4 +1,4 @@
-import Darwin
+import simd
 
 /* * * * * * * * * * * * * * * * * *
  * BLOCK & POINT COORDINATE SYSTEM *
@@ -137,16 +137,14 @@ extension Int2 {
     }
 }
 
-let CHUNK_SIDE = 16
-let CHUNK_HEIGHT = 256
+let CHUNK_SIDE: Int32 = 16
+let CHUNK_HEIGHT: Int32 = 256
 
-let CHUNK_SIDE_MASK = 15
-let CHUNK_SIDE_SHIFT = 4
+let CHUNK_SIDE_MASK: Int32 = 15
+let CHUNK_SIDE_SHIFT: Int32 = 4
 
 func getBlockPos(_ pointPos: Float3) -> Int3 {
-    return Int3(x: Int(floor(pointPos.x)),
-                y: Int(floor(pointPos.y)),
-                z: Int(floor(pointPos.z)))
+    return Int3(floor(pointPos))
 }
 
 func getChunkPos(_ blockPos: Int3) -> Int2 {
@@ -155,8 +153,9 @@ func getChunkPos(_ blockPos: Int3) -> Int2 {
 }
 
 func getChunkPos(_ pointPos: Float3) -> Int2 {
-    return Int2(x: Int(floor(pointPos.x)) >> CHUNK_SIDE_SHIFT,
-                y: Int(floor(pointPos.z)) >> CHUNK_SIDE_SHIFT)
+    let blockPos = Int3(floor(pointPos))
+    return Int2(x: blockPos.x >> CHUNK_SIDE_SHIFT,
+                y: blockPos.z >> CHUNK_SIDE_SHIFT)
 }
 
 func getLocalBlockPos(_ globalBlockPos: Int3) -> Int3 {
@@ -171,7 +170,7 @@ func getGlobalBlockPos(chunkPos: Int2, localBlockPos: Int3) -> Int3 {
                 z: chunkPos.y * CHUNK_SIDE + localBlockPos.z)
 }
 
-func distanceSquared(_ chunk1: Int2, _ chunk2: Int2) -> Int {
+func distanceSquared(_ chunk1: Int2, _ chunk2: Int2) -> Int32 {
     let fX = chunk1.x - chunk2.x
     let fZ = chunk1.y - chunk2.y
     return fX * fX + fZ * fZ

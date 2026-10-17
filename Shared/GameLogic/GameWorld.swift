@@ -13,14 +13,14 @@ enum StructureType {
 struct GameWorld: WorldGenerator, @unchecked Sendable {
     let textureNames: [String]
     let blocks: [Block]
-    let blockID: [String: Int]
+    let blockID: [String: UInt16]
     
-    let seed: UInt64
+    let seed: UInt32
     let terrain: TerrainNoise
     let treeGenerator: StructureGenerator<Biome, StructureType>
-    let dirtLayerHeight = 5
+    let dirtLayerHeight: Int32 = 5
     
-    init(seed: UInt64 = 0) {
+    init(seed: UInt32 = 0) {
         self.seed = seed
         
         terrain = TerrainNoise(
@@ -163,7 +163,7 @@ struct GameWorld: WorldGenerator, @unchecked Sendable {
     let rotations: [BlockOrientation] = [.NONE, .Y90, .YNEG90, .Y180]
     
     func findBiome(_ pos: Int3) -> Biome {
-        let biome = simplex2D(seed, Float2(Float(pos.x), Float(pos.z))/200)
+        let biome = simplex2D(seed, Double2(Double(pos.x), Double(pos.z))/200)
         
         if (biome < -0.6) {
             return .AUTUMN_FOREST
@@ -200,7 +200,7 @@ struct GameWorld: WorldGenerator, @unchecked Sendable {
                 let globalPos = getGlobalBlockPos(chunkPos: pos, localBlockPos: localPos)
                 
                 let terrainHeight = terrain.terrainHeight(globalPos)
-                let ground_block_id: Int
+                let ground_block_id: UInt16
                 
                 switch findBiome(globalPos) {
                 case .AUTUMN_FOREST:

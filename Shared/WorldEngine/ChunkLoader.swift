@@ -12,12 +12,12 @@ actor ChunkLoader {
     private var generationQueue: [Int2]
     
     private var generator: WorldGenerator
-    private var renderDistanceChunksSquared: Int
-    private var memoryDistanceChunksSquared: Int
+    private var renderDistanceChunksSquared: Int32
+    private var memoryDistanceChunksSquared: Int32
     
     init(generator: WorldGenerator,
-         renderDistanceChunks: Int,
-         memoryDistanceChunks: Int,
+         renderDistanceChunks: Int32,
+         memoryDistanceChunks: Int32,
          cameraPos: Int2) {
         
         renderCircle = getChunkPosCircle(radiusChunks: renderDistanceChunks)
@@ -157,7 +157,7 @@ actor ChunkLoader {
 }
 
 
-private func getChunkPosCircle(radiusChunks: Int) -> [Int2] {
+private func getChunkPosCircle(radiusChunks: Int32) -> [Int2] {
     var result: [Int2] = []
     
     for X in -radiusChunks...radiusChunks {

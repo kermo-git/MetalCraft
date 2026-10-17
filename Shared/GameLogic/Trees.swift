@@ -1,7 +1,7 @@
 func buildTree() -> Structure {
     let A = AIR_ID
-    let W = 0 // Wood
-    let L = 1 // Leaves
+    let W: UInt16 = 0 // Wood
+    let L: UInt16 = 1 // Leaves
     
     return Structure(blocks: [
         // Trunk layer
@@ -39,19 +39,19 @@ func buildTree() -> Structure {
     ], anchorBlock: Int3(2, 0, 2))
 }
 
-func treeLayerRepeats(_ trunkBlocks: Int, _ canopyBottomBlocks: Int, _ canopyMiddleBlocks: Int) -> [Int] {
-    var result = Array(repeating: 0, count: trunkBlocks)
-    result.append(contentsOf: Array(repeating: 1, count: canopyBottomBlocks))
-    result.append(contentsOf: Array(repeating: 2, count: canopyMiddleBlocks))
+func treeLayerRepeats(_ trunkBlocks: Int, _ canopyBottomBlocks: Int, _ canopyMiddleBlocks: Int) -> [Int32] {
+    var result = Array<Int32>(repeating: 0, count: trunkBlocks)
+    result.append(contentsOf: Array<Int32>(repeating: 1, count: canopyBottomBlocks))
+    result.append(contentsOf: Array<Int32>(repeating: 2, count: canopyMiddleBlocks))
     result.append(contentsOf: [3, 4])
     return result
 }
 
 func buildSpruceTree() -> Structure {
     let A = AIR_ID
-    let W = 0 // Wood
-    let L = 1 // Leaves
-    let S = 2 // Snow covered leaves
+    let W: UInt16 = 0 // Wood
+    let L: UInt16 = 1 // Leaves
+    let S: UInt16 = 2 // Snow covered leaves
     
     return Structure(blocks: [
         // Trunk layer
@@ -158,8 +158,8 @@ func buildSpruceTree() -> Structure {
     ], anchorBlock: Int3(3, 0, 3))
 }
 
-func spruceLayerRepeats(trunkBlocks: Int, isLarge: Bool, isTall: Bool) -> [Int] {
-    var result = Array(repeating: 0, count: trunkBlocks)
+func spruceLayerRepeats(trunkBlocks: Int, isLarge: Bool, isTall: Bool) -> [Int32] {
+    var result = Array<Int32>(repeating: 0, count: trunkBlocks)
     
     if isLarge {
         if isTall {

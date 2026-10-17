@@ -21,7 +21,7 @@ struct BlockInfo {
     }
 }
 
-func compileBlocks(_ info: [String:BlockInfo]) -> ([String:Int], [String], [Block]) {
+func compileBlocks(_ info: [String:BlockInfo]) -> ([String:UInt16], [String], [Block]) {
     var texture_set: Set<String> = []
     
     for (_, block_info) in info {
@@ -29,7 +29,7 @@ func compileBlocks(_ info: [String:BlockInfo]) -> ([String:Int], [String], [Bloc
         texture_set.insert(block_info.sideTexture)
         texture_set.insert(block_info.bottomTexture)
     }
-    var block_name_to_id: [String:Int] = [:]
+    var block_name_to_id: [String:UInt16] = [:]
     let texture_names = Array(texture_set)
     var blocks: [Block] = []
     
@@ -38,27 +38,23 @@ func compileBlocks(_ info: [String:BlockInfo]) -> ([String:Int], [String], [Bloc
         let sideTexture = block_info.sideTexture
         let bottomTexture = block_info.bottomTexture
         
-        let block = Block(topTextureID: texture_names.firstIndex(of: topTexture)!,
-                          sideTextureID: texture_names.firstIndex(of: sideTexture)!,
-                          bottomTextureID: texture_names.firstIndex(of: bottomTexture)!)
+        let block = Block(topTextureID: UInt16(texture_names.firstIndex(of: topTexture)!),
+                          sideTextureID: UInt16(texture_names.firstIndex(of: sideTexture)!),
+                          bottomTextureID: UInt16(texture_names.firstIndex(of: bottomTexture)!))
         
-        block_name_to_id[block_name] = block_id
+        block_name_to_id[block_name] = UInt16(block_id)
         blocks.append(block)
     }
     return (block_name_to_id, texture_names, blocks)
 }
 
 struct Block {
-    let topTextureID: Int
-    let sideTextureID: Int
-    let bottomTextureID: Int
+    let topTextureID: UInt16
+    let sideTextureID: UInt16
+    let bottomTextureID: UInt16
 
     func getVertices(pos: Int3, orientation: BlockOrientation, directions: Set<Direction>) -> [Vertex] {
-        let offset = Float3(
-            Float(pos.x) + 0.5,
-            Float(pos.y) + 0.5,
-            Float(pos.z) + 0.5
-        )
+        let offset = Float3(pos) + 0.5
         func transform(_ vec: Float3) -> Float3 {
             return orientVector(vec, orientation) + offset
         }
@@ -74,15 +70,15 @@ struct Block {
         
         var result: [Vertex] = []
         
-        let texTopLeft = Float2(0, 0)
-        let texTopRight = Float2(1, 0)
-        let texBottomLeft = Float2(0, 1)
-        let texBottomRight = Float2(1, 1)
+        let texTopLeft = Half2(0, 0)
+        let texTopRight = Half2(1, 0)
+        let texBottomLeft = Half2(0, 1)
+        let texBottomRight = Half2(1, 1)
         
         for direction in reverseOrientDirections(orientation, directions) {
             switch direction {
                 case .DOWN:
-                    let normal = orientVector(Float3(0, -1, 0), orientation)
+                    let normal = Half3(orientVector(Float3(0, -1, 0), orientation))
                 
                     result.append(contentsOf: [
                         Vertex(position: EDN, normal: normal,
@@ -95,7 +91,7 @@ struct Block {
                         
                         Vertex(position: EDS, normal: normal,
                                textureCoords: texBottomRight,
-                                textureID: bottomTextureID),
+                               textureID: bottomTextureID),
                         
                         Vertex(position: EDS, normal: normal,
                                textureCoords: texBottomRight,
@@ -110,7 +106,7 @@ struct Block {
                                textureID: bottomTextureID)
                     ])
                 case .UP:
-                    let normal = orientVector(Float3(0, 1, 0), orientation)
+                    let normal = Half3(orientVector(Float3(0, 1, 0), orientation))
                 
                     result.append(contentsOf: [
                         Vertex(position: EUN, normal: normal,
@@ -138,7 +134,7 @@ struct Block {
                                textureID: topTextureID)
                     ])
                 case .WEST:
-                    let normal = orientVector(Float3(-1, 0, 0), orientation)
+                    let normal = orientVector(Half3(-1, 0, 0), orientation)
                 
                     result.append(contentsOf: [
                         Vertex(position: WUN, normal: normal,
@@ -166,7 +162,7 @@ struct Block {
                                textureID: sideTextureID)
                     ])
                 case .EAST:
-                    let normal = orientVector(Float3(1, 0, 0), orientation)
+                    let normal = orientVector(Half3(1, 0, 0), orientation)
                 
                     result.append(contentsOf: [
                         Vertex(position: EUN, normal: normal,
@@ -194,7 +190,7 @@ struct Block {
                                textureID: sideTextureID)
                     ])
                 case .NORTH:
-                    let normal = orientVector(Float3(0, 0, -1), orientation)
+                    let normal = orientVector(Half3(0, 0, -1), orientation)
                 
                     result.append(contentsOf: [
                         Vertex(position: EUN, normal: normal,
@@ -222,7 +218,7 @@ struct Block {
                                textureID: sideTextureID)
                     ])
                 case .SOUTH:
-                    let normal = orientVector(Float3(0, 0, 1), orientation)
+                    let normal = orientVector(Half3(0, 0, 1), orientation)
                 
                     result.append(contentsOf: [
                         Vertex(position: EUS, normal: normal,

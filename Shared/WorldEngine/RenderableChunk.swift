@@ -19,7 +19,7 @@ actor RenderableChunk {
         
         for (localBlockPos, directions) in faces {
             let (blockID, orientation) = data.get(localBlockPos)
-            let block = blocks[blockID]
+            let block = blocks[Int(blockID)]
             let globalBlockPos = getGlobalBlockPos(chunkPos: chunkPos,
                                                    localBlockPos: localBlockPos)
             vertices.append(

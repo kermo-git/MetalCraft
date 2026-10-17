@@ -3,9 +3,9 @@ using namespace metal;
 
 struct VertexIn {
     float3 position [[ attribute(0) ]];
-    float3 normal [[ attribute(1) ]];
-    float2 textureCoords [[ attribute(2) ]];
-    int textureID [[ attribute(3) ]];
+    half3 normal [[ attribute(1) ]];
+    half2 textureCoords [[ attribute(2) ]];
+    ushort textureID [[ attribute(3) ]];
 };
 
 struct VertexConstants {
@@ -15,17 +15,17 @@ struct VertexConstants {
 struct FragmentIn {
     float4 screenPosition [[ position ]];
     float3 worldPosition;
-    float3 normal [[ flat ]];
-    float2 textureCoords;
-    int textureID [[ flat ]];
+    half3 normal [[ flat ]];
+    half2 textureCoords;
+    short textureID [[ flat ]];
 };
 
 struct FragmentConstants {
     float3 cameraPos;
-    float3 sunDirection;
+    half3 sunDirection;
     float fogDistanceSquared;
-    float4 fogColor;
-    float4 sunColor;
+    half4 fogColor;
+    half4 sunColor;
 };
 
 vertex FragmentIn worldVertex(const VertexIn vIn [[ stage_in ]],
@@ -41,10 +41,10 @@ vertex FragmentIn worldVertex(const VertexIn vIn [[ stage_in ]],
     return fIn;
 }
 
-fragment float4 worldFragment(FragmentIn fIn [[ stage_in ]],
+fragment half4 worldFragment(FragmentIn fIn [[ stage_in ]],
                               constant FragmentConstants &constants [[ buffer(1) ]],
                               sampler sampler2D [[ sampler(0) ]],
-                              texture2d_array<float> textures [[ texture(0) ]]) {
+                              texture2d_array<half> textures [[ texture(0) ]]) {
     
     float distFromCameraSqr = distance_squared(fIn.worldPosition, constants.cameraPos);
     float fullFogDistSqr = 0.9 * constants.fogDistanceSquared;
@@ -52,8 +52,8 @@ fragment float4 worldFragment(FragmentIn fIn [[ stage_in ]],
     if (distFromCameraSqr > fullFogDistSqr)
         return constants.fogColor;
     
-    float4 textureColor = textures.sample(sampler2D, fIn.textureCoords, fIn.textureID);
-    float4 color = textureColor * 0.5;
+    half4 textureColor = textures.sample(sampler2D, float2(fIn.textureCoords), fIn.textureID);
+    half4 color = textureColor * 0.5;
 
     float sunIntensity = dot(fIn.normal, constants.sunDirection);
     

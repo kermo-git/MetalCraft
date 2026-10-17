@@ -1,16 +1,16 @@
 struct StructureVariant<T: Hashable> {
     let type: T
-    let blockID: [Int]
-    let layerIndexes: [Int]
+    let blockID: [UInt16]
+    let layerIndexes: [Int32]
 }
 
 class StructureGenerator<B: Hashable, S: Hashable> {
     private var structure_types: [S: Structure] = [:]
     private var structure_variants: [B : [StructureVariant<S>]] = [:]
     
-    private let seed: UInt64
+    private let seed: UInt32
     
-    init(_ seed: UInt64) {
+    init(_ seed: UInt32) {
         self.seed = seed
     }
     
@@ -19,7 +19,7 @@ class StructureGenerator<B: Hashable, S: Hashable> {
     }
     
     func addStructurevariant(biome: B, structureType: S,
-                             blockID: [Int], layerIndexes: [Int]) {
+                             blockID: [UInt16], layerIndexes: [Int32]) {
         if !structure_variants.contains(where: {$0.key == biome}) {
             structure_variants[biome] = []
         }
@@ -35,10 +35,10 @@ class StructureGenerator<B: Hashable, S: Hashable> {
         
         for gridCellX in (2*chunkPos.x - 1)...(2*chunkPos.x + 2) {
             for gridCellZ in (2*chunkPos.y - 1)...(2*chunkPos.y + 2) {
-                let hash = hash2D(seed, Int2(gridCellX, gridCellZ))
+                let hash = Int32(hash2D_raw(seed, Int2(gridCellX, gridCellZ)) & 255)
                 let x = 8 * gridCellX + hash & 7
                 let z = 8 * gridCellZ + (hash >> 3) & 7
-                result.append((Int3(x, 0, z), hash))
+                result.append((Int3(x, 0, z), Int(hash)))
             }
         }
         return result
