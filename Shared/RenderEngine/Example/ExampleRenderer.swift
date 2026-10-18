@@ -15,13 +15,17 @@ class ExampleRenderer: Renderer {
         let color: Float3
     }
     
+    struct Instance: Sizeable {
+        let model: Float4x4
+    }
+    
     struct VertexConstants: Sizeable {
-        var projectionViewModelMatrix = matrix_identity_float4x4
+        var projectionView = matrix_identity_float4x4
     }
     
     var vertexConstants = VertexConstants()
-    var vertexBuffer, indexBuffer: MTLBuffer
-    var indexCount: Int
+    var vertexBuffer, indexBuffer, instanceBuffer: MTLBuffer
+    var indexCount, instanceCount: Int
     
     init() {
         let vertices = [
@@ -56,6 +60,22 @@ class ExampleRenderer: Renderer {
             6, 3, 7
         ]
         indexCount = indices.count
+        
+        let instances = [
+            Instance(
+                model: translate(-1, 0, -3) *
+                rotateAroundX(toRadians(30)) *
+                rotateAroundY(toRadians(-50)) *
+                scale(1, 0.5, 0.5)
+            ),
+            Instance(
+                model: translate(1, 0, -3) *
+                rotateAroundY(toRadians(30)) *
+                rotateAroundX(toRadians(30))
+            )
+        ]
+        instanceCount = instances.count
+        
         indexBuffer = engine.device.makeBuffer(bytes: indices,
                                                length: indices.memorySize(),
                                                options: [])!
@@ -64,17 +84,44 @@ class ExampleRenderer: Renderer {
                                                 length: vertices.memorySize(),
                                                 options: [])!
         
+        instanceBuffer = engine.device.makeBuffer(bytes: instances,
+                                                  length: instances.memorySize(),
+                                                  options: [])!
+        
         let descriptor = MTLVertexDescriptor()
         
-        descriptor.attributes[0].format = .float3
+        descriptor.layouts[0].stride = Vertex.memorySize()
+        descriptor.layouts[0].stepFunction = .perVertex
+        
+        // Vertex position
         descriptor.attributes[0].bufferIndex = 0
+        descriptor.attributes[0].format = .float3
         descriptor.attributes[0].offset = 0
         
-        descriptor.attributes[1].format = .float3
+        // Vertex color
         descriptor.attributes[1].bufferIndex = 0
+        descriptor.attributes[1].format = .float3
         descriptor.attributes[1].offset = Float3.memorySize()
         
-        descriptor.layouts[0].stride = Vertex.memorySize()
+        descriptor.layouts[1].stride = Instance.memorySize()
+        descriptor.layouts[1].stepFunction = .perInstance
+        
+        // Instance model
+        descriptor.attributes[2].bufferIndex = 1
+        descriptor.attributes[2].format = .float4
+        descriptor.attributes[2].offset = 0
+        
+        descriptor.attributes[3].bufferIndex = 1
+        descriptor.attributes[3].format = .float4
+        descriptor.attributes[3].offset = Float4.memorySize()
+        
+        descriptor.attributes[4].bufferIndex = 1
+        descriptor.attributes[4].format = .float4
+        descriptor.attributes[4].offset = 2 * Float4.memorySize()
+        
+        descriptor.attributes[5].bufferIndex = 1
+        descriptor.attributes[5].format = .float4
+        descriptor.attributes[5].offset = 3 * Float4.memorySize()
         
         renderPipeline = getRenderPipelineState(
             device: engine.device,
@@ -98,21 +145,28 @@ class ExampleRenderer: Renderer {
     
     var time: Float = 0
     func update(deltaTime: Float) {
-        time = max(time + deltaTime, 2 * Float.pi)
-        let modelMarix = translate(0, 0, -3) * rotateAroundY(time) * rotateAroundX(toRadians(30))
-        let pvm = projectionMatrix * camera.viewMatrix * modelMarix
-        vertexConstants.projectionViewModelMatrix = pvm
+        vertexConstants.projectionView = projectionMatrix * camera.viewMatrix
     }
     
     func render(_ encoder: MTLRenderCommandEncoder) {
         encoder.setDepthStencilState(depthStencilState)
         encoder.setRenderPipelineState(renderPipeline)
-        encoder.setVertexBytes(&vertexConstants, length: VertexConstants.memorySize(), index: 1)
+        
         encoder.setVertexBuffer(vertexBuffer, offset: 0, index: 0)
+        encoder.setVertexBuffer(instanceBuffer, offset: 0, index: 1)
+        encoder.setVertexBytes(&vertexConstants, length: VertexConstants.memorySize(), index: 2)
+        
         encoder.drawIndexedPrimitives(type: .triangle,
                                       indexCount: indexCount,
                                       indexType: .uint16,
                                       indexBuffer: indexBuffer,
-                                      indexBufferOffset: 0)
+                                      indexBufferOffset: 0,
+                                      instanceCount: instanceCount)
     }
+}
+
+import SwiftUI
+
+#Preview {
+    MetalView(renderer: ExampleRenderer())
 }

@@ -85,7 +85,3 @@ extension MetalView : UIViewRepresentable {
     func updateUIView(_ nsView: MTKView, context: Context) {}
 }
 #endif
-
-#Preview {
-    MetalView(renderer: ExampleRenderer())
-}
