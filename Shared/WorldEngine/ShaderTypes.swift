@@ -2,9 +2,20 @@ import simd
 import Metal
 
 struct Vertex: Sizeable {
-    let position: Float3
+    let position: Int3
     let normal: Half3
     let textureCoords: Half2
+    let textureID: UInt16
+}
+
+struct _Vertex {
+    let index: UInt8
+}
+
+struct _FaceInstance {
+    let positionXZ: Int2
+    let positionY: UInt8
+    let orientation: UInt8
     let textureID: UInt16
 }
 
@@ -12,11 +23,11 @@ func createVertexDescriptor() -> MTLVertexDescriptor {
     let descriptor = MTLVertexDescriptor()
     var offset = 0
     
-    descriptor.attributes[0].format = .float3
+    descriptor.attributes[0].format = .int3
     descriptor.attributes[0].bufferIndex = 0
     descriptor.attributes[0].offset = offset
     
-    offset += Float3.memorySize()
+    offset += MemoryLayout<Int3>.stride
     
     descriptor.attributes[1].format = .half3
     descriptor.attributes[1].bufferIndex = 0
@@ -39,6 +50,7 @@ func createVertexDescriptor() -> MTLVertexDescriptor {
 }
 
 struct VertexConstants: Sizeable {
+    var cameraOrigin: Int3
     var projectionViewMatrix = matrix_identity_float4x4
 }
 

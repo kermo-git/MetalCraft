@@ -24,7 +24,7 @@ struct PositionLabel: View {
         PositionLabel()
             .environmentObject(
                 WorldRenderer(generator: GameWorld(),
-                           cameraPos: Float3(0, 70, 0))
+                              cameraPos: Int3(0, 90, 0))
             )
     }
 }

@@ -54,9 +54,8 @@ struct Block {
     let bottomTextureID: UInt16
 
     func getVertices(pos: Int3, orientation: BlockOrientation, directions: Set<Direction>) -> [Vertex] {
-        let offset = Float3(pos) + 0.5
-        func transform(_ vec: Float3) -> Float3 {
-            return orientVector(vec, orientation) + offset
+        func transform(_ vec: Float3) -> Int3 {
+            return pos &+ Int3(orientVector(vec, orientation) + 0.5)
         }
         let EDN = transform(Float3( 0.5, -0.5, -0.5))
         let WDN = transform(Float3(-0.5, -0.5, -0.5))
@@ -78,7 +77,7 @@ struct Block {
         for direction in reverseOrientDirections(orientation, directions) {
             switch direction {
                 case .DOWN:
-                    let normal = Half3(orientVector(Float3(0, -1, 0), orientation))
+                    let normal = orientVector(Half3(0, -1, 0), orientation)
                 
                     result.append(contentsOf: [
                         Vertex(position: EDN, normal: normal,
@@ -106,7 +105,7 @@ struct Block {
                                textureID: bottomTextureID),
                     ])
                 case .UP:
-                    let normal = Half3(orientVector(Float3(0, 1, 0), orientation))
+                    let normal = orientVector(Half3(0, 1, 0), orientation)
                 
                     result.append(contentsOf: [
                         Vertex(position: EUS, normal: normal,

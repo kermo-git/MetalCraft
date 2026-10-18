@@ -58,7 +58,7 @@ struct MacOSGameView: View {
 #Preview {
     MacOSGameView()
         .environmentObject(
-            WorldRenderer(generator: GameWorld(),
-                          cameraPos: Float3(0, 90, 0))
+            WorldRenderer(generator: GameWorld(seed: 0),
+                          cameraPos: Int3(0, 90, 0))
         )
 }

@@ -2,13 +2,14 @@
 using namespace metal;
 
 struct VertexIn {
-    float3 position [[ attribute(0) ]];
+    int3 position [[ attribute(0) ]];
     half3 normal [[ attribute(1) ]];
     half2 textureCoords [[ attribute(2) ]];
     ushort textureID [[ attribute(3) ]];
 };
 
 struct VertexConstants {
+    int3 cameraOrigin;
     float4x4 projectionViewMatrix;
 };
 
@@ -30,10 +31,11 @@ struct FragmentConstants {
 
 vertex FragmentIn worldVertex(const VertexIn vIn [[ stage_in ]],
                               constant VertexConstants &constants [[ buffer(1) ]]) {
+    float3 vertex_pos = float3(vIn.position - constants.cameraOrigin);
     FragmentIn fIn;
     
-    fIn.screenPosition = constants.projectionViewMatrix * float4(vIn.position, 1);
-    fIn.worldPosition = vIn.position;
+    fIn.screenPosition = constants.projectionViewMatrix * float4(vertex_pos, 1);
+    fIn.worldPosition = vertex_pos;
     fIn.normal = vIn.normal;
     fIn.textureCoords = vIn.textureCoords;
     fIn.textureID = vIn.textureID;
@@ -42,9 +44,9 @@ vertex FragmentIn worldVertex(const VertexIn vIn [[ stage_in ]],
 }
 
 fragment half4 worldFragment(FragmentIn fIn [[ stage_in ]],
-                              constant FragmentConstants &constants [[ buffer(1) ]],
-                              sampler sampler2D [[ sampler(0) ]],
-                              texture2d_array<half> textures [[ texture(0) ]]) {
+                             constant FragmentConstants &constants [[ buffer(1) ]],
+                             sampler sampler2D [[ sampler(0) ]],
+                             texture2d_array<half> textures [[ texture(0) ]]) {
     
     float distFromCameraSqr = distance_squared(fIn.worldPosition, constants.cameraPos);
     float fullFogDistSqr = 0.9 * constants.fogDistanceSquared;

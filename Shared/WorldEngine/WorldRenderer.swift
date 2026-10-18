@@ -19,7 +19,7 @@ class WorldRenderer: Renderer {
     private var sampler: MTLSamplerState
     private var depthStencilState: MTLDepthStencilState
     
-    private var vertexConstants = VertexConstants()
+    private var vertexConstants: VertexConstants
     private var fragmentConstants: FragmentConstants
     private let textures: MTLTexture
     
@@ -27,7 +27,7 @@ class WorldRenderer: Renderer {
     private var chunkVertexBuffers: [Int2 : (MTLBuffer, Int)] = [:]
     
     init(generator: WorldGenerator,
-         cameraPos: Float3) {
+         cameraPos: Int3) {
         
         let sunColor = Half4(x: 1, y: 1, z: 1, w: 1)
         let skyColor = Half4(x: 65.0/255, y: 166.0/255, z: 224/255, w: 1)
@@ -36,8 +36,8 @@ class WorldRenderer: Renderer {
                                    blue: Double(skyColor.z),
                                    alpha: Double(skyColor.w))
         
-        camera = FlyingCamera(input: input, startPos: cameraPos)
-        cameraBlockPos = getBlockPos(cameraPos)
+        camera = FlyingCamera(input: input, startPos: Float3(0, 0, 0))
+        cameraBlockPos = cameraPos
         cameraChunkPos = getChunkPos(cameraPos)
         
         let renderDistanceBlocks = Float(renderDistanceChunks * CHUNK_SIDE)
@@ -51,8 +51,9 @@ class WorldRenderer: Renderer {
         sampler = getSamplerState(engine.device)
         depthStencilState = getDepthStencilState(engine.device)
 
+        vertexConstants = VertexConstants(cameraOrigin: cameraPos)
         fragmentConstants = FragmentConstants(
-            cameraPos: cameraPos,
+            cameraPos: Float3(0, 0, 0),
             sunDirection: Half3(normalize(Float3(0.8, 0.9, 1.3))),
             fogDistanceSquared: pow(renderDistanceBlocks, 2),
             fogColor: skyColor,
@@ -81,15 +82,14 @@ class WorldRenderer: Renderer {
     
     func update(deltaTime: Float) {
         camera.update(deltaTime: deltaTime)
+        
         vertexConstants.projectionViewMatrix = projectionMatrix * camera.viewMatrix
-        
-        let newCameraChunkPos = getChunkPos(camera.position)
-        let posChanged = cameraChunkPos != newCameraChunkPos
-        
-        cameraChunkPos = newCameraChunkPos
-        
         fragmentConstants.cameraPos = camera.position
-        cameraBlockPos = getBlockPos(camera.position)
+        
+        cameraBlockPos = vertexConstants.cameraOrigin &+ getBlockPos(camera.position)
+        let newCameraChunkPos = getChunkPos(cameraBlockPos)
+        let posChanged = cameraChunkPos != newCameraChunkPos
+        cameraChunkPos = newCameraChunkPos
         
         Task {
             let updatedChunks = await loader.update(cameraPos: newCameraChunkPos, posChanged: posChanged)
