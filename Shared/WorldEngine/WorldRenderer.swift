@@ -107,6 +107,9 @@ class WorldRenderer: Renderer {
     }
     
     func render(_ encoder: MTLRenderCommandEncoder) {
+        encoder.setCullMode(.back)
+        encoder.setFrontFacing(.clockwise)
+        
         encoder.setDepthStencilState(depthStencilState)
         encoder.setRenderPipelineState(renderPipeline)
         

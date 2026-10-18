@@ -93,36 +93,32 @@ struct Block {
                                textureCoords: texBottomRight,
                                textureID: bottomTextureID),
                         
-                        Vertex(position: EDS, normal: normal,
-                               textureCoords: texBottomRight,
+                        Vertex(position: WDN, normal: normal,
+                               textureCoords: texTopLeft,
                                textureID: bottomTextureID),
                         
                         Vertex(position: WDS, normal: normal,
-                               textureCoords: texBottomLeft, 
+                               textureCoords: texBottomLeft,
                                textureID: bottomTextureID),
                         
-                        Vertex(position: WDN, normal: normal,
-                               textureCoords: texTopLeft,
-                               textureID: bottomTextureID)
+                        Vertex(position: EDS, normal: normal,
+                               textureCoords: texBottomRight,
+                               textureID: bottomTextureID),
                     ])
                 case .UP:
                     let normal = Half3(orientVector(Float3(0, 1, 0), orientation))
                 
                     result.append(contentsOf: [
-                        Vertex(position: EUN, normal: normal,
-                               textureCoords: texTopLeft,
+                        Vertex(position: EUS, normal: normal,
+                               textureCoords: texBottomLeft,
                                textureID: topTextureID),
                         
                         Vertex(position: WUN, normal: normal,
-                               textureCoords: texTopRight, 
+                               textureCoords: texTopRight,
                                textureID: topTextureID),
                         
-                        Vertex(position: EUS, normal: normal,
-                               textureCoords: texBottomLeft, 
-                               textureID: topTextureID),
-                        
-                        Vertex(position: EUS, normal: normal,
-                               textureCoords: texBottomLeft,
+                        Vertex(position: EUN, normal: normal,
+                               textureCoords: texTopLeft,
                                textureID: topTextureID),
                         
                         Vertex(position: WUS, normal: normal,
@@ -131,7 +127,11 @@ struct Block {
                         
                         Vertex(position: WUN, normal: normal,
                                textureCoords: texTopRight,
-                               textureID: topTextureID)
+                               textureID: topTextureID),
+                        
+                        Vertex(position: EUS, normal: normal,
+                               textureCoords: texBottomLeft,
+                               textureID: topTextureID),
                     ])
                 case .WEST:
                     let normal = orientVector(Half3(-1, 0, 0), orientation)
@@ -149,17 +149,17 @@ struct Block {
                                textureCoords: texBottomLeft,
                                textureID: sideTextureID),
                         
-                        Vertex(position: WDN, normal: normal,
-                               textureCoords: texBottomRight,
+                        Vertex(position: WUN, normal: normal,
+                               textureCoords: texTopRight,
                                textureID: sideTextureID),
                         
                         Vertex(position: WDS, normal: normal,
                                textureCoords: texBottomLeft,
                                textureID: sideTextureID),
                         
-                        Vertex(position: WUN, normal: normal,
-                               textureCoords: texTopRight,
-                               textureID: sideTextureID)
+                        Vertex(position: WDN, normal: normal,
+                               textureCoords: texBottomRight,
+                               textureID: sideTextureID),
                     ])
                 case .EAST:
                     let normal = orientVector(Half3(1, 0, 0), orientation)
@@ -169,12 +169,12 @@ struct Block {
                                textureCoords: texTopLeft,
                                textureID: sideTextureID),
                         
-                        Vertex(position: EUS, normal: normal,
-                               textureCoords: texTopRight,
-                               textureID: sideTextureID),
-                        
                         Vertex(position: EDS, normal: normal,
                                textureCoords: texBottomRight,
+                               textureID: sideTextureID),
+                        
+                        Vertex(position: EUS, normal: normal,
+                               textureCoords: texTopRight,
                                textureID: sideTextureID),
                         
                         Vertex(position: EDN, normal: normal,
@@ -205,12 +205,12 @@ struct Block {
                                textureCoords: texBottomLeft,
                                textureID: sideTextureID),
                         
-                        Vertex(position: EDN, normal: normal,
-                               textureCoords: texBottomRight,
-                               textureID: sideTextureID),
-                        
                         Vertex(position: WDN, normal: normal,
                                textureCoords: texBottomLeft,
+                               textureID: sideTextureID),
+                        
+                        Vertex(position: EDN, normal: normal,
+                               textureCoords: texBottomRight,
                                textureID: sideTextureID),
                         
                         Vertex(position: EUN, normal: normal,
@@ -221,12 +221,12 @@ struct Block {
                     let normal = orientVector(Half3(0, 0, 1), orientation)
                 
                     result.append(contentsOf: [
-                        Vertex(position: EUS, normal: normal,
-                               textureCoords: texTopLeft,
-                               textureID: sideTextureID),
-                        
                         Vertex(position: WUS, normal: normal,
                                textureCoords: texTopRight,
+                               textureID: sideTextureID),
+                        
+                        Vertex(position: EUS, normal: normal,
+                               textureCoords: texTopLeft,
                                textureID: sideTextureID),
                         
                         Vertex(position: EDS, normal: normal,
