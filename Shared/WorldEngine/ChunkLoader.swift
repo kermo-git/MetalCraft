@@ -31,15 +31,15 @@ actor ChunkLoader {
         memoryDistanceChunksSquared = memoryDistanceChunks * memoryDistanceChunks
     }
     
-    func update(cameraPos: Int2, posChanged: Bool) async -> [Int2 : [Vertex]] {
-        var updatedChunkVertices: [Int2 : [Vertex]] = [:]
+    func update(cameraPos: Int2, posChanged: Bool) async -> [Int2 : [BlockFace]] {
+        var updatedChunkFaces: [Int2 : [BlockFace]] = [:]
         
         if (!generationQueue.isEmpty) {
             let pos = generationQueue.remove(at: 0)
             let d_sqr = distanceSquared(pos, cameraPos)
             
             if (d_sqr <= renderDistanceChunksSquared) {
-                updatedChunkVertices = await addChunk(pos: pos)
+                updatedChunkFaces = await addChunk(pos: pos)
             }
         }
         if (posChanged) {
@@ -48,7 +48,7 @@ actor ChunkLoader {
                 
                 if (d_sqr > memoryDistanceChunksSquared) {
                     chunks.removeValue(forKey: pos)
-                    updatedChunkVertices[pos] = []
+                    updatedChunkFaces[pos] = []
                 }
             }
             
@@ -63,7 +63,7 @@ actor ChunkLoader {
                 }
             }
         }
-        return updatedChunkVertices
+        return updatedChunkFaces
     }
     // https://medium.com/@jaredcassoutt/how-to-define-your-own-if-flags-in-swift-and-why-you-should-797508c243a2
     // Build Settings -> Swift Compiler — Custom Flags
@@ -73,13 +73,13 @@ actor ChunkLoader {
     var total_chunk_generation_ms: Float = 0
     #endif
     
-    private func addChunk(pos: Int2) async -> [Int2 : [Vertex]] {
+    private func addChunk(pos: Int2) async -> [Int2 : [BlockFace]] {
         #if MEASURE_TIME
         let start = DispatchTime.now()
         #endif
         let newChunk = generator.generateChunk(pos)
         var faces = getBlockFaces(chunk: newChunk)
-        var result: [Int2 : [Vertex]] = [:]
+        var result: [Int2 : [BlockFace]] = [:]
         
         let northPos = pos.move(.NORTH)
         if let northChunk = chunks[northPos] {

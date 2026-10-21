@@ -14,8 +14,8 @@ actor RenderableChunk {
     }
     
     func createVertices(blocks: [Block],
-                        chunkPos: Int2) -> [Vertex] {
-        var vertices: [Vertex] = []
+                        chunkPos: Int2) -> [BlockFace] {
+        var vertices: [BlockFace] = []
         
         for (localBlockPos, directions) in faces {
             let (blockID, orientation) = data.get(localBlockPos)
@@ -24,7 +24,7 @@ actor RenderableChunk {
                                                    localBlockPos: localBlockPos)
             vertices.append(
                 contentsOf:
-                    block.getVertices(
+                    block.createVertexShaderData(
                         pos: globalBlockPos,
                         orientation: orientation,
                         directions: directions
@@ -33,10 +33,4 @@ actor RenderableChunk {
         }
         return vertices
     }
-}
-
-func createVertexBuffer(device: MTLDevice, vertices: [Vertex]) -> MTLBuffer {
-    return device.makeBuffer(bytes: vertices,
-                             length: vertices.memorySize(),
-                             options: [])!
 }

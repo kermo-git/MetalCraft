@@ -1,18 +1,7 @@
 import simd
 import Metal
 
-struct Vertex: Sizeable {
-    let position: Int3
-    let normal: Half3
-    let textureCoords: Half2
-    let textureID: UInt16
-}
-
-struct _Vertex {
-    let index: UInt8
-}
-
-struct _FaceInstance {
+struct BlockFace: Sizeable {
     let positionXZ: Int2
     let positionY: UInt8
     let orientation: UInt8
@@ -23,29 +12,29 @@ func createVertexDescriptor() -> MTLVertexDescriptor {
     let descriptor = MTLVertexDescriptor()
     var offset = 0
     
-    descriptor.attributes[0].format = .int3
+    descriptor.attributes[0].format = .int2
     descriptor.attributes[0].bufferIndex = 0
     descriptor.attributes[0].offset = offset
     
-    offset += MemoryLayout<Int3>.stride
+    offset += MemoryLayout<Int2>.stride
     
-    descriptor.attributes[1].format = .half3
+    descriptor.attributes[1].format = .char
     descriptor.attributes[1].bufferIndex = 0
     descriptor.attributes[1].offset = offset
     
-    offset += MemoryLayout<Half3>.stride
+    offset += MemoryLayout<UInt8>.stride
     
-    descriptor.attributes[2].format = .half2
+    descriptor.attributes[2].format = .char
     descriptor.attributes[2].bufferIndex = 0
     descriptor.attributes[2].offset = offset
     
-    offset += MemoryLayout<Half2>.stride
+    offset += MemoryLayout<UInt8>.stride
     
     descriptor.attributes[3].format = .ushort2
     descriptor.attributes[3].bufferIndex = 0
     descriptor.attributes[3].offset = offset
     
-    descriptor.layouts[0].stride = Vertex.memorySize()
+    descriptor.layouts[0].stride = BlockFace.memorySize()
     return descriptor
 }
 

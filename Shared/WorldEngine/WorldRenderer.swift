@@ -24,7 +24,7 @@ class WorldRenderer: Renderer {
     private let textures: MTLTexture
     
     private let loader: ChunkLoader
-    private var chunkVertexBuffers: [Int2 : (MTLBuffer, Int)] = [:]
+    private var chunkBuffers: [Int2 : (MTLBuffer, Int)] = [:]
     
     init(generator: WorldGenerator,
          cameraPos: Int3) {
@@ -36,7 +36,8 @@ class WorldRenderer: Renderer {
                                    blue: Double(skyColor.z),
                                    alpha: Double(skyColor.w))
         
-        camera = FlyingCamera(input: input, startPos: Float3(0, 0, 0))
+        let cameraFloatPos = Float3(0, 0, 0)
+        camera = FlyingCamera(input: input, startPos: cameraFloatPos)
         cameraBlockPos = cameraPos
         cameraChunkPos = getChunkPos(cameraPos)
         
@@ -53,7 +54,7 @@ class WorldRenderer: Renderer {
 
         vertexConstants = VertexConstants(cameraOrigin: cameraPos)
         fragmentConstants = FragmentConstants(
-            cameraPos: Float3(0, 0, 0),
+            cameraPos: cameraFloatPos,
             sunDirection: Half3(normalize(Float3(0.8, 0.9, 1.3))),
             fogDistanceSquared: pow(renderDistanceBlocks, 2),
             fogColor: skyColor,
@@ -83,23 +84,30 @@ class WorldRenderer: Renderer {
     func update(deltaTime: Float) {
         camera.update(deltaTime: deltaTime)
         
-        vertexConstants.projectionViewMatrix = projectionMatrix * camera.viewMatrix
-        fragmentConstants.cameraPos = camera.position
-        
         cameraBlockPos = vertexConstants.cameraOrigin &+ getBlockPos(camera.position)
         let newCameraChunkPos = getChunkPos(cameraBlockPos)
         let posChanged = cameraChunkPos != newCameraChunkPos
         cameraChunkPos = newCameraChunkPos
         
+        if camera.position.x > 5000 || camera.position.z > 5000 {
+            vertexConstants.cameraOrigin = cameraBlockPos
+            camera.position = Float3(0, 0, 0)
+        }
+        
+        vertexConstants.projectionViewMatrix = projectionMatrix * camera.viewMatrix
+        fragmentConstants.cameraPos = camera.position
+        
         Task {
             let updatedChunks = await loader.update(cameraPos: newCameraChunkPos, posChanged: posChanged)
             await MainActor.run {
-                for (pos, vertices) in updatedChunks {
-                    if vertices.isEmpty {
-                        chunkVertexBuffers.removeValue(forKey: pos)
+                for (pos, faces) in updatedChunks {
+                    if faces.isEmpty {
+                        chunkBuffers.removeValue(forKey: pos)
                     } else {
-                        let buffer = createVertexBuffer(device: engine.device, vertices: vertices)
-                        chunkVertexBuffers[pos] = (buffer, vertices.count)
+                        let buffer = engine.device.makeBuffer(bytes: faces,
+                                                              length: faces.memorySize(),
+                                                              options: [])!
+                        chunkBuffers[pos] = (buffer, 6 * faces.count)
                     }
                 }
             }
@@ -122,7 +130,7 @@ class WorldRenderer: Renderer {
         let cameraViewX = -sin(camera.rotationY)
         let cameraViewZ = -cos(camera.rotationY)
         
-        for (chunkPos, (buffer, vertexCount)) in chunkVertexBuffers {
+        for (chunkPos, (buffer, vertexCount)) in chunkBuffers {
             let cameraToChunkX = Float(chunkPos.x - cameraChunkPos.x)
             let cameraToChunkZ = Float(chunkPos.y - cameraChunkPos.y)
             
