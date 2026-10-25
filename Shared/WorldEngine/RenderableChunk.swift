@@ -14,11 +14,11 @@ actor RenderableChunk {
     }
     
     func createVertices(blocks: [Block],
-                        chunkPos: Int2) -> [BlockFace] {
-        var vertices: [BlockFace] = []
+                        chunkPos: Int2) -> [Quad] {
+        var vertices: [Quad] = []
         
         for (localBlockPos, directions) in faces {
-            let (blockID, orientation) = data.get(localBlockPos)
+            let (blockID, rotation) = data.get(localBlockPos)
             let block = blocks[Int(blockID)]
             let globalBlockPos = getGlobalBlockPos(chunkPos: chunkPos,
                                                    localBlockPos: localBlockPos)
@@ -26,7 +26,7 @@ actor RenderableChunk {
                 contentsOf:
                     block.createVertexShaderData(
                         pos: globalBlockPos,
-                        orientation: orientation,
+                        rotation: rotation,
                         directions: directions
                     )
             )

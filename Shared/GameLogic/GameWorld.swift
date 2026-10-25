@@ -160,7 +160,7 @@ struct GameWorld: WorldGenerator, @unchecked Sendable {
             }
         }
     }
-    let rotations: [BlockOrientation] = [.NONE, .Y90, .YNEG90, .Y180]
+    let rotations: [BlockRotation] = [.NONE, .Y90, .YNEG90, .Y180]
     
     func findBiome(_ pos: Int3) -> Biome {
         let biome = simplex2D(seed, Double2(Double(pos.x), Double(pos.z))/200)

@@ -5,9 +5,9 @@ struct Structure {
     let anchorBlock: Int3
     
     private var blockID: [UInt16]
-    private var orientation: [BlockOrientation]
+    private var rotation: [BlockRotation]
     
-    init(blocks: [[[UInt16]]], anchorBlock: Int3, orientations: [[[BlockOrientation]]] = []) {
+    init(blocks: [[[UInt16]]], anchorBlock: Int3, rotation: [[[BlockRotation]]] = []) {
         self.lengthX = Int32(blocks[0][0].count)
         self.lengthY = Int32(blocks.count)
         self.lengthZ = Int32(blocks[0].count)
@@ -15,7 +15,7 @@ struct Structure {
         
         let n_blocks = lengthX*lengthY*lengthZ
         self.blockID = Array(repeating: AIR_ID, count: Int(n_blocks))
-        self.orientation = Array(repeating: .NONE, count: Int(n_blocks))
+        self.rotation = Array(repeating: .NONE, count: Int(n_blocks))
         
         for (y, layer) in blocks.enumerated() {
             for (z, west_east_row) in layer.enumerated() {
@@ -25,12 +25,12 @@ struct Structure {
                 }
             }
         }
-        if orientation.count > 0 {
-            for (y, layer) in orientations.enumerated() {
+        if rotation.count > 0 {
+            for (y, layer) in rotation.enumerated() {
                 for (z, west_east_row) in layer.enumerated() {
                     for (x, orientation) in west_east_row.enumerated() {
                         let pos = Int3(Int32(x), Int32(y), Int32(z))
-                        setOrientation(pos, orientation)
+                        setRotation(pos, orientation)
                     }
                 }
             }
@@ -41,16 +41,16 @@ struct Structure {
         return Int((pos.y * lengthZ + pos.z) * lengthX + pos.x)
     }
     
-    func get(_ pos: Int3) -> (UInt16, BlockOrientation) {
+    func get(_ pos: Int3) -> (UInt16, BlockRotation) {
         let index = getIndex(pos)
-        return (blockID[index], orientation[index])
+        return (blockID[index], rotation[index])
     }
     
     mutating func set(_ pos: Int3, _ blockID: UInt16,
-                      _ orientation: BlockOrientation = .NONE) {
+                      _ orientation: BlockRotation = .NONE) {
         let index = getIndex(pos)
         self.blockID[index] = blockID
-        self.orientation[index] = orientation
+        self.rotation[index] = orientation
     }
     
     func isEmpty(_ pos: Int3) -> Bool {
@@ -65,11 +65,11 @@ struct Structure {
         self.blockID[getIndex(pos)] = blockID
     }
     
-    func getOrientation(_ pos: Int3) -> BlockOrientation {
-        orientation[getIndex(pos)]
+    func getOrientation(_ pos: Int3) -> BlockRotation {
+        rotation[getIndex(pos)]
     }
     
-    mutating func setOrientation(_ pos: Int3, _ orientation: BlockOrientation) {
-        self.orientation[getIndex(pos)] = orientation
+    mutating func setRotation(_ pos: Int3, _ rotation: BlockRotation) {
+        self.rotation[getIndex(pos)] = rotation
     }
 }

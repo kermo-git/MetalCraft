@@ -96,8 +96,8 @@
 		4F9EAA1A2B69BC340080B613 /* iOSGameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F9EAA192B69BC340080B613 /* iOSGameView.swift */; };
 		4F9EAA1D2B69BCA00080B613 /* PositionLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F9EAA1C2B69BCA00080B613 /* PositionLabel.swift */; };
 		4F9EAA1E2B69BD960080B613 /* PositionLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F9EAA1C2B69BCA00080B613 /* PositionLabel.swift */; };
-		4FA26CE92C27576700AABCD6 /* BlockOrientation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FA26CE82C27576700AABCD6 /* BlockOrientation.swift */; };
-		4FA26CEA2C27576700AABCD6 /* BlockOrientation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FA26CE82C27576700AABCD6 /* BlockOrientation.swift */; };
+		4FA26CE92C27576700AABCD6 /* BlockRotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FA26CE82C27576700AABCD6 /* BlockRotation.swift */; };
+		4FA26CEA2C27576700AABCD6 /* BlockRotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FA26CE82C27576700AABCD6 /* BlockRotation.swift */; };
 		4FADDE8D2E1961DA00F59698 /* spruce_leaves.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FADDE8C2E1961DA00F59698 /* spruce_leaves.png */; };
 		4FADDE8E2E1961DA00F59698 /* spruce_leaves.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FADDE8C2E1961DA00F59698 /* spruce_leaves.png */; };
 		4FADDE902E19658000F59698 /* snow_spruce_leaves.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FADDE8F2E19658000F59698 /* snow_spruce_leaves.png */; };
@@ -211,7 +211,7 @@
 		4F9E1AE22A7923BB0055A782 /* ShaderTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShaderTypes.swift; sourceTree = "<group>"; };
 		4F9EAA192B69BC340080B613 /* iOSGameView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = iOSGameView.swift; sourceTree = "<group>"; };
 		4F9EAA1C2B69BCA00080B613 /* PositionLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PositionLabel.swift; sourceTree = "<group>"; };
-		4FA26CE82C27576700AABCD6 /* BlockOrientation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockOrientation.swift; sourceTree = "<group>"; };
+		4FA26CE82C27576700AABCD6 /* BlockRotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockRotation.swift; sourceTree = "<group>"; };
 		4FA63F432E9900EE0037FD66 /* spruce_forest.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = spruce_forest.jpg; sourceTree = "<group>"; };
 		4FA63F442E9900EE0037FD66 /* summer_autumn_forest.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = summer_autumn_forest.jpg; sourceTree = "<group>"; };
 		4FADDE8C2E1961DA00F59698 /* spruce_leaves.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = spruce_leaves.png; sourceTree = "<group>"; };
@@ -276,7 +276,7 @@
 			children = (
 				4F5AA4FD2E1721D500538197 /* Structure.swift */,
 				4FD3114C286A3F1F00BB55ED /* CoordinateSystem.swift */,
-				4FA26CE82C27576700AABCD6 /* BlockOrientation.swift */,
+				4FA26CE82C27576700AABCD6 /* BlockRotation.swift */,
 				4F0220602A402E1A000ACC7E /* Block.swift */,
 				4FD3114D286A3F1F00BB55ED /* Chunk.swift */,
 				4F1288982B703B5C003860E8 /* WorldGenerator.swift */,
@@ -658,7 +658,7 @@
 				4FD31152286A3F1F00BB55ED /* NoiseGenerator.swift in Sources */,
 				4F5AA4FB2E1721BA00538197 /* StructureGenerator.swift in Sources */,
 				4FD31116286A3F0100BB55ED /* Engine.swift in Sources */,
-				4FA26CE92C27576700AABCD6 /* BlockOrientation.swift in Sources */,
+				4FA26CE92C27576700AABCD6 /* BlockRotation.swift in Sources */,
 				4FD31124286A3F0100BB55ED /* WorldRenderer.swift in Sources */,
 				4F3B74C72A408656008A508A /* Renderer.swift in Sources */,
 				4F9E1AE32A7923BB0055A782 /* ShaderTypes.swift in Sources */,
@@ -696,7 +696,7 @@
 				4FD31159286A3F1F00BB55ED /* Chunk.swift in Sources */,
 				4F5AA4FA2E1721BA00538197 /* StructureGenerator.swift in Sources */,
 				4F9E1AE42A7923BB0055A782 /* ShaderTypes.swift in Sources */,
-				4FA26CEA2C27576700AABCD6 /* BlockOrientation.swift in Sources */,
+				4FA26CEA2C27576700AABCD6 /* BlockRotation.swift in Sources */,
 				4F9E1ADB2A791DE80055A782 /* ExampleShader.metal in Sources */,
 				4FD31117286A3F0100BB55ED /* Engine.swift in Sources */,
 				4FD31123286A3F0100BB55ED /* WorldShader.metal in Sources */,

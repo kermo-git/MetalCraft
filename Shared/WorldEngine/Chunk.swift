@@ -9,7 +9,7 @@ private func getBlockArrayIndex(_ pos: Int3) -> Int {
 
 struct Chunk {
     private var blockID: [UInt16]
-    private var orientation: [BlockOrientation]
+    private var rotation: [BlockRotation]
     private(set) var numLayerAirBlocks: [UInt16]
     
     private(set) var minRenderY: Int32 = 0
@@ -20,19 +20,19 @@ struct Chunk {
     init() {
         numLayerAirBlocks = Array(repeating: UInt16(N_CHUNK_LAYER_BLOCKS), count: Int(CHUNK_HEIGHT))
         blockID = Array(repeating: AIR_ID, count: Int(N_CHUNK_BLOCKS))
-        orientation = Array(repeating: .NONE, count: Int(N_CHUNK_BLOCKS))
+        rotation = Array(repeating: .NONE, count: Int(N_CHUNK_BLOCKS))
     }
     
-    func get(_ pos: Int3) -> (UInt16, BlockOrientation) {
+    func get(_ pos: Int3) -> (UInt16, BlockRotation) {
         let index = getBlockArrayIndex(pos)
-        return (blockID[index], orientation[index])
+        return (blockID[index], rotation[index])
     }
     
     mutating func set(_ pos: Int3, _ blockID: UInt16,
-             _ orientation: BlockOrientation = .NONE) {
+             _ orientation: BlockRotation = .NONE) {
         let index = getBlockArrayIndex(pos)
         self.blockID[index] = blockID
-        self.orientation[index] = orientation
+        self.rotation[index] = orientation
         
         if blockID != AIR_ID {
             numLayerAirBlocks[Int(pos.y)] -= 1
@@ -58,12 +58,12 @@ struct Chunk {
         }
     }
     
-    func getOrientation(_ pos: Int3) -> BlockOrientation {
-        orientation[getBlockArrayIndex(pos)]
+    func getRotation(_ pos: Int3) -> BlockRotation {
+        rotation[getBlockArrayIndex(pos)]
     }
     
-    mutating func setOrientation(_ pos: Int3, _ orientation: BlockOrientation) {
-        self.orientation[getBlockArrayIndex(pos)] = orientation
+    mutating func setRotation(_ pos: Int3, _ orientation: BlockRotation) {
+        self.rotation[getBlockArrayIndex(pos)] = orientation
     }
     
     // Determine the Y-coordinate levels that might be visible

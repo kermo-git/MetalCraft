@@ -31,8 +31,8 @@ actor ChunkLoader {
         memoryDistanceChunksSquared = memoryDistanceChunks * memoryDistanceChunks
     }
     
-    func update(cameraPos: Int2, posChanged: Bool) async -> [Int2 : [BlockFace]] {
-        var updatedChunkFaces: [Int2 : [BlockFace]] = [:]
+    func update(cameraPos: Int2, posChanged: Bool) async -> [Int2 : [Quad]] {
+        var updatedChunkFaces: [Int2 : [Quad]] = [:]
         
         if (!generationQueue.isEmpty) {
             let pos = generationQueue.remove(at: 0)
@@ -73,13 +73,13 @@ actor ChunkLoader {
     var total_chunk_generation_ms: Float = 0
     #endif
     
-    private func addChunk(pos: Int2) async -> [Int2 : [BlockFace]] {
+    private func addChunk(pos: Int2) async -> [Int2 : [Quad]] {
         #if MEASURE_TIME
         let start = DispatchTime.now()
         #endif
         let newChunk = generator.generateChunk(pos)
         var faces = getBlockFaces(chunk: newChunk)
-        var result: [Int2 : [BlockFace]] = [:]
+        var result: [Int2 : [Quad]] = [:]
         
         let northPos = pos.move(.NORTH)
         if let northChunk = chunks[northPos] {

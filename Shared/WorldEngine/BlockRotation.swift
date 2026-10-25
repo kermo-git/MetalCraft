@@ -25,16 +25,16 @@ enum BlockRotation: UInt8 {
 }
 
 enum TextureRotation: UInt8 {
-    case NONE = 0,
-    case CW,
-    case CCW,
+    case NONE = 0
+    case CW
+    case CCW
     case FULL
 }
 
-func reverseOrientDirection(_ orientation: BlockRotation, _ direction: Direction) -> (Direction, TextureRotation) {
-    switch orientation {
+func findRotatedFace(_ rotation: BlockRotation, _ direction: Direction) -> (Direction, TextureRotation) {
+    switch rotation {
     case .NONE:
-        direction
+        (direction, .NONE)
     case .Y90:
         switch direction {
         case .WEST: (.NORTH, .NONE)
@@ -68,7 +68,7 @@ func reverseOrientDirection(_ orientation: BlockRotation, _ direction: Direction
         case .SOUTH: (.UP, .NONE)
         case .NORTH: (.DOWN, .NONE)
         case .WEST: (.WEST, .CW)
-        case: .EAST: (.EAST, .CCW)
+        case .EAST: (.EAST, .CCW)
         }
     case .X90_Y90:
         switch direction {

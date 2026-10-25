@@ -1,10 +1,11 @@
 #include <metal_stdlib>
 using namespace metal;
 
-struct BlockFace {
-    int2 positionXZ;
-    uchar positionY;
-    uchar orientation;
+struct Quad {
+    int2 blockPosXZ;
+    uchar blockPosY;
+    ushort quadPos;
+    ushort quadSize_quadOrientation_texRotation;
     ushort textureID;
 };
 
@@ -15,7 +16,7 @@ struct VertexConstants {
 
 struct FragmentIn {
     float4 screenPosition [[ position ]];
-    float3 relativeWorldPosition;
+    float3 worldPosition;
     half3 normal [[ flat ]];
     half2 textureCoords;
     ushort textureID [[ flat ]];
@@ -29,21 +30,29 @@ struct FragmentConstants {
     half4 sunColor;
 };
 
-vertex FragmentIn worldVertex(const device BlockFace* vertices [[ buffer(0) ]],
+half unpack_half(ushort uint16_val, ushort shift) {
+    return half((uint16_val >> shift) & 0x1F) * 0.0625h;
+}
+
+vertex FragmentIn worldVertex(const device Quad* quads [[ buffer(0) ]],
                               constant VertexConstants &constants [[ buffer(1) ]],
                               uint vertexID [[ vertex_id ]]) {
+    // Find quad unpack compressed data
+    Quad quad = quads[vertexID / 6];
     
-    BlockFace face = vertices[vertexID / 6];
-    int3 block_pos = int3(face.positionXZ.x, face.positionY, face.positionXZ.y);
-    float3 block_origin = float3(block_pos - constants.cameraOrigin);
+    int3 block_pos = int3(quad.blockPosXZ.x, quad.blockPosY, quad.blockPosXZ.y);
     
-    uint vertex_index = vertexID % 6;
-    uint face_orientation = face.orientation & 7;
-    // uint block_orientation = face.orientation >> 3;
-
-    float3 vertex_pos = float3(0, 0, 0);
-    half3 normal = half3(0, 0, 0);
+    half3 quad_pos = half3(unpack_half(quad.quadPos, 10),
+                           unpack_half(quad.quadPos, 5),
+                           unpack_half(quad.quadPos, 0));
     
+    half2 quad_size = half2(unpack_half(quad.quadSize_quadOrientation_texRotation, 10),
+                            unpack_half(quad.quadSize_quadOrientation_texRotation, 5));
+    
+    uchar quad_orientation = (quad.quadSize_quadOrientation_texRotation >> 2) & 7;
+    uchar tex_rotation = quad.quadSize_quadOrientation_texRotation & 3;
+    
+    // Define lookup tables
     /*
      1 --- 2/4
      |     / |
@@ -52,168 +61,80 @@ vertex FragmentIn worldVertex(const device BlockFace* vertices [[ buffer(0) ]],
      |  /    |
      0/3 --- 5
      */
-    switch (face_orientation) {
-        case 0: // UP
-            normal = half3(0, 1, 0);
-            switch (vertex_index) {
-                case 0:
-                case 3:
-                    vertex_pos = block_origin + float3(0, 1, 1);
-                    break;
-                case 1:
-                    vertex_pos = block_origin + float3(0, 1, 0);
-                    break;
-                case 2:
-                case 4:
-                    vertex_pos = block_origin + float3(1, 1, 0);
-                    break;
-                default:
-                    vertex_pos = block_origin + float3(1, 1, 1);
-                    break;
-            }
-            break;
-        case 1: // DOWN
-            normal = half3(0, -1, 0);
-            switch (vertex_index) {
-                case 0:
-                case 3:
-                    vertex_pos = block_origin + float3(1, 0, 1);
-                    break;
-                case 1:
-                    vertex_pos = block_origin + float3(1, 0, 0);
-                    break;
-                case 2:
-                case 4:
-                    vertex_pos = block_origin + float3(0, 0, 0);
-                    break;
-                default:
-                    vertex_pos = block_origin + float3(0, 0, 1);
-                    break;
-            }
-            break;
-        case 2: // WEST
-            normal = half3(-1, 0, 0);
-            switch (vertex_index) {
-                case 0:
-                case 3:
-                    vertex_pos = block_origin + float3(0, 0, 0);
-                    break;
-                case 1:
-                    vertex_pos = block_origin + float3(0, 1, 0);
-                    break;
-                case 2:
-                case 4:
-                    vertex_pos = block_origin + float3(0, 1, 1);
-                    break;
-                default:
-                    vertex_pos = block_origin + float3(0, 0, 1);
-                    break;
-            }
-            break;
-        case 3: // EAST
-            normal = half3(1, 0, 0);
-            switch (vertex_index) {
-                case 0:
-                case 3:
-                    vertex_pos = block_origin + float3(1, 0, 1);
-                    break;
-                case 1:
-                    vertex_pos = block_origin + float3(1, 1, 1);
-                    break;
-                case 2:
-                case 4:
-                    vertex_pos = block_origin + float3(1, 1, 0);
-                    break;
-                default:
-                    vertex_pos = block_origin + float3(1, 0, 0);
-                    break;
-            }
-            break;
-        case 4: // SOUTH
-            normal = half3(0, 0, 1);
-            switch (vertex_index) {
-                case 0:
-                case 3:
-                    vertex_pos = block_origin + float3(0, 0, 1);
-                    break;
-                case 1:
-                    vertex_pos = block_origin + float3(0, 1, 1);
-                    break;
-                case 2:
-                case 4:
-                    vertex_pos = block_origin + float3(1, 1, 1);
-                    break;
-                default:
-                    vertex_pos = block_origin + float3(1, 0, 1);
-                    break;
-            }
-            break;
-        default: // NORTH
-            normal = half3(0, 0, -1);
-            switch (vertex_index) {
-                case 0:
-                case 3:
-                    vertex_pos = block_origin + float3(1, 0, 0);
-                    break;
-                case 1:
-                    vertex_pos = block_origin + float3(1, 1, 0);
-                    break;
-                case 2:
-                case 4:
-                    vertex_pos = block_origin + float3(0, 1, 0);
-                    break;
-                default:
-                    vertex_pos = block_origin + float3(0, 0, 0);
-                    break;
-            }
-            break;
-    }
+    half3 vertex_pos_lookup[36] = {
+        // UP
+        half3(0, 0, 1), half3(0, 0, 0), half3(1, 0, 0),
+        half3(0, 0, 1), half3(1, 0, 0), half3(1, 0, 1),
+        // DOWN
+        half3(1, 0, 1), half3(1, 0, 0), half3(0, 0, 0),
+        half3(1, 0, 1), half3(0, 0, 0), half3(0, 0, 1),
+        // WEST
+        half3(0, 0, 0), half3(0, 1, 0), half3(0, 1, 1),
+        half3(0, 0, 0), half3(0, 1, 1), half3(0, 0, 1),
+        // EAST
+        half3(0, 0, 1), half3(0, 1, 1), half3(0, 1, 0),
+        half3(0, 0, 1), half3(0, 1, 0), half3(0, 0, 0),
+        // SOUTH
+        half3(0, 0, 0), half3(0, 1, 0), half3(1, 1, 0),
+        half3(0, 0, 0), half3(1, 1, 0), half3(1, 0, 0),
+        // NORTH
+        half3(1, 0, 0), half3(1, 1, 0), half3(0, 1, 0),
+        half3(1, 0, 0), half3(0, 1, 0), half3(0, 0, 0),
+    };
     
-    half2 texture_coords = half2(0, 0);
+    half3 normal_lookup[6] = {
+        half3( 0,  1,  0), // UP
+        half3( 0, -1,  0), // DOWN
+        half3(-1,  0,  0), // WEST
+        half3( 1,  0,  0), // EAST
+        half3( 0,  0,  1), // SOUTH
+        half3( 0,  0, -1)  // NORTH
+    };
     
-    switch (vertex_index) {
-        case 0:
-        case 3:
-            texture_coords = half2(0, 1);
-            break;
-        case 1:
-            texture_coords = half2(0, 0);
-            break;
-        case 2:
-        case 4:
-            texture_coords = half2(1, 0);
-            break;
-        default:
-            texture_coords = half2(1, 1);
-            break;
-    }
+    half2 tex_pos_lookup[24] = {
+        // NONE
+        half2(0, 1), half2(0, 0), half2(1, 0),
+        half2(0, 1), half2(1, 0), half2(1, 1),
+        // CW
+        half2(1, 1), half2(0, 1), half2(0, 0),
+        half2(1, 1), half2(0, 0), half2(1, 0),
+        // CCW
+        half2(0, 0), half2(1, 0), half2(1, 1),
+        half2(0, 0), half2(1, 1), half2(0, 1),
+        // FULL
+        half2(1, 0), half2(1, 1), half2(0, 1),
+        half2(1, 0), half2(0, 1), half2(0, 0),
+    };
     
-    /* switch (orientation) {
-        case 0: // NONE
-            break;
-        case 1: // Y90
-            break;
-        case 2: // YNEG90
-            break;
-        case 3: // Y180
-            break;
-        case 4: // X90
-            break;
-        case 5: // X90_Y90
-            break;
-        case 6: // X90_NEGY90
-            break;
-        default: // X90_Y180
-            break;
-    } */
-    
+    // Calculations
     FragmentIn fIn;
+    fIn.textureID = quad.textureID;
+    fIn.normal = normal_lookup[quad_orientation];
+    
+    uint vertex_index = vertexID % 6;
+    fIn.textureCoords = tex_pos_lookup[6*tex_rotation + vertex_index];
+    
+    half3 quad_size_multiplier = half3(1, 1, 1);
+    
+    if (quad_orientation < 2) {
+        // UP, DOWN
+        quad_size_multiplier = half3(quad_size.x, 1, quad_size.y);
+    } else if (quad_orientation < 4) {
+        // WEST, EAST
+        quad_size_multiplier = half3(1, quad_size.y, quad_size.x);
+    } else {
+        // SOUTH, NORTH
+        quad_size_multiplier = half3(quad_size.x, quad_size.y, 1);
+    }
+    
+    half3 local_vertex_pos = vertex_pos_lookup[6*quad_orientation + vertex_index];
+    local_vertex_pos = quad_size_multiplier * local_vertex_pos + quad_pos;
+    
+    float3 block_origin = float3(block_pos - constants.cameraOrigin);
+    float3 vertex_pos = block_origin + float3(local_vertex_pos);
     
     fIn.screenPosition = constants.projectionViewMatrix * float4(vertex_pos, 1);
-    fIn.relativeWorldPosition = vertex_pos;
-    fIn.normal = normal;
-    fIn.textureCoords = texture_coords;
-    fIn.textureID = face.textureID;
+    fIn.worldPosition = vertex_pos;
     
     return fIn;
 }
@@ -223,7 +144,7 @@ fragment half4 worldFragment(FragmentIn fIn [[ stage_in ]],
                              sampler sampler2D [[ sampler(0) ]],
                              texture2d_array<half> textures [[ texture(0) ]]) {
     
-    float distFromCameraSqr = distance_squared(fIn.relativeWorldPosition, constants.cameraPos);
+    float distFromCameraSqr = distance_squared(fIn.worldPosition, constants.cameraPos);
     float fullFogDistSqr = 0.9 * constants.fogDistanceSquared;
     
     if (distFromCameraSqr > fullFogDistSqr)
