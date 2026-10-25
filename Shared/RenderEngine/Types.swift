@@ -14,30 +14,8 @@ typealias Float4x4 = simd_float4x4
 typealias Double2 = SIMD2<Double>
 typealias Double3 = SIMD3<Double>
 
-protocol Sizeable {
-    static func memorySize() -> Int
-}
-
-extension Sizeable {
-    static func memorySize() -> Int {
-        return MemoryLayout<Self>.stride
-    }
-}
-
-extension Array where Element: Sizeable {
-    func memorySize() -> Int {
-        return Element.memorySize() * count
-    }
-}
-
-extension UInt16: Sizeable {}
-extension Float2: Sizeable {}
-extension Float3: Sizeable {}
-extension Float4: Sizeable {}
-extension Float4x4: Sizeable {}
-
-extension Float3 {
-    func toString() -> String {
-        return "\(x), \(y), \(z)"
+extension Array {
+    func memoryStride() -> Int {
+        return MemoryLayout<Element>.stride * count
     }
 }

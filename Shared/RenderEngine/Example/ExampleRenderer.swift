@@ -10,16 +10,16 @@ class ExampleRenderer: Renderer {
     private var renderPipeline: MTLRenderPipelineState
     private var depthStencilState: MTLDepthStencilState
     
-    struct Vertex: Sizeable {
+    struct Vertex {
         let position: Float3
         let color: Float3
     }
     
-    struct Instance: Sizeable {
+    struct Instance {
         let model: Float4x4
     }
     
-    struct VertexConstants: Sizeable {
+    struct VertexConstants {
         var projectionView = matrix_identity_float4x4
     }
     
@@ -77,20 +77,20 @@ class ExampleRenderer: Renderer {
         instanceCount = instances.count
         
         indexBuffer = engine.device.makeBuffer(bytes: indices,
-                                               length: indices.memorySize(),
+                                               length: indices.memoryStride(),
                                                options: [])!
         
         vertexBuffer = engine.device.makeBuffer(bytes: vertices,
-                                                length: vertices.memorySize(),
+                                                length: vertices.memoryStride(),
                                                 options: [])!
         
         instanceBuffer = engine.device.makeBuffer(bytes: instances,
-                                                  length: instances.memorySize(),
+                                                  length: instances.memoryStride(),
                                                   options: [])!
         
         let descriptor = MTLVertexDescriptor()
         
-        descriptor.layouts[0].stride = Vertex.memorySize()
+        descriptor.layouts[0].stride = MemoryLayout<Vertex>.stride
         descriptor.layouts[0].stepFunction = .perVertex
         
         // Vertex position
@@ -101,9 +101,9 @@ class ExampleRenderer: Renderer {
         // Vertex color
         descriptor.attributes[1].bufferIndex = 0
         descriptor.attributes[1].format = .float3
-        descriptor.attributes[1].offset = Float3.memorySize()
+        descriptor.attributes[1].offset = MemoryLayout<Float3>.stride
         
-        descriptor.layouts[1].stride = Instance.memorySize()
+        descriptor.layouts[1].stride = MemoryLayout<Instance>.stride
         descriptor.layouts[1].stepFunction = .perInstance
         
         // Instance model
@@ -113,15 +113,15 @@ class ExampleRenderer: Renderer {
         
         descriptor.attributes[3].bufferIndex = 1
         descriptor.attributes[3].format = .float4
-        descriptor.attributes[3].offset = Float4.memorySize()
+        descriptor.attributes[3].offset = MemoryLayout<Float4>.stride
         
         descriptor.attributes[4].bufferIndex = 1
         descriptor.attributes[4].format = .float4
-        descriptor.attributes[4].offset = 2 * Float4.memorySize()
+        descriptor.attributes[4].offset = 2 * MemoryLayout<Float4>.stride
         
         descriptor.attributes[5].bufferIndex = 1
         descriptor.attributes[5].format = .float4
-        descriptor.attributes[5].offset = 3 * Float4.memorySize()
+        descriptor.attributes[5].offset = 3 * MemoryLayout<Float4>.stride
         
         renderPipeline = getRenderPipelineState(
             device: engine.device,
@@ -154,7 +154,11 @@ class ExampleRenderer: Renderer {
         
         encoder.setVertexBuffer(vertexBuffer, offset: 0, index: 0)
         encoder.setVertexBuffer(instanceBuffer, offset: 0, index: 1)
-        encoder.setVertexBytes(&vertexConstants, length: VertexConstants.memorySize(), index: 2)
+        encoder.setVertexBytes(
+            &vertexConstants,
+            length: MemoryLayout<VertexConstants>.stride,
+            index: 2
+        )
         
         encoder.drawIndexedPrimitives(type: .triangle,
                                       indexCount: indexCount,

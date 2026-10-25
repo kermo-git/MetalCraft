@@ -105,7 +105,7 @@ class WorldRenderer: Renderer {
                         chunkBuffers.removeValue(forKey: pos)
                     } else {
                         let buffer = engine.device.makeBuffer(bytes: faces,
-                                                              length: faces.memorySize(),
+                                                              length: faces.memoryStride(),
                                                               options: [])!
                         chunkBuffers[pos] = (buffer, 6 * faces.count)
                     }
@@ -121,11 +121,19 @@ class WorldRenderer: Renderer {
         encoder.setDepthStencilState(depthStencilState)
         encoder.setRenderPipelineState(renderPipeline)
         
-        encoder.setFragmentBytes(&fragmentConstants, length: FragmentConstants.memorySize(), index: 1)
+        encoder.setFragmentBytes(
+            &fragmentConstants,
+            length: MemoryLayout<FragmentConstants>.stride,
+            index: 1
+        )
         encoder.setFragmentSamplerState(sampler, index: 0)
         encoder.setFragmentTexture(textures, index: 0)
 
-        encoder.setVertexBytes(&vertexConstants, length: VertexConstants.memorySize(), index: 1)
+        encoder.setVertexBytes(
+            &vertexConstants,
+            length: MemoryLayout<VertexConstants>.stride,
+            index: 1
+        )
         
         let cameraViewX = -sin(camera.rotationY)
         let cameraViewZ = -cos(camera.rotationY)

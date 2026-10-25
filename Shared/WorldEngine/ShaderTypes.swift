@@ -1,7 +1,7 @@
 import simd
 import Metal
 
-struct BlockFace: Sizeable {
+struct BlockFace {
     let positionXZ: Int2
     let positionY: UInt8
     let orientation: UInt8
@@ -34,16 +34,16 @@ func createVertexDescriptor() -> MTLVertexDescriptor {
     descriptor.attributes[3].bufferIndex = 0
     descriptor.attributes[3].offset = offset
     
-    descriptor.layouts[0].stride = BlockFace.memorySize()
+    descriptor.layouts[0].stride = MemoryLayout<BlockFace>.stride
     return descriptor
 }
 
-struct VertexConstants: Sizeable {
+struct VertexConstants {
     var cameraOrigin: Int3
     var projectionViewMatrix = matrix_identity_float4x4
 }
 
-struct FragmentConstants: Sizeable {
+struct FragmentConstants {
     var cameraPos: Float3
     var sunDirection: Half3
     var fogDistanceSquared: Float
