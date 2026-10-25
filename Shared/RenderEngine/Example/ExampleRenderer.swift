@@ -123,13 +123,12 @@ class ExampleRenderer: Renderer {
         descriptor.attributes[5].format = .float4
         descriptor.attributes[5].offset = 3 * MemoryLayout<Float4>.stride
         
-        renderPipeline = getRenderPipelineState(
-            device: engine.device,
+        renderPipeline = engine.getRenderPipelineState(
             vertexShaderName: "exampleVertex",
             fragmentShaderName: "exampleFragment",
             vertexDescriptor: descriptor
         )!
-        depthStencilState = getDepthStencilState(engine.device)
+        depthStencilState = engine.getDepthStencilState()
         setAspectRatio(1)
     }
     

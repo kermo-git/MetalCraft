@@ -75,41 +75,40 @@ class Engine {
         }
         return result
     }
-}
-
-func getSamplerState(_ device: MTLDevice) -> MTLSamplerState {
-    let descriptor = MTLSamplerDescriptor()
-    descriptor.minFilter = .nearest
-    descriptor.magFilter = .nearest
-    descriptor.mipFilter = .linear
-    return device.makeSamplerState(descriptor: descriptor)!
-}
-
-func getDepthStencilState(_ device: MTLDevice) -> MTLDepthStencilState {
-    let descriptor = MTLDepthStencilDescriptor()
-    descriptor.isDepthWriteEnabled = true
-    descriptor.depthCompareFunction = .less
-    return device.makeDepthStencilState(descriptor: descriptor)!
-}
-
-func getRenderPipelineState(device: MTLDevice,
-                            vertexShaderName: String,
-                            fragmentShaderName: String,
-                            vertexDescriptor: MTLVertexDescriptor) -> MTLRenderPipelineState? {
     
-    let descriptor = MTLRenderPipelineDescriptor()
-    descriptor.colorAttachments[0].pixelFormat = pixelFormat
-    descriptor.depthAttachmentPixelFormat = depthPixelFormat
-    
-    let library = device.makeDefaultLibrary()!
-    descriptor.vertexFunction = library.makeFunction(name: vertexShaderName)
-    descriptor.fragmentFunction = library.makeFunction(name: fragmentShaderName)
-    descriptor.vertexDescriptor = vertexDescriptor
-    
-    do {
-        return try device.makeRenderPipelineState(descriptor: descriptor)
-    } catch {
-        print(error.localizedDescription)
+    func getSamplerState() -> MTLSamplerState {
+        let descriptor = MTLSamplerDescriptor()
+        descriptor.minFilter = .nearest
+        descriptor.magFilter = .nearest
+        descriptor.mipFilter = .linear
+        return device.makeSamplerState(descriptor: descriptor)!
     }
-    return nil
+
+    func getDepthStencilState() -> MTLDepthStencilState {
+        let descriptor = MTLDepthStencilDescriptor()
+        descriptor.isDepthWriteEnabled = true
+        descriptor.depthCompareFunction = .less
+        return device.makeDepthStencilState(descriptor: descriptor)!
+    }
+
+    func getRenderPipelineState(vertexShaderName: String,
+                                fragmentShaderName: String,
+                                vertexDescriptor: MTLVertexDescriptor) -> MTLRenderPipelineState? {
+        
+        let descriptor = MTLRenderPipelineDescriptor()
+        descriptor.colorAttachments[0].pixelFormat = pixelFormat
+        descriptor.depthAttachmentPixelFormat = depthPixelFormat
+        
+        let library = device.makeDefaultLibrary()!
+        descriptor.vertexFunction = library.makeFunction(name: vertexShaderName)
+        descriptor.fragmentFunction = library.makeFunction(name: fragmentShaderName)
+        descriptor.vertexDescriptor = vertexDescriptor
+        
+        do {
+            return try device.makeRenderPipelineState(descriptor: descriptor)
+        } catch {
+            print(error.localizedDescription)
+        }
+        return nil
+    }
 }

@@ -43,14 +43,13 @@ class WorldRenderer: Renderer {
         
         let renderDistanceBlocks = Float(renderDistanceChunks * CHUNK_SIDE)
         
-        renderPipeline = getRenderPipelineState(
-            device: engine.device,
+        renderPipeline = engine.getRenderPipelineState(
             vertexShaderName: "worldVertex",
             fragmentShaderName: "worldFragment",
             vertexDescriptor: createVertexDescriptor()
         )!
-        sampler = getSamplerState(engine.device)
-        depthStencilState = getDepthStencilState(engine.device)
+        sampler = engine.getSamplerState()
+        depthStencilState = engine.getDepthStencilState()
 
         vertexConstants = VertexConstants(cameraOrigin: cameraPos)
         fragmentConstants = FragmentConstants(
