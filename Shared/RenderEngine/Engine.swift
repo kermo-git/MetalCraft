@@ -81,6 +81,8 @@ class Engine {
         descriptor.minFilter = .nearest
         descriptor.magFilter = .nearest
         descriptor.mipFilter = .linear
+        descriptor.sAddressMode = .repeat
+        descriptor.tAddressMode = .repeat
         return device.makeSamplerState(descriptor: descriptor)!
     }
 

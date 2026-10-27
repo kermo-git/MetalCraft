@@ -4,9 +4,10 @@ using namespace metal;
 struct Quad {
     int2 blockPosXZ;
     uchar blockPosY;
-    ushort quadPos;
-    ushort quadSize_quadOrientation_texRotation;
+    uchar shapeID_texRotation;
     ushort textureID;
+    ushort quadPos;
+    ushort quadSize;
 };
 
 struct VertexConstants {
@@ -46,11 +47,12 @@ vertex FragmentIn worldVertex(const device Quad* quads [[ buffer(0) ]],
                            unpack_half(quad.quadPos, 5),
                            unpack_half(quad.quadPos, 0));
     
-    half2 quad_size = half2(unpack_half(quad.quadSize_quadOrientation_texRotation, 10),
-                            unpack_half(quad.quadSize_quadOrientation_texRotation, 5));
+    half3 quad_size = half3(unpack_half(quad.quadSize, 10),
+                            unpack_half(quad.quadSize, 5),
+                            unpack_half(quad.quadSize, 0));
     
-    uchar quad_orientation = (quad.quadSize_quadOrientation_texRotation >> 2) & 7;
-    uchar tex_rotation = quad.quadSize_quadOrientation_texRotation & 3;
+    uchar shapeID = (quad.shapeID_texRotation >> 2) & 7;
+    uchar tex_rotation = quad.shapeID_texRotation & 3;
     
     // Define lookup tables
     /*
@@ -109,26 +111,13 @@ vertex FragmentIn worldVertex(const device Quad* quads [[ buffer(0) ]],
     // Calculations
     FragmentIn fIn;
     fIn.textureID = quad.textureID;
-    fIn.normal = normal_lookup[quad_orientation];
+    fIn.normal = normal_lookup[shapeID];
     
     uint vertex_index = vertexID % 6;
     fIn.textureCoords = tex_pos_lookup[6*tex_rotation + vertex_index];
     
-    half3 quad_size_multiplier = half3(1, 1, 1);
-    
-    if (quad_orientation < 2) {
-        // UP, DOWN
-        quad_size_multiplier = half3(quad_size.x, 1, quad_size.y);
-    } else if (quad_orientation < 4) {
-        // WEST, EAST
-        quad_size_multiplier = half3(1, quad_size.y, quad_size.x);
-    } else {
-        // SOUTH, NORTH
-        quad_size_multiplier = half3(quad_size.x, quad_size.y, 1);
-    }
-    
-    half3 local_vertex_pos = vertex_pos_lookup[6*quad_orientation + vertex_index];
-    local_vertex_pos = quad_size_multiplier * local_vertex_pos + quad_pos;
+    half3 local_vertex_pos = vertex_pos_lookup[6*shapeID + vertex_index];
+    local_vertex_pos = quad_size * local_vertex_pos + quad_pos;
     
     float3 block_origin = float3(block_pos - constants.cameraOrigin);
     float3 vertex_pos = block_origin + float3(local_vertex_pos);

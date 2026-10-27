@@ -53,23 +53,19 @@ struct Block {
     let sideTextureID: UInt16
     let bottomTextureID: UInt16
     
-    func encodeQuadPos(_ x: UInt16, _ y: UInt16, _ z: UInt16) -> UInt16 {
+    func encode3x5bitTriplet(_ x: UInt16, _ y: UInt16, _ z: UInt16) -> UInt16 {
         (x << 10) | (y << 5) | z
     }
     
-    func encodeSizeOrientationTexRotation(
-        quadSizeX: UInt16, quadSizeY: UInt16,
-        quadOrientation: Direction, texRotation: TextureRotation
-    ) -> UInt16 {
-        (quadSizeX << 10) |
-        (quadSizeY << 5) |
-        (UInt16(quadOrientation.rawValue) << 2) |
-        UInt16(texRotation.rawValue)
+    func encodeShapeIDTexRotation(
+        shapeID: Direction, texRotation: TextureRotation
+    ) -> UInt8 {
+        (shapeID.rawValue << 2) | texRotation.rawValue
     }
 
     func createVertexShaderData(pos: Int3, rotation: BlockRotation, directions: Set<Direction>) -> [Quad] {
-        return directions.map { quad_orientation in
-            let (tex_face, tex_rotation) = findRotatedFace(rotation, quad_orientation)
+        return directions.map { face_orientation in
+            let (tex_face, tex_rotation) = findRotatedFace(rotation, face_orientation)
             
             let texture_ID = switch tex_face {
             case .UP:
@@ -80,26 +76,25 @@ struct Block {
                 sideTextureID
             }
             
-            let quad_pos: UInt16 = switch quad_orientation {
-            case .UP: encodeQuadPos(0, 16, 0)
-            case .DOWN: encodeQuadPos(0, 0, 0)
-            case .WEST: encodeQuadPos(0, 0, 0)
-            case .EAST: encodeQuadPos(16, 0, 0)
-            case .SOUTH: encodeQuadPos(0, 0, 16)
-            case .NORTH: encodeQuadPos(0, 0, 0)
+            let quad_pos: UInt16 = switch face_orientation {
+            case .UP: encode3x5bitTriplet(0, 16, 0)
+            case .DOWN: encode3x5bitTriplet(0, 0, 0)
+            case .WEST: encode3x5bitTriplet(0, 0, 0)
+            case .EAST: encode3x5bitTriplet(16, 0, 0)
+            case .SOUTH: encode3x5bitTriplet(0, 0, 16)
+            case .NORTH: encode3x5bitTriplet(0, 0, 0)
             }
                 
             return Quad(
                 blockPosXZ: Int2(pos.x, pos.z),
                 blockPosY: UInt8(pos.y & 255),
-                quadPos: quad_pos,
-                quadSize_quadOrientation_texRotation: encodeSizeOrientationTexRotation(
-                    quadSizeX: 16,
-                    quadSizeY: 16,
-                    quadOrientation: quad_orientation,
+                shapeID_texRotation: encodeShapeIDTexRotation(
+                    shapeID: face_orientation,
                     texRotation: tex_rotation
                 ),
-                textureID: texture_ID
+                textureID: texture_ID,
+                quadPos: quad_pos,
+                quadSize: encode3x5bitTriplet(16, 16, 16)
             )
         }
     }
