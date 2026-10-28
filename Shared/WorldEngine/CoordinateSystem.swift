@@ -93,7 +93,7 @@ import simd
  */
 
 enum Direction: UInt8 {
-    case UP
+    case UP = 0
     case DOWN
     case WEST
     case EAST

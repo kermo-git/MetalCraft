@@ -31,26 +31,22 @@ struct FragmentConstants {
     half4 sunColor;
 };
 
-half unpack_half(ushort uint16_val, ushort shift) {
-    return half((uint16_val >> shift) & 0x1F) * 0.0625h;
+half3 unpack_half3(ushort uint16_data) {
+    half x = half(uint16_data >> 10) * 0.0625h;
+    half y = half((uint16_data >> 5) & 0x1F) * 0.0625h;
+    half z = half(uint16_data & 0x1F) * 0.0625h;
+    return half3(x, y, z);
 }
 
 vertex FragmentIn worldVertex(const device Quad* quads [[ buffer(0) ]],
                               constant VertexConstants &constants [[ buffer(1) ]],
                               uint vertexID [[ vertex_id ]]) {
-    // Find quad unpack compressed data
+    // Find quad and unpack compressed data
     Quad quad = quads[vertexID / 6];
     
     int3 block_pos = int3(quad.blockPosXZ.x, quad.blockPosY, quad.blockPosXZ.y);
-    
-    half3 quad_pos = half3(unpack_half(quad.quadPos, 10),
-                           unpack_half(quad.quadPos, 5),
-                           unpack_half(quad.quadPos, 0));
-    
-    half3 quad_size = half3(unpack_half(quad.quadSize, 10),
-                            unpack_half(quad.quadSize, 5),
-                            unpack_half(quad.quadSize, 0));
-    
+    half3 quad_pos = unpack_half3(quad.quadPos);
+    half3 quad_size = unpack_half3(quad.quadSize);
     uchar shapeID = (quad.shapeID_texRotation >> 2) & 7;
     uchar tex_rotation = quad.shapeID_texRotation & 3;
     
@@ -93,19 +89,54 @@ vertex FragmentIn worldVertex(const device Quad* quads [[ buffer(0) ]],
         half3( 0,  0, -1)  // NORTH
     };
     
-    half2 tex_pos_lookup[24] = {
+    half3x2 tex_pos_projection_lookup[6] = {
+        // UP
+        half3x2(
+            half2(1, 0),
+            half2(0, 0),
+            half2(0, 1)
+        ),
+        // DOWN
+        half3x2(
+            half2(-1, 0),
+            half2(0, 0),
+            half2(0, 1)
+        ),
+        // WEST
+        half3x2(
+            half2(0, 0),
+            half2(0, -1),
+            half2(1, 0)
+        ),
+        // EAST
+        half3x2(
+            half2(0, 0),
+            half2(0, -1),
+            half2(-1, 0)
+        ),
+        // SOUTH
+        half3x2(
+            half2(1, 0),
+            half2(0, -1),
+            half2(0, 0)
+        ),
+        // NORTH
+        half3x2(
+            half2(-1, 0),
+            half2(0, -1),
+            half2(0, 0)
+        )
+    };
+    
+    half2x2 tex_rotation_lookup[4] = {
         // NONE
-        half2(0, 1), half2(0, 0), half2(1, 0),
-        half2(0, 1), half2(1, 0), half2(1, 1),
+        half2x2(half2(1, 0), half2(0, 1)),
         // CW
-        half2(1, 1), half2(0, 1), half2(0, 0),
-        half2(1, 1), half2(0, 0), half2(1, 0),
+        half2x2(half2(0, -1), half2(1, 0)),
         // CCW
-        half2(0, 0), half2(1, 0), half2(1, 1),
-        half2(0, 0), half2(1, 1), half2(0, 1),
+        half2x2(half2(0, 1), half2(-1, 0)),
         // FULL
-        half2(1, 0), half2(1, 1), half2(0, 1),
-        half2(1, 0), half2(0, 1), half2(0, 0),
+        half2x2(half2(-1, 0), half2(0, -1)),
     };
     
     // Calculations
@@ -114,10 +145,12 @@ vertex FragmentIn worldVertex(const device Quad* quads [[ buffer(0) ]],
     fIn.normal = normal_lookup[shapeID];
     
     uint vertex_index = vertexID % 6;
-    fIn.textureCoords = tex_pos_lookup[6*tex_rotation + vertex_index];
     
     half3 local_vertex_pos = vertex_pos_lookup[6*shapeID + vertex_index];
     local_vertex_pos = quad_size * local_vertex_pos + quad_pos;
+    
+    half2 tex_pos = tex_pos_projection_lookup[shapeID]*local_vertex_pos;
+    fIn.textureCoords = tex_rotation_lookup[tex_rotation] * tex_pos;
     
     float3 block_origin = float3(block_pos - constants.cameraOrigin);
     float3 vertex_pos = block_origin + float3(local_vertex_pos);
