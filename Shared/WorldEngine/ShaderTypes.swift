@@ -4,10 +4,9 @@ import Metal
 struct Quad {
     let blockPosXZ: Int2
     let blockPosY: UInt8
-    let shapeID_texRotation: UInt8
+    let shapeID: UInt8
+    let rotationID: UInt8
     let textureID: UInt16
-    let quadPos: UInt16
-    let quadSize: UInt16
 }
 
 func createVertexDescriptor() -> MTLVertexDescriptor {
@@ -28,7 +27,14 @@ func createVertexDescriptor() -> MTLVertexDescriptor {
     
     offset += MemoryLayout<UInt8>.stride
     
-    // shapeID_texRotation
+    // shapeID
+    descriptor.attributes[2].format = .uchar
+    descriptor.attributes[2].bufferIndex = 0
+    descriptor.attributes[2].offset = offset
+    
+    offset += MemoryLayout<UInt8>.stride
+    
+    // rotationID
     descriptor.attributes[2].format = .uchar
     descriptor.attributes[2].bufferIndex = 0
     descriptor.attributes[2].offset = offset
@@ -39,20 +45,6 @@ func createVertexDescriptor() -> MTLVertexDescriptor {
     descriptor.attributes[3].format = .ushort
     descriptor.attributes[3].bufferIndex = 0
     descriptor.attributes[3].offset = offset
-    
-    // quadPos
-    descriptor.attributes[4].format = .ushort
-    descriptor.attributes[4].bufferIndex = 0
-    descriptor.attributes[4].offset = offset
-    
-    offset += MemoryLayout<UInt16>.stride
-    
-    // quadSize
-    descriptor.attributes[5].format = .ushort
-    descriptor.attributes[5].bufferIndex = 0
-    descriptor.attributes[5].offset = offset
-    
-    offset += MemoryLayout<UInt16>.stride
     
     descriptor.layouts[0].stride = MemoryLayout<Quad>.stride
     return descriptor

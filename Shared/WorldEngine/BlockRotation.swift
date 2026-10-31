@@ -19,13 +19,6 @@ enum BlockRotation: UInt8 {
     case      Z90, Z90_Y90, Z90_YNEG90, Z90_Y180
 }
 
-enum TextureRotation: UInt8 {
-    case NONE = 0
-    case CW
-    case CCW
-    case FULL
-}
-
 func rotateVector<I: SignedInteger>(_ vec: SIMD3<I>, _ rotation: BlockRotation) -> SIMD3<I> {
     switch rotation {
     case .NONE:       vec
@@ -43,107 +36,106 @@ func rotateVector<I: SignedInteger>(_ vec: SIMD3<I>, _ rotation: BlockRotation) 
     }
 }
 
-func findRotatedFace(_ rotation: BlockRotation, _ direction: Direction) -> (Direction, TextureRotation) {
+func reverseRotation(_ rotation: BlockRotation, _ direction: Direction) -> Direction {
     switch rotation {
-    case .NONE:
-        (direction, .NONE)
+    case .NONE: direction
     case .Y90:
         switch direction {
-        case .WEST: (.NORTH, .NONE)
-        case .EAST: (.SOUTH, .NONE)
-        case .SOUTH: (.WEST, .NONE)
-        case .NORTH: (.EAST, .NONE)
-        case .UP: (.UP, .CCW)
-        case .DOWN: (.DOWN, .CW)
+        case .WEST: .NORTH
+        case .EAST: .SOUTH
+        case .SOUTH: .WEST
+        case .NORTH: .EAST
+        case .UP: .UP
+        case .DOWN: .DOWN
         }
     case .YNEG90:
         switch direction {
-        case .WEST: (.SOUTH, .NONE)
-        case .EAST: (.NORTH, .NONE)
-        case .SOUTH: (.EAST, .NONE)
-        case .NORTH: (.WEST, .NONE)
-        case .UP: (.UP, .CW)
-        case .DOWN: (.DOWN, .CCW)
+        case .WEST: .SOUTH
+        case .EAST: .NORTH
+        case .SOUTH: .EAST
+        case .NORTH: .WEST
+        case .UP: .UP
+        case .DOWN: .DOWN
         }
     case .Y180:
         switch direction {
-        case .WEST: (.EAST, .NONE)
-        case .EAST: (.WEST, .NONE)
-        case .SOUTH: (.NORTH, .NONE)
-        case .NORTH: (.SOUTH, .NONE)
-        default: (direction, .FULL)
+        case .WEST: .EAST
+        case .EAST: .WEST
+        case .SOUTH: .NORTH
+        case .NORTH: .SOUTH
+        default: direction
         }
     case .X90:
         switch direction {
-        case .UP: (.NORTH, .FULL)
-        case .DOWN: (.SOUTH, .FULL)
-        case .SOUTH: (.UP, .NONE)
-        case .NORTH: (.DOWN, .NONE)
-        case .WEST: (.WEST, .CW)
-        case .EAST: (.EAST, .CCW)
+        case .UP: .NORTH
+        case .DOWN: .SOUTH
+        case .SOUTH: .UP
+        case .NORTH: .DOWN
+        case .WEST: .WEST
+        case .EAST: .EAST
         }
     case .X90_Y90:
         switch direction {
-        case .UP: (.NORTH, .CW)
-        case .DOWN: (.SOUTH, .CW)
-        case .WEST: (.DOWN, .NONE)
-        case .EAST: (.UP, .NONE)
-        case .SOUTH: (.WEST, .CW)
-        case .NORTH: (.EAST, .CCW)
+        case .UP: .NORTH
+        case .DOWN: .SOUTH
+        case .WEST: .DOWN
+        case .EAST: .UP
+        case .SOUTH: .WEST
+        case .NORTH: .EAST
         }
     case .X90_YNEG90:
         switch direction {
-        case .UP: (.NORTH, .CCW)
-        case .DOWN: (.SOUTH, .CW)
-        case .WEST: (.UP, .NONE)
-        case .EAST: (.DOWN, .NONE)
-        case .SOUTH: (.EAST, .CCW)
-        case .NORTH: (.WEST, .CW)
+        case .UP: .NORTH
+        case .DOWN: .SOUTH
+        case .WEST: .UP
+        case .EAST: .DOWN
+        case .SOUTH: .EAST
+        case .NORTH: .WEST
         }
     case .X90_Y180:
         switch direction {
-        case .UP: (.NORTH, .NONE)
-        case .DOWN: (.SOUTH, .NONE)
-        case .WEST: (.EAST, .CCW)
-        case .EAST: (.WEST, .CW)
-        case .SOUTH: (.DOWN, .NONE)
-        case .NORTH: (.UP, .NONE)
+        case .UP: .NORTH
+        case .DOWN: .SOUTH
+        case .WEST: .EAST
+        case .EAST: .WEST
+        case .SOUTH: .DOWN
+        case .NORTH: .UP
         }
     case .Z90:
         switch direction {
-        case .UP: (.EAST, .CCW)
-        case .DOWN: (.WEST, .CW)
-        case .SOUTH: (.SOUTH, .CCW)
-        case .NORTH: (.NORTH, .CW)
-        case .WEST: (.UP, .CCW)
-        case .EAST: (.DOWN, .CW)
+        case .UP: .EAST
+        case .DOWN: .WEST
+        case .SOUTH: .SOUTH
+        case .NORTH: .NORTH
+        case .WEST: .UP
+        case .EAST: .DOWN
         }
     case .Z90_Y90:
         switch direction {
-        case .UP: (.EAST, .FULL)
-        case .DOWN: (.WEST, .FULL)
-        case .WEST: (.NORTH, .CW)
-        case .EAST: (.SOUTH, .CCW)
-        case .SOUTH: (.UP, .CCW)
-        case .NORTH: (.DOWN, .CW)
+        case .UP: .EAST
+        case .DOWN: .WEST
+        case .WEST: .NORTH
+        case .EAST: .SOUTH
+        case .SOUTH: .UP
+        case .NORTH: .DOWN
         }
     case .Z90_YNEG90:
         switch direction {
-        case .UP: (.EAST, .NONE)
-        case .DOWN: (.WEST, .NONE)
-        case .WEST: (.SOUTH, .CCW)
-        case .EAST: (.NORTH, .CW)
-        case .SOUTH: (.DOWN, .CW)
-        case .NORTH: (.UP, .CCW)
+        case .UP: .EAST
+        case .DOWN: .WEST
+        case .WEST: .SOUTH
+        case .EAST: .NORTH
+        case .SOUTH: .DOWN
+        case .NORTH: .UP
         }
     case .Z90_Y180:
         switch direction {
-        case .UP: (.EAST, .CW)
-        case .DOWN: (.WEST, .CCW)
-        case .WEST: (.DOWN, .CW)
-        case .EAST: (.UP, .CCW)
-        case .SOUTH: (.NORTH, .CW)
-        case .NORTH: (.SOUTH, .CCW)
+        case .UP: .EAST
+        case .DOWN: .WEST
+        case .WEST: .DOWN
+        case .EAST: .UP
+        case .SOUTH: .NORTH
+        case .NORTH: .SOUTH
         }
     }
 }

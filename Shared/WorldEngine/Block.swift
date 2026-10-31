@@ -52,22 +52,12 @@ struct Block {
     let topTextureID: UInt16
     let sideTextureID: UInt16
     let bottomTextureID: UInt16
-    
-    func encode3x5bitTriplet(_ x: UInt16, _ y: UInt16, _ z: UInt16) -> UInt16 {
-        (x << 10) | (y << 5) | z
-    }
-    
-    func encodeShapeIDTexRotation(
-        shapeID: Direction, texRotation: TextureRotation
-    ) -> UInt8 {
-        (shapeID.rawValue << 2) | texRotation.rawValue
-    }
 
     func createVertexShaderData(pos: Int3, rotation: BlockRotation, directions: Set<Direction>) -> [Quad] {
         return directions.map { face_orientation in
-            let (tex_face, tex_rotation) = findRotatedFace(rotation, face_orientation)
+            let original_orientation = reverseRotation(rotation, face_orientation)
             
-            let texture_ID = switch tex_face {
+            let texture_ID = switch original_orientation {
             case .UP:
                 topTextureID
             case .DOWN:
@@ -75,26 +65,13 @@ struct Block {
             default:
                 sideTextureID
             }
-            
-            let quad_pos: UInt16 = switch face_orientation {
-            case .UP: encode3x5bitTriplet(0, 16, 0)
-            case .DOWN: encode3x5bitTriplet(0, 0, 0)
-            case .WEST: encode3x5bitTriplet(0, 0, 0)
-            case .EAST: encode3x5bitTriplet(16, 0, 0)
-            case .SOUTH: encode3x5bitTriplet(0, 0, 16)
-            case .NORTH: encode3x5bitTriplet(0, 0, 0)
-            }
                 
             return Quad(
                 blockPosXZ: Int2(pos.x, pos.z),
                 blockPosY: UInt8(pos.y & 255),
-                shapeID_texRotation: encodeShapeIDTexRotation(
-                    shapeID: face_orientation,
-                    texRotation: tex_rotation
-                ),
-                textureID: texture_ID,
-                quadPos: quad_pos,
-                quadSize: encode3x5bitTriplet(16, 16, 16)
+                shapeID: original_orientation.rawValue,
+                rotationID: rotation.rawValue,
+                textureID: texture_ID
             )
         }
     }

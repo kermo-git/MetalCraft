@@ -22,6 +22,8 @@
 		4F0D905F2E11BEE50075F38B /* purple_bricks.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F0D90572E11BEE50075F38B /* purple_bricks.png */; };
 		4F1288992B703B5C003860E8 /* WorldGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F1288982B703B5C003860E8 /* WorldGenerator.swift */; };
 		4F12889A2B703B5C003860E8 /* WorldGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F1288982B703B5C003860E8 /* WorldGenerator.swift */; };
+		4F2163653093954C0050F5A7 /* Geometry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F216364309395430050F5A7 /* Geometry.swift */; };
+		4F2163663093954C0050F5A7 /* Geometry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F216364309395430050F5A7 /* Geometry.swift */; };
 		4F2FD3732A78655B00AB43D0 /* App.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F2FD3722A78655B00AB43D0 /* App.swift */; };
 		4F326D1F30829EBD0077A39C /* Hash.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F326D1E30829EB90077A39C /* Hash.swift */; };
 		4F326D2030829EBD0077A39C /* Hash.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F326D1E30829EB90077A39C /* Hash.swift */; };
@@ -172,6 +174,7 @@
 		4F0D90562E11BEE50075F38B /* orange_bricks.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = orange_bricks.png; sourceTree = "<group>"; };
 		4F0D90572E11BEE50075F38B /* purple_bricks.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = purple_bricks.png; sourceTree = "<group>"; };
 		4F1288982B703B5C003860E8 /* WorldGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldGenerator.swift; sourceTree = "<group>"; };
+		4F216364309395430050F5A7 /* Geometry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Geometry.swift; sourceTree = "<group>"; };
 		4F2FD3722A78655B00AB43D0 /* App.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = App.swift; sourceTree = "<group>"; };
 		4F326D1E30829EB90077A39C /* Hash.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Hash.swift; sourceTree = "<group>"; };
 		4F3B74C62A408656008A508A /* Renderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Renderer.swift; sourceTree = "<group>"; };
@@ -274,6 +277,7 @@
 		4F3B74C92A40953D008A508A /* WorldEngine */ = {
 			isa = PBXGroup;
 			children = (
+				4F216364309395430050F5A7 /* Geometry.swift */,
 				4F5AA4FD2E1721D500538197 /* Structure.swift */,
 				4FD3114C286A3F1F00BB55ED /* CoordinateSystem.swift */,
 				4FA26CE82C27576700AABCD6 /* BlockRotation.swift */,
@@ -669,6 +673,7 @@
 				4F0220612A402E1A000ACC7E /* Block.swift in Sources */,
 				4F326D1F30829EBD0077A39C /* Hash.swift in Sources */,
 				4F9E1AD72A79186F0055A782 /* ExampleRenderer.swift in Sources */,
+				4F2163663093954C0050F5A7 /* Geometry.swift in Sources */,
 				4FD31154286A3F1F00BB55ED /* SimplexNoise.swift in Sources */,
 				4F9E1ADF2A7921550055A782 /* ChunkLoader.swift in Sources */,
 				4FD31126286A3F0100BB55ED /* Types.swift in Sources */,
@@ -707,6 +712,7 @@
 				4FD31125286A3F0100BB55ED /* WorldRenderer.swift in Sources */,
 				4F326D2030829EBD0077A39C /* Hash.swift in Sources */,
 				4F0220622A402E1A000ACC7E /* Block.swift in Sources */,
+				4F2163653093954C0050F5A7 /* Geometry.swift in Sources */,
 				4F0220682A40422B000ACC7E /* ChunkFaces.swift in Sources */,
 				4FD31141286A3F1400BB55ED /* Math.swift in Sources */,
 				4FD31157286A3F1F00BB55ED /* CoordinateSystem.swift in Sources */,

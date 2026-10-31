@@ -20,6 +20,11 @@ class WorldRenderer: Renderer {
     private var depthStencilState: MTLDepthStencilState
     
     private var vertexConstants: VertexConstants
+    private let vertexPosBuffer: MTLBuffer
+    private let triangleNormalBuffer: MTLBuffer
+    private let textureCoordinateBuffer: MTLBuffer
+    private let rotationMatrixBuffer: MTLBuffer
+    
     private var fragmentConstants: FragmentConstants
     private let textures: MTLTexture
     
@@ -52,6 +57,11 @@ class WorldRenderer: Renderer {
         depthStencilState = engine.getDepthStencilState()
 
         vertexConstants = VertexConstants(cameraOrigin: cameraPos)
+        vertexPosBuffer = createVertexPosData(device: engine.device)
+        triangleNormalBuffer = createTriangleNormalData(device: engine.device)
+        textureCoordinateBuffer = createTextureCoordinateData(device: engine.device)
+        rotationMatrixBuffer = createRotationMatrixData(device: engine.device)
+        
         fragmentConstants = FragmentConstants(
             cameraPos: cameraFloatPos,
             sunDirection: Half3(normalize(Float3(0.8, 0.9, 1.3))),
@@ -120,6 +130,17 @@ class WorldRenderer: Renderer {
         encoder.setDepthStencilState(depthStencilState)
         encoder.setRenderPipelineState(renderPipeline)
         
+        encoder.setVertexBytes(
+            &vertexConstants,
+            length: MemoryLayout<VertexConstants>.stride,
+            index: 0
+        )
+        
+        encoder.setVertexBuffer(vertexPosBuffer, offset: 0, index: 1)
+        encoder.setVertexBuffer(triangleNormalBuffer, offset: 0, index: 2)
+        encoder.setVertexBuffer(textureCoordinateBuffer, offset: 0, index: 3)
+        encoder.setVertexBuffer(rotationMatrixBuffer, offset: 0, index: 4)
+        
         encoder.setFragmentBytes(
             &fragmentConstants,
             length: MemoryLayout<FragmentConstants>.stride,
@@ -127,12 +148,6 @@ class WorldRenderer: Renderer {
         )
         encoder.setFragmentSamplerState(sampler, index: 0)
         encoder.setFragmentTexture(textures, index: 0)
-
-        encoder.setVertexBytes(
-            &vertexConstants,
-            length: MemoryLayout<VertexConstants>.stride,
-            index: 1
-        )
         
         let cameraViewX = -sin(camera.rotationY)
         let cameraViewZ = -cos(camera.rotationY)
@@ -145,7 +160,7 @@ class WorldRenderer: Renderer {
             let inCameraView = cameraToChunkX * cameraViewX + cameraToChunkZ * cameraViewZ >= 0
             
             if (inRenderDistance && inCameraView) {
-                encoder.setVertexBuffer(buffer, offset: 0, index: 0)
+                encoder.setVertexBuffer(buffer, offset: 0, index: 5)
                 encoder.drawPrimitives(type: .triangle, vertexStart: 0, vertexCount: vertexCount)
             }
         }

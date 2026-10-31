@@ -7,6 +7,7 @@ typealias UInt3 = SIMD3<UInt32>
 typealias Half2 = SIMD2<Float16>
 typealias Half3 = SIMD3<Float16>
 typealias Half4 = SIMD4<Float16>
+typealias Half3x3 = simd_half3x3
 typealias Float2 = SIMD2<Float>
 typealias Float3 = SIMD3<Float>
 typealias Float4 = SIMD4<Float>
